@@ -1,7 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User  = require('../models/user'); 
-const bcrypt = require('bcrypt');
 const passwordEncoder = require('./passwordEncoder');
 
 // Configuration de la stratégie locale de Passport
@@ -10,14 +9,12 @@ const passwordEncoder = require('./passwordEncoder');
 passport.use(new LocalStrategy(async (username, password, done) => {
 
   try {
-    
     const user = await User.findOne({ where: { email : username }, logging: console.log });
- 
+
     if (!user) {
       return done(null, false, { message: 'email incorrect' });
     }
 
-    // const passwordMatch = await bcrypt.compare(password, user.password);
     const passwordMatch = await passwordEncoder.comparePassword(password, user.password);
 
     if (!passwordMatch) {
