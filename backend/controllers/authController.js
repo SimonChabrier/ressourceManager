@@ -1,36 +1,33 @@
 const passport = require('../security/authenticate');
+const User  = require('../models/user');
+const passwordEncoder = require('../security/passwordEncoder');
 
 const authController = {
   
-  // Contrôleur pour gérer la connexion (authentification)
+  // Gérer la connexion (authentification)
   login: (req, res, next) => {
 
     passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        // Une erreur s'est produite pendant l'authentification
-        console.error(err);
+      if (err) { // Une erreur s'est produite pendant l'authentification
         return res.status(500).json({ message: 'Erreur lors de l\'authentification' });
       }
       if (!user) { // L'authentification a échoué, user est false
         return res.status(401).json({ message: 'Identifiants invalides' });
       }
-      // L'authentification a réussi
-      req.logIn(user, (err) => {
+      req.logIn(user, (err) => { // Fonction ajoutée par Passport pour connecter l'utilisateur
         if (err) {
-          console.error(err);
           return res.status(500).json({ message: 'Erreur lors de la création de la session' });
         }
-        // ajouter une clé isLoggedIn à la session de l'utilisateur
-        req.session.isLoggedIn = true;
-        // ajouter un cookie de session
-        req.session.cookie.maxAge = 3600000; // 1 heure
+        req.session.isLoggedIn = true; // ajouter une clé isLoggedIn à la session de l'utilisateur
+        req.session.cookie.maxAge = 3600000; // ajouter un cookie de session avec une durée de vie de 1h
+
         return res.status(200).json({ message: 'Authentification réussie', user: user });
       });
       
-    })(req, res, next);
+    })(req, res, next); // appeler la fonction retournée par authenticate
   },
 
-  // Contrôleur pour gérer la déconnexion
+  // Gérer la déconnexion
   logout: (req, res) => {
     req.logout(() => { // callback appelé après la déconnexion réussie
       req.session.destroy();
@@ -38,8 +35,30 @@ const authController = {
     });
   },
 
-  // session de l'utilisateur connecté
-  getUserInfo: (req, res) => {
+  // Gérer l'inscription
+  register: async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const hashedPassword = await passwordEncoder.hashPassword(password);
+      const newUser = await User.create({ email, password:hashedPassword });
+      
+      req.logIn(newUser, (err) => { // connecter l'utilisateur après son inscription
+        if (err) {
+          return res.status(500).json({ message: 'Erreur lors de la création de la session' });
+        }
+        // on met à jour la session de l'utilisateur
+        req.session.isLoggedIn = true;
+        req.session.cookie.maxAge = 3600000;
+        return res.status(200).json({ message: 'Inscription réussie', user: newUser });
+      });
+
+    } catch (error) {
+      res.status(500).send(error.errors[0].message);// Erreur envoyée par Sequelize si le username ou l'email ne sont pas uniques
+    }
+  },
+
+  //Retourne les infos de session de l'utilisateur connecté
+  getSessionInfo: (req, res) => {
 
     if (req.isAuthenticated() && req.session.isLoggedIn) { // si mon middleware isAuthenticated a ajouté une clé isLoggedIn à la session de l'utilisateur
 

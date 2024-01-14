@@ -29,11 +29,11 @@ passport.use(new LocalStrategy(async (username, password, done) => {
   }
 }));
 
-// Configuration de la sérialisation et de la désérialisation de l'utilisateur
+// serialiser l'utilisateur pour le stocker dans la session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-
+// deserialiser l'utilisateur pour le récupérer de la session et le stocker dans req.user
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findByPk(id);

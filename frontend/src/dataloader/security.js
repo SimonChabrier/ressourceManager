@@ -20,7 +20,7 @@ export default {
     logout() {
         return apiClient.get('/logout')
     },
-    getUserInfo() {
+    getSessionInfo() {
         return apiClient.get('/userinfo')
     },
 

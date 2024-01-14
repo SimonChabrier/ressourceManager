@@ -5,7 +5,10 @@ const userController = {
   
   getAllUsers: async (req, res) => {
     try {
-      const users = await User.findAll();  // Assurez-vous que User est défini
+      const users = await User.findAll(); 
+      if(users.length === 0) {
+        return res.status(200).json({ message: 'Aucun utilisateur enregistré' });
+      }
       res.json(users);
     } catch (error) {
       console.error(error);
@@ -27,7 +30,6 @@ const userController = {
       });
       res.json(newUser);
     } catch (error) {
-      console.error('retour', error.errors[0].message);
       res.status(500).send(error.errors[0].message); // Erreur envoyée par Sequelize si le username ou l'email ne sont pas uniques
     }
   },
