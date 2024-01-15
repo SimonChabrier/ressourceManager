@@ -6,7 +6,6 @@ const routes = require('./routes');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
 
-require('./models/relations')
 
 const app = express();
 const PORT = process.env.PORT || 3000;

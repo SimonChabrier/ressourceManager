@@ -32,6 +32,7 @@ const ressourceController = {
   getRessourceById: async (req, res) => {
     const { id } = req.params;
     try {
+      // récupèrer la ressource avec l'utilisateur associé
       const ressource = await Ressource.findByPk(id);
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
@@ -47,7 +48,24 @@ const ressourceController = {
   getUserRessources: async (req, res) => {
     const { userId } = req.params;
     try {
-      const ressource = await Ressource.findAll({ where: { userId } });
+
+      // la ressource seule
+      //const ressource = await Ressource.findAll({ where: { userId } });
+
+      // la ressource avec l'utilisateur associé
+      //const ressource = await Ressource.findAll({ where: { userId }, include: User });
+
+      // la ressource avec l'utilisateur associé sans les champs password, createdAt, updatedAt
+      const ressource = await Ressource.findAll({
+        where: { userId },
+        include: {
+          model: User,
+          attributes: {
+            exclude: ['password', 'createdAt', 'updatedAt'],
+          },
+        },
+      });
+
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }

@@ -66,7 +66,7 @@ const userController = {
     try {
       const user = await User.findByPk(id);
       if (user) {
-        await user.destroy();
+        await user.destroy(); // Apeller detroy de sequalize sur l'instance de l'utilisateur pour supprimer les ressources associées 
         res.json('Utilisateur supprimé');
       } else {
         res.status(404).send(`L'utilisateur avec l'id ${id} n'existe pas`);
@@ -75,7 +75,7 @@ const userController = {
       console.error(error);
       res.status(500).send('Erreur interne du serveur');
     }
-  },
+},
 
 //* autres méthodes
 
