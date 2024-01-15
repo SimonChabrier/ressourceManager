@@ -6,10 +6,35 @@ const routes = require('./routes');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
 
+// pour le websocket
+const http = require('http');
+const WebSocket = require('ws');
 
+
+// Création du serveur Express
 const app = express();
-const PORT = process.env.PORT || 3000;
+// Création du serveur HTTP à partir du serveur Express
+const server = http.createServer(app);
+// Création du serveur WebSocket sur le serveur Express
+const wss = new WebSocket.Server({ server });
+// Port du serveur Express ou 3000 par défaut si non défini dans les variables d'environnement
+const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
 
+// Endpoint pour gérer les connexions WebSocket
+wss.on('connection', (ws) => {
+  console.log('Nouvelle connexion WebSocket établie.');
+  // on écoutera les messages envoyés par le client ici sur le serveur
+  ws.on('message', (message) => {
+    console.log(`Reçu du client : ${message}`);
+  });
+  // Envoyer un message au client
+  ws.send('Bienvenue sur le serveur WebSocket.');
+});
+
+// Endpoint pour gérer les connexions WebSocket
+app.get('/socket', (req, res) => {
+  res.json({ message: 'Bienvenue sur le serveur WebSocket.' });
+});
 
 // Middleware
 app.use(bodyParser.json());
