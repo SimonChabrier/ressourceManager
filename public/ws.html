@@ -16,28 +16,41 @@
 
   <script>
     const webSocket = new WebSocket('ws://localhost:443');
-
+    
+    webSocket.addEventListener("open", () => {
+        console.log("We are connected");
+        // envoyer un ping toutes les 5 secondes pour éviter que le serveur ne coupe la connexion
+        setInterval(() => {
+          webSocket.send("ping");
+        }, 10000);
+      });
+  
+      webSocket.addEventListener("close", () => {
+        document.getElementById('messages').innerHTML += "We are disconnected<br>"      
+        setTimeout(() => {
+              webSocket = new WebSocket('ws://localhost:443');
+           }, 2000);
+      });
+    
+    // listen for messages from the server
     webSocket.onmessage = (event) => {
+        // si on reçoit un ping, on ne fait rien
+        if (event.data === "ping") {
+            console.log("ping received");
+          return;
+        }
       console.log(event)
       document.getElementById('messages').innerHTML += 
         'Message from server: ' + event.data + "<br>";
     };
-    webSocket.addEventListener("open", () => {
-      console.log("We are connected");
-    });
-
-    webSocket.addEventListener("close", () => {
-      document.getElementById('messages').innerHTML += "We are disconnected<br>"      
-      setTimeout(() => {
-            webSocket = new WebSocket('ws://localhost:443');
-         }, 2000);
-    });
 
     webSocket.addEventListener("error", () => {
       document.getElementById('messages').innerHTML += "We have an error<br>"
       console.log("We have an error");
     });
 
+
+    // send message to server
     function sendMessage(event) {
       var inputMessage = document.getElementById('message')
       webSocket.send(inputMessage.value)
