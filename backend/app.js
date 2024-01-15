@@ -5,56 +5,47 @@ const sequelize = require('./config/db'); // Assurez-vous d'avoir le chemin corr
 const routes = require('./routes');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
+const startWebSocketServer = require('./notifications/ws.serveur');
 
 // pour le websocket
 const http = require('http');
 const WebSocket = require('ws');
 
+// Lancement du serveur websocket 
+startWebSocketServer();
 
 // Création du serveur Express
 const app = express();
-// Création du serveur HTTP à partir du serveur Express
-const server = http.createServer(app);
-// Création du serveur WebSocket sur le serveur Express
-const wss = new WebSocket.Server({ server });
-// Port du serveur Express ou 3000 par défaut si non défini dans les variables d'environnement
 const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
-
-// Endpoint pour gérer les connexions WebSocket
-wss.on('connection', (ws) => {
-  console.log('Nouvelle connexion WebSocket établie.');
-  // on écoutera les messages envoyés par le client ici sur le serveur
-  ws.on('message', (message) => {
-    console.log(`Reçu du client : ${message}`);
-  });
-  // Envoyer un message au client
-  ws.send('Bienvenue sur le serveur WebSocket.');
-});
-
-// Endpoint pour gérer les connexions WebSocket
-app.get('/socket', (req, res) => {
-  res.json({ message: 'Bienvenue sur le serveur WebSocket.' });
-});
-
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 // autoriser les requêtes cross-domain
 app.use(cors());
-
 // session et passport pour l'authentification
 sessionConfig(app); // Utilisation de la gestion de session avec Passport
-
 // autres middleware
 
 // Routes
 app.use('/api', routes); // Préfixe toutes les routes avec /api
 
+//* Middleware pour servir les fichiers statiques du dossier public
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
+//* Route pour servir le fichier ws.html
+app.get('/ws', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'ws.html'), (err) => {
+      if (err) {
+          console.error(err);
+          res.status(err.status).end();
+      }
+  });
+});
+
 // Gestion des erreurs
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Erreur interne du serveur.');
+  res.status(500).send('Erreur interne du serveur retournée dans app.js');
 });
 
 // Synchronisation avec la base de données et lancement du serveur
@@ -64,3 +55,6 @@ sequelize.sync({ force: false }).then(() => {
     console.log(`Serveur en écoute sur le port ${PORT}`);
   });
 });
+
+
+
