@@ -6,6 +6,7 @@ const isAuthenticated = require('../security/isAuthenticated');  // Importez le 
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 router.post('/register', authController.register);
+// reourner les infos de l'utilisateur connecté (session)
 router.get('/user-info', isAuthenticated, authController.getSessionInfo);
 
 module.exports = router;
