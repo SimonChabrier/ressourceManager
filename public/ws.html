@@ -1,6 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <title>Websocket</title>
 </head>
+
 <body>
   <form id="input-form">
     <label for="message">Enter Message:</label>
@@ -8,6 +11,9 @@
     <input type="submit" value="Send">
   </form>
   <div id="messages"></div>
+</body>
+</html>
+
   <script>
     const webSocket = new WebSocket('ws://localhost:443');
 
@@ -21,9 +27,7 @@
     });
 
     webSocket.addEventListener("close", () => {
-      document.getElementById('messages').innerHTML += "We are disconnected<br>"
-      console.log("We are disconnected");
-      
+      document.getElementById('messages').innerHTML += "We are disconnected<br>"      
       setTimeout(() => {
             webSocket = new WebSocket('ws://localhost:443');
          }, 2000);
@@ -40,7 +44,8 @@
       inputMessage.value = ""
       event.preventDefault();
     }
+
     document.getElementById('input-form').addEventListener('submit', sendMessage);
+
   </script>
-</body>
-</html>
+
