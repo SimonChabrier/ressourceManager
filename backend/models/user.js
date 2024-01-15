@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const bcrypt = require('bcrypt');
 
 const User = sequelize.define('user', {
   id: {
@@ -31,15 +32,11 @@ const User = sequelize.define('user', {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  // relation avec la table ressource (1 user peut avoir plusieurs ressources et une ressource apparien à un seul user)
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'ressource',
-      key: 'id',
-    },
-  },
+});
+
+// hash password before saving
+User.addHook('beforeCreate', async (user) => {
+  user.password = await bcrypt.hash(user.password, 10);
 });
 
 module.exports = User;

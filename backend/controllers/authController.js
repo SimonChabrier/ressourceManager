@@ -1,6 +1,5 @@
 const passport = require('../security/authenticate');
 const User  = require('../models/user');
-const passwordEncoder = require('../security/passwordEncoder');
 
 const authController = {
   
@@ -39,9 +38,8 @@ const authController = {
   register: async (req, res) => {
     const { email, password } = req.body;
     try {
-      const hashedPassword = await passwordEncoder.hashPassword(password);
-      const newUser = await User.create({ email, password:hashedPassword });
-      
+      const newUser = await User.create({ email, password });
+  
       req.logIn(newUser, (err) => { // connecter l'utilisateur après son inscription
         if (err) {
           return res.status(500).json({ message: 'Erreur lors de la création de la session' });
@@ -53,7 +51,7 @@ const authController = {
       });
 
     } catch (error) {
-      res.status(500).send(error.errors[0].message);// Erreur envoyée par Sequelize si le username ou l'email ne sont pas uniques
+      res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
 

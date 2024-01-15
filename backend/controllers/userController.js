@@ -1,5 +1,4 @@
 const User  = require('../models/user'); 
-const passwordEncoder = require('../security/passwordEncoder');
 
 const userController = {
   
@@ -19,19 +18,16 @@ const userController = {
   createUser: async (req, res) => {
     const { username, email, password, firstName, lastName } = req.body;
     try {
-      const hashedPassword = await passwordEncoder.hashPassword(password);
-
       const newUser = await User.create({ 
         username, 
         email, 
-        password:hashedPassword, 
+        password, 
         firstName, 
         lastName 
       });
       res.json(newUser);
     } catch (error) {
-      res.status(500).send(error.errors[0].message); // Erreur envoyée par Sequelize si le username ou l'email ne sont pas uniques
-    }
+      res.status(500).json({ message: error.errors.map(err => err.message) });    }
   },
 
   patchUser: async (req, res) => {

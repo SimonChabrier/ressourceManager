@@ -6,6 +6,8 @@ const routes = require('./routes');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
 
+require('./models/relations')
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -33,7 +35,7 @@ app.use((err, req, res, next) => {
 
 // Synchronisation avec la base de données et lancement du serveur
 // il créer ici les tables si elles n'existent pas déjà
-sequelize.sync().then(() => {
+sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`Serveur en écoute sur le port ${PORT}`);
   });
