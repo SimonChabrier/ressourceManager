@@ -27,5 +27,8 @@ router.post('/username/:username', userController.findByUserName);
 // Exemple de route pour récupérer un utilisateur par son email
 router.post('/email/:email', userController.findByEmail);
 
+// delete all users
+router.delete('/', userController.deleteAllUsers);
+
 
 module.exports = router;

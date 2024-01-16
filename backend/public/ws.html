@@ -11,6 +11,7 @@
     <input type="submit" value="Send">
   </form>
   <div id="messages"></div>
+  <div id="marcure_messages"></div>
 </body>
 </html>
 
@@ -41,7 +42,7 @@
         }
       console.log(event)
       document.getElementById('messages').innerHTML += 
-        'Message from server: ' + event.data + "<br>";
+        'Message from Websocket: ' + event.data + "<br>";
     };
 
     webSocket.addEventListener("error", () => {
@@ -59,6 +60,25 @@
     }
 
     document.getElementById('input-form').addEventListener('submit', sendMessage);
+
+
+    //* 2nd method MERCURE topic = new_user_registered
+    // append the message to the container marcure_messages
+
+    const MERCURE_URL = 'https://mercure.simschab.cloud/.well-known/mercure';
+    const MERCURE_TOPIC = 'new_user_registered';
+
+    const eventSource = new EventSource(MERCURE_URL + '?topic=' + encodeURIComponent(MERCURE_TOPIC));
+
+    eventSource.onmessage = event => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      // data format {@type: 'User', @id: 35, email: 'simon@gmaildsssfs.com'}
+      document.getElementById('marcure_messages').innerHTML += 
+        'Message from Mercure: ' + data.email + "<br>";
+    };
+
+
 
   </script>
 

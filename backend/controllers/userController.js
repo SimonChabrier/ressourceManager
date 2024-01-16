@@ -124,6 +124,17 @@ const userController = {
     }
   },
 
+  // delete all users
+  deleteAllUsers: async (req, res) => {
+    try {
+      await User.destroy({ where: {} });
+      res.json('Tous les utilisateurs ont été supprimés');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Erreur interne du serveur');
+    }
+  },
+
 };
 
 module.exports = userController;
