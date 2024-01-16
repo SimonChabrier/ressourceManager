@@ -5,7 +5,7 @@ const sequelize = require('./config/db'); // Assurez-vous d'avoir le chemin corr
 const routes = require('./routes');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
-const startWebSocketServer = require('./notifications/ws.serveur');
+const startWebSocketServer = require('./notifications/ws');
 
 // pour le websocket
 const http = require('http');
