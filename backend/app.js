@@ -31,10 +31,10 @@ app.use('/api', routes); // Préfixe toutes les routes avec /api
 
 //* Middleware pour servir les fichiers statiques du dossier public
 const path = require('path');
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 //* Route pour servir le fichier ws.html
 app.get('/ws', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'ws.html'), (err) => {
+  res.sendFile(path.join(__dirname, 'public', 'ws.html'), (err) => {
       if (err) {
           console.error(err);
           res.status(err.status).end();
