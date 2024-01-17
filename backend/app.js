@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser'); // pour parser les requêtes HTTP
 const sequelize = require('./config/db'); // Assurez-vous d'avoir le chemin correct vers votre configuration Sequelize
-const routes = require('./routes');
+const routes = require('./routes/_index');
 const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
 const startWebSocketServer = require('./notifications/ws');
@@ -27,7 +27,7 @@ app.use(cors());
 sessionConfig(app); // Utilisation de la gestion de session avec Passport
 // autres middleware
 
-// Routes
+// Ajout des routes retournée par le router général /routes/index.js
 app.use('/api', routes); // Préfixe toutes les routes avec /api
 
 //* Middleware pour servir les fichiers statiques du dossier public

@@ -1,12 +1,16 @@
-const express = require('express');
-const router = express.Router();
+// router général qu'on apelle dans app.js pour toutes les routes
+// définies dans les autres fichiers de routes (userRoutes, ressourceRoutes, etc.) 
 
+const express = require('express');
+const router = express.Router(); // je récupère le router d'express
+
+// routes 
 const userRoutes = require('./userRoutes');
 const ressourceRoutes = require('./ressourceRoutes');
 const authRoutes = require('./authRoutes');
 const contactRoutes = require('./contactRoutes');
 
-// sécurité
+// sécurité middleware
 const isAuthenticated = require('../security/isAuthenticated');
 const verifyToken = require('../security/jwtCheck');
 
