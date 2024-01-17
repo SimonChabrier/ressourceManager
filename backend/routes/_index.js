@@ -1,30 +1,24 @@
 // router général qu'on apelle dans app.js pour toutes les routes
 // définies dans les autres fichiers de routes (userRoutes, ressourceRoutes, etc.) 
-
 const express = require('express');
-const router = express.Router(); // je récupère le router d'express
-
-// routes 
+const openRouter = express.Router(); // je récupère le router d'express
+const apiRouter = express.Router(); // je récupère le router d'express
+// routes détails
+const authRoutes = require('./authRoutes');
 const userRoutes = require('./userRoutes');
 const ressourceRoutes = require('./ressourceRoutes');
-const authRoutes = require('./authRoutes');
 const contactRoutes = require('./contactRoutes');
-
 // sécurité middleware
 const isAuthenticated = require('../security/isAuthenticated');
 const verifyToken = require('../security/jwtCheck');
 
-// routes fermées (authentification requise)
-// router.use('/users',isAuthenticated, userRoutes);
-// router.use('/ressources',isAuthenticated, ressourceRoutes); 
+// routes ouvertes préfix : /
+openRouter.use('/', authRoutes);
+openRouter.use('/contact', contactRoutes);
+openRouter.use('/ws', express.static('public/ws.html'));
 
-// routes fermées (JWT requis)
-// router.use('/users', verifyToken, userRoutes);
+//* routes sécurisées préfix: /api
+apiRouter.use('/users',isAuthenticated, verifyToken, userRoutes);
+apiRouter.use('/ressources',isAuthenticated, verifyToken, ressourceRoutes); 
 
-// routes ouvertes préfixées par /api
-router.use('/', authRoutes);
-router.use('/users', userRoutes);
-router.use('/ressources', ressourceRoutes);
-router.use('/contact', contactRoutes);
-
-module.exports = router;
+module.exports = { openRouter, apiRouter };

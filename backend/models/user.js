@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Ressource = require('./ressource');
 const newUserNotification = require('../notifications/mercure');
-
 const bcrypt = require('bcrypt');
 
 const User = sequelize.define('user', {
@@ -36,7 +35,6 @@ const User = sequelize.define('user', {
     allowNull: true,
   },
 });
-
 // User id sur la ressource
 User.hasMany(Ressource, {
   foreignKey: {
@@ -50,12 +48,10 @@ Ressource.belongsTo(User, {
     allowNull: false,
   },
 });
-
 // hash password before saving
 User.addHook('beforeCreate', async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });
-
 //Notification mercure
 User.addHook('afterCreate', async (user) => {
   await newUserNotification(user)
