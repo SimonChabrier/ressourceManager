@@ -13,14 +13,15 @@ const authController = {
       if (!user) { // L'authentification a échoué, user est false
         return res.status(401).json({ message: 'Identifiants invalides' });
       }
+  // L'authentification a réussi
       req.logIn(user, (err) => { // Fonction ajoutée par Passport pour connecter l'utilisateur
         if (err) {
           return res.status(500).json({ message: 'Erreur lors de la création de la session' });
         }
         req.session.isLoggedIn = true; // ajouter une clé isLoggedIn à la session de l'utilisateur
         req.session.cookie.maxAge = 3600000; // ajouter un cookie de session avec une durée de vie de 1h
-
-        return res.status(200).json({ message: 'Authentification réussie', user: user });
+        req.session.token = user.token; // ajouter le token d'authentification de l'utilisateur à la session
+        return res.status(200).json({ message: 'Authentification réussie', user: user, token: user.token });
       });
       
     })(req, res, next); // appeler la fonction retournée par authenticate

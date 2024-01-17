@@ -7,6 +7,7 @@ const sessionConfig = require('./security/session'); // pour la session
 const cors = require('cors'); // pour autoriser les requêtes cross-domain
 const startWebSocketServer = require('./notifications/ws');
 
+
 // pour le websocket
 const http = require('http');
 const WebSocket = require('ws');
