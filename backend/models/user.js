@@ -3,6 +3,7 @@ const sequelize = require('../config/db');
 const Ressource = require('./ressource');
 const newUserNotification = require('../notifications/mercure');
 const bcrypt = require('bcrypt');
+const appMails = require('../services/mails');
 
 const User = sequelize.define('user', {
   id: {
@@ -52,13 +53,17 @@ Ressource.belongsTo(User, {
 User.addHook('beforeCreate', async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });
-// hash password before updating
-User.addHook('beforeUpdate', async (user) => {
-  user.password = await bcrypt.hash(user.password, 10);
-});
 // Notification mercure after user creation
 User.addHook('afterCreate', async (user) => {
   await newUserNotification(user)
+});
+// si mise à jour du mot de passe on envoie le mail 
+// de confirmation avec le nouveau mot de passe avant de le hasher
+User.addHook('afterUpdate', async (user) => {
+  if (user.changed('password')) {
+    await appMails.passwordRenewMail(user);
+    user.password = await bcrypt.hash(user.password, 10);
+  }
 });
 
 module.exports = User;

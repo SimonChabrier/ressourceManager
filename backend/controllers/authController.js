@@ -1,6 +1,7 @@
 const passport = require('../security/authenticate');
 const User  = require('../models/user');
 
+
 const authController = {
   
   // Manage login
@@ -52,7 +53,7 @@ const authController = {
     }
   },
 
-  // reset password
+  // reset password (confirmation mail send from User Model hook)
   resetPassword: async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -60,11 +61,14 @@ const authController = {
       if (!user) {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
       }
+
       await user.update({ password });
-      return res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+      
+      return res.status(200).json({ message: 'Mot de passe modifié' });
+
     } catch (error) {
       console.log(error);
-      //res.status(500).json({ message: error.errors.map(err => err.message) });
+      res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
 
