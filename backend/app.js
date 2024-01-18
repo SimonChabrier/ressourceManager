@@ -6,11 +6,12 @@ const sessionConfig = require('./security/session');
 const cors = require('cors'); 
 const startWebSocketServer = require('./notifications/ws');
 const path = require('path'); 
-const app = express();
 const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
+const reqLogger = require('./services/reqLogger');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = express();
+app.use(bodyParser.json()); // use for parsing application/json 
+app.use(bodyParser.urlencoded({ extended: true })); // use for parsing application/x-www-form-urlencoded
 
 app.use(cors(
   {
@@ -20,18 +21,16 @@ app.use(cors(
     allowedHeaders: ['Content-Type', 'Authorization']
   }
 ));
+app.use(reqLogger.log); // use for log request
+sessionConfig(app); // use for session management on app all routes
 
-sessionConfig(app); 
-
-app.use((req, res, next) => {
-  console.log(`********** REQUETTE RECUE ** METHODE ** ${req.method} ** ENDPOINT ${req.url} ** ORIGIN  ** ${req.get('Origin')}`);
-  next();
-});
-
-app.use('/api', apiRouter); 
-app.use('/', openRouter);
-
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use((req, res, next) => {
+//   console.log(`********** REQUETTE RECUE ** METHODE ** ${req.method} ** ENDPOINT ${req.url} ** ORIGIN  ** ${req.get('Origin')}`);
+//   next();
+// });
+app.use('/api', apiRouter); // use for api routes
+app.use('/', openRouter); // use for open routes
+app.use(express.static(path.join(__dirname, 'public'))); // use for static files
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Erreur interne du serveur retournée dans app.js');
