@@ -52,6 +52,22 @@ const authController = {
     }
   },
 
+  // reset password
+  resetPassword: async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+      }
+      await user.update({ password });
+      return res.status(200).json({ message: 'Mot de passe modifié avec succès' });
+    } catch (error) {
+      console.log(error);
+      //res.status(500).json({ message: error.errors.map(err => err.message) });
+    }
+  },
+
   // Manage session info
   getSessionInfo: (req, res) => {
     if (req.isAuthenticated() && req.session.isLoggedIn) { 

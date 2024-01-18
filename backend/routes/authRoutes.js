@@ -7,6 +7,13 @@ const verifyToken = require('../security/jwtCheck');
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 router.post('/register', authController.register);
-router.post('/user-info', isAuthenticated, verifyToken, authController.getSessionInfo);
+router.post('/reset-password', authController.resetPassword);
+// si .env est sur prod 
+if (process.env.NODE_ENV === 'prod') {
+    router.post('/user-info', isAuthenticated, verifyToken, authController.getSessionInfo);
+} else {
+    router.post('/user-info', authController.getSessionInfo);
+}
+
 
 module.exports = router;

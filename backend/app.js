@@ -21,10 +21,10 @@ app.use(cors(
     allowedHeaders: ['Content-Type', 'Authorization']
   }
 ));
-app.use(logger.logReq); // use for log request
+app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
-app.use(logger.logErr); // use for log error
+app.use(logger.logErr); // use for log error - put it after routes
 
 app.use('/api', apiRouter); // use for api routes
 app.use('/', openRouter); // use for open routes

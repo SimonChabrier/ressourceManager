@@ -18,7 +18,12 @@ openRouter.use('/contact', contactRoutes);
 openRouter.use('/ws', express.static('public/ws.html'));
 
 // secure routes préfix: /api
-apiRouter.use('/users',isAuthenticated, verifyToken, userRoutes);
-apiRouter.use('/ressources',isAuthenticated, verifyToken, ressourceRoutes); 
+if (process.env.NODE_ENV === 'prod') {
+    apiRouter.use('/users',isAuthenticated, verifyToken, userRoutes);
+    apiRouter.use('/ressources',isAuthenticated, verifyToken, ressourceRoutes);
+} else {
+    apiRouter.use('/users', userRoutes);
+    apiRouter.use('/ressources', ressourceRoutes);
+}    
 
 module.exports = { openRouter, apiRouter };
