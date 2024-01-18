@@ -1,35 +1,43 @@
+const { json } = require('body-parser');
 const mailer = require('../notifications/mailer');
 
 const appMails = {
 
-    sendContactMail: async (req, res) => {
+    // rejette les champs de formulaires vides.
+    validateFields: (fields) => {
+        const errors = [];
+        for (const [fieldName, fieldValue] of Object.entries(fields)) {
+            if (!fieldValue) {
+                errors.push(`Le champ ${fieldName} est obligatoire`);
+            }
+        }
+        return errors;
+    },
 
-        const { from, to, subject, content } = req.body;
-
-        const message = {
-            from,
-            to,
-            subject,
-            text: content,
-        };
+    // assemble et envoie le mail de contact
+    sendContactMail: async (from, to, subject, content) => {
+        const message = { from, to, subject, text: content};
 
         try {
             const info = await mailer.sendMail(message);
-
-            console.log(info);
             const { accepted, rejected, response } = info;
-
-            res.status(200).json({
+        
+            return {
                 message: `Mail envoyé de ${info.envelope.from} à ${info.envelope.to}`,
                 accepted: accepted,
                 rejected: rejected,
                 response: response
-            });
+            };
+            
         } catch (error) {
             console.error(error);
-            res.status(500).json({ message: 'Erreur interne du serveur' });
+            return {
+                error: 'Erreur lors de l\'envoi du mail',
+                details: error.message
+            };
         }
     },
+    
 
     // New password mail send after mail update from User Model hook
     passwordRenewMail: async (user) => {

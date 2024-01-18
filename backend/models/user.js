@@ -57,6 +57,8 @@ User.addHook('beforeCreate', async (user) => {
 User.addHook('afterCreate', async (user) => {
   await newUserNotification(user)
 });
+
+
 // si mise à jour du mot de passe on envoie le mail 
 // de confirmation avec le nouveau mot de passe avant de le hasher
 User.addHook('afterUpdate', async (user) => {
