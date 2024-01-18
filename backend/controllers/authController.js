@@ -1,6 +1,6 @@
 const passport = require('../security/authenticate');
 const User  = require('../models/user');
-const appMails = require('../services/mails');
+const validator = require('../services/validator');
 
 
 const authController = {
@@ -58,8 +58,7 @@ const authController = {
   resetPassword: async (req, res) => {
     
     const { email, password } = req.body;
-    const validate = appMails.validateFields({ email, password });
-    
+    const validate = validator.validateFields({ email, password });
     if(validate.length !== 0){ // si le validateur a trouvé des champs vides
       return res.status(404).json({ message : validate })
     }

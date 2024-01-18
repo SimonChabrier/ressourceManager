@@ -1,6 +1,5 @@
-const mailer = require('../notifications/mailer');
-const util = require('util');
-const appMail = require('../services/mails');
+const validator = require('../services/validator');
+const appMail = require('../services/mails')
 
 const contactController = {
 
@@ -10,8 +9,7 @@ const contactController = {
         // récupérer les infos du formulaire ou insomia
         const { from, to, subject, content } = req.body;
         // valider les champs
-        const errors = appMail.validateContactMailFields({ from, to, subject, content });
-        
+        const errors = validator.validateFields({ from, to, subject, content });
         if (errors.length > 0) {
             return res.status(400).json({ errors });
         }

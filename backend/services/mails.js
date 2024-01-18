@@ -1,18 +1,7 @@
-const { json } = require('body-parser');
 const mailer = require('../notifications/mailer');
 
 const appMails = {
 
-    // rejette les champs de formulaires vides.
-    validateFields: (fields) => {
-        const errors = [];
-        for (const [fieldName, fieldValue] of Object.entries(fields)) {
-            if (!fieldValue) {
-                errors.push(`Le champ ${fieldName} est obligatoire`);
-            }
-        }
-        return errors;
-    },
 
     // assemble et envoie le mail de contact
     sendContactMail: async (from, to, subject, content) => {
@@ -38,7 +27,6 @@ const appMails = {
         }
     },
     
-
     // New password mail send after mail update from User Model hook
     passwordRenewMail: async (user) => {
     const { email, password } = user;
