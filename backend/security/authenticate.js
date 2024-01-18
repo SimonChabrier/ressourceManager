@@ -7,24 +7,18 @@ const jwt = require('jsonwebtoken');
 // username est la clé utilisée pour récupérer la valeur de l'email dans le corps de la requête
 // c'est défini dans LocalStrategy je dois pouvoir le changer... 
 passport.use(new LocalStrategy(async (username, password, done) => {
-
   try {
     const user = await User.findOne({ where: { email : username }, logging: console.log });
-
     if (!user) {
       return done(null, false, { message: 'email incorrect' });
     }
-
     const passwordMatch = await passwordEncoder.comparePassword(password, user.password);
-
     if (!passwordMatch) {
       return done(null, false, { message: 'Mot de passe incorrect' });
     }
-
-    // si tout est ok, on renvoie l'utilisateur et un token d'authentification (jwt)
+    // if user is found and password is right create a token 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     user.token = token;
-
     return done(null, user);
 
   } catch (error) {
@@ -32,12 +26,11 @@ passport.use(new LocalStrategy(async (username, password, done) => {
     return done(error);
   }
 }));
-
-// serialiser l'utilisateur pour le stocker dans la session
+// Serialise user to store in session
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
-// deserialiser l'utilisateur pour le récupérer de la session et le stocker dans req.user
+// deserialiser user from session 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findByPk(id);

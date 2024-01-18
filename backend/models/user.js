@@ -35,14 +35,14 @@ const User = sequelize.define('user', {
     allowNull: true,
   },
 });
-// User id sur la ressource
+// get ressources from user
 User.hasMany(Ressource, {
   foreignKey: {
     allowNull: false,
     onDelete: 'CASCADE',
   },
 });
-// pour récupérer l'utilisateur sur la/les ressource/s
+// get user from ressource
 Ressource.belongsTo(User, {
   foreignKey: {
     allowNull: false,
@@ -52,7 +52,11 @@ Ressource.belongsTo(User, {
 User.addHook('beforeCreate', async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
 });
-//Notification mercure
+// hash password before updating
+User.addHook('beforeUpdate', async (user) => {
+  user.password = await bcrypt.hash(user.password, 10);
+});
+// Notification mercure after user creation
 User.addHook('afterCreate', async (user) => {
   await newUserNotification(user)
 });

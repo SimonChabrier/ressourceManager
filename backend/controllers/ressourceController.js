@@ -2,37 +2,22 @@ const Ressource = require('../models/ressource');
 const User = require('../models/user');
 
 const ressourceController = {
+  // get all ressources with user
   getAllRessources: async (req, res) => {
     try {
-      //const ressources = await Ressource.findAll();
       const ressources = await Ressource.findAll({ include: User });
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
       }
       res.json(ressources);
     } catch (error) {
-      console.error(error);
       res.status(500).send('Erreur interne du serveur');
     }
   },
-
-  // creer une ressource et l'associer à un user
-  createRessource: async (req, res) => {
-    const { title, description, code, userId } = req.body;
-    try {
-      const newRessource = await Ressource.create({ title, description, code, userId });
-      res.json(newRessource);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
-    }
-  },
-
-  // récupérer une ressource par son id
+  // get one ressource by id and user associated
   getRessourceById: async (req, res) => {
     const { id } = req.params;
     try {
-      // récupèrer la ressource avec l'utilisateur associé
       const ressource = await Ressource.findByPk(id);
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
@@ -43,7 +28,6 @@ const ressourceController = {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
-
   // get ressources by user id
   getUserRessources: async (req, res) => {
     const { userId } = req.params;
@@ -75,7 +59,17 @@ const ressourceController = {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
-
+  // create new ressource with user
+  createRessource: async (req, res) => {
+    const { title, description, code, userId } = req.body;
+    try {
+      const newRessource = await Ressource.create({ title, description, code, userId });
+      res.json(newRessource);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Erreur interne du serveur' });
+    }
+  },
   // update ressource by id
   updateRessource: async (req, res) => {
     const { id } = req.params;
@@ -95,7 +89,6 @@ const ressourceController = {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
-
   // delete ressource by id
   deleteRessource: async (req, res) => {
     const { id } = req.params;
@@ -111,7 +104,6 @@ const ressourceController = {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
-
   // delete all ressources
   deleteAllRessources: async (req, res) => {
     try {
@@ -122,7 +114,6 @@ const ressourceController = {
       res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
-
 };
 
 module.exports = ressourceController;

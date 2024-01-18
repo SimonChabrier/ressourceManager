@@ -1,7 +1,7 @@
 const User  = require('../models/user'); 
 
 const userController = {
-  
+  // get all users
   getAllUsers: async (req, res) => {
     try {
       const users = await User.findAll(); 
@@ -14,7 +14,7 @@ const userController = {
       res.status(500).send('Erreur interne du serveur');
     }
   },
-
+  // create new user
   createUser: async (req, res) => {
     const { username, email, password, firstName, lastName } = req.body;
     try {
@@ -29,7 +29,7 @@ const userController = {
     } catch (error) {
       res.status(500).json({ message: error.errors.map(err => err.message) });    }
   },
-
+  // update one user
   patchUser: async (req, res) => {
     const { id } = req.params;
     const { username, email, password, firstName, lastName } = req.body;
@@ -60,7 +60,7 @@ const userController = {
       res.status(500).send('Erreur interne du serveur');
     }
   },
-
+  // delete one user
   deleteUser: async (req, res) => {
     const { id } = req.params;
     try {
@@ -75,10 +75,8 @@ const userController = {
       console.error(error);
       res.status(500).send('Erreur interne du serveur');
     }
-},
-
-//* autres méthodes
-
+  },
+  // get one user by username
   findByUserName: async (req, res) => {
     const { username } = req.params;
     try {
@@ -93,7 +91,7 @@ const userController = {
       res.status(500).send('Erreur interne du serveur');
     }
   },
-  
+  // get one user by email
   findByEmail: async (req, res) => {
     const { email } = req.params;
     try {
@@ -108,7 +106,7 @@ const userController = {
       res.status(500).send('Erreur interne du serveur');
     }
   },
-
+  // get one user by id
   getUserById: async (req, res) => {
     const { id } = req.params;
     try {
@@ -123,7 +121,6 @@ const userController = {
       res.status(500).send('Erreur interne du serveur');
     }
   },
-
   // delete all users
   deleteAllUsers: async (req, res) => {
     try {

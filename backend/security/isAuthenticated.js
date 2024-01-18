@@ -1,4 +1,4 @@
- // middleware custom pour vérifier si l'utilisateur est connecté
+// middleware custom use passport to check if user is authenticated
 
 function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -6,6 +6,6 @@ function isAuthenticated(req, res, next) {
     }
     res.status(401).send('Vous n\'êtes pas connecté');
   }
-  
+
   module.exports = isAuthenticated;
   
