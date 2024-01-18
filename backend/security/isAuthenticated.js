@@ -4,7 +4,8 @@ function isAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
       return next();
     }
-    res.status(401).send('Vous n\'êtes pas connecté');
+    res.locals.message = "Utilisateur non authentifié";
+    res.status(401).json({ message: 'Utilisateur non authentifié' });
   }
 
   module.exports = isAuthenticated;
