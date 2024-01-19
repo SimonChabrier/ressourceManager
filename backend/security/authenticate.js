@@ -12,8 +12,8 @@ passport.use(new LocalStrategy(async (username, password, done) => {
     if (!user) {
       return done(null, false, { message: 'email incorrect' });
     }
-    const passwordMatch = await passwordEncoder.comparePassword(password, user.password);
-    if (!passwordMatch) {
+    const checkPasswordMatch = await passwordEncoder.comparePassword(password, user.password);
+    if (!checkPasswordMatch) {
       return done(null, false, { message: 'Mot de passe incorrect' });
     }
     // if user is found and password is right create a token 
