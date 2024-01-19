@@ -28,7 +28,7 @@ const appMails = {
     },
     
     // New password mail send after mail update from User Model hook
-    passwordRenewMail: async (user) => {
+    sendPasswordMail: async (user) => {
     const { email, password } = user;
       const mailOptions = {
         from: process.env.MAIL_ADRESS,
@@ -38,10 +38,11 @@ const appMails = {
       };
   
       mailer.sendMail(mailOptions, (error, info) => {
+
         if (error) {
           return res.status(500).json({ message: 'Erreur lors de l\'envoi du mail' });
         }
-  
+        console.log(info);
       return res.status(200).json({ message: 'Mot de passe modifié avec succès' });
       
       });

@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 const Ressource = require('./ressource');
 const newUserNotification = require('../notifications/mercure');
-const bcrypt = require('bcrypt');
+const paswwwordEncoder = require('../security/passwordEncoder');
 const appMails = require('../services/mails');
 
 const User = sequelize.define('user', {
@@ -51,7 +51,7 @@ Ressource.belongsTo(User, {
 });
 // hash password before saving
 User.addHook('beforeCreate', async (user) => {
-  user.password = await bcrypt.hash(user.password, 10);
+  user.password = await paswwwordEncoder.hashPassword(user.password);
 });
 // Notification mercure after user creation
 User.addHook('afterCreate', async (user) => {
@@ -63,8 +63,8 @@ User.addHook('afterCreate', async (user) => {
 // de confirmation avec le nouveau mot de passe avant de le hasher
 User.addHook('afterUpdate', async (user) => {
   if (user.changed('password')) {
-    await appMails.passwordRenewMail(user);
-    user.password = await bcrypt.hash(user.password, 10);
+    await appMails.sendPasswordMail(user);
+    user.password = await paswwwordEncoder.hashPassword(user.password);
   }
 });
 
