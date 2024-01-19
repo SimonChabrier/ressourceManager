@@ -4,6 +4,7 @@ const Ressource = require('./ressource');
 const newUserNotification = require('../notifications/mercure');
 const paswwwordEncoder = require('../security/passwordEncoder');
 const appMails = require('../services/mails');
+// const bcrypt = require('bcrypt');
 
 const User = sequelize.define('user', {
   id: {
@@ -58,10 +59,9 @@ User.addHook('afterCreate', async (user) => {
   await newUserNotification(user)
 });
 
-
 // si mise à jour du mot de passe on envoie le mail 
 // de confirmation avec le nouveau mot de passe avant de le hasher
-User.addHook('afterUpdate', async (user) => {
+User.addHook('beforeUpdate', async (user) => {
   if (user.changed('password')) {
     await appMails.sendPasswordMail(user);
     user.password = await paswwwordEncoder.hashPassword(user.password);
