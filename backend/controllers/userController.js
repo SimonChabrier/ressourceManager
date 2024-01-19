@@ -67,7 +67,7 @@ const userController = {
       const user = await User.findByPk(id);
       if (user) {
         // reset user_id in ressources
-        await user.destroy({ truncate: true }); // Apeller detroy de sequalize sur l'instance de l'utilisateur pour supprimer les ressources associées 
+        await user.destroy(); // Apeller detroy de sequalize sur l'instance de l'utilisateur pour supprimer les ressources associées 
         res.json('Utilisateur supprimé');
       } else {
         res.status(404).send(`L'utilisateur avec l'id ${id} n'existe pas`);
@@ -125,7 +125,7 @@ const userController = {
   // delete all users
   deleteAllUsers: async (req, res) => {
     try {
-      await User.destroy({ where: {} });
+      await User.destroy({ where: {}});
       res.json('Tous les utilisateurs ont été supprimés');
     } catch (error) {
       console.error(error);

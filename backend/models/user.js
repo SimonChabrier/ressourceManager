@@ -68,4 +68,10 @@ User.addHook('beforeUpdate', async (user) => {
   }
 });
 
+// after delete truncate ressources and user table
+// User.addHook('afterDestroy', async (user) => {
+//   await Ressource.destroy({ truncate: true });
+//   await User.destroy({ truncate: true });
+// });
+
 module.exports = User;
