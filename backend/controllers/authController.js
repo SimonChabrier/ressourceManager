@@ -37,28 +37,29 @@ const authController = {
     });
   },
 
-    // Manage register
-    register: async (req, res) => {
-      const { email, password } = req.body;
-      
-      try {
-          const newUser = await User.create({ email, password });
-          
-          req.logIn(newUser, (err) => {
-              if (err) {
-                  return res.status(500).json({ message: 'Erreur lors de la création de la session' });
-              }
-              // Créer la session
-              req.session.isLoggedIn = true;
-              req.session.cookie.maxAge = 3600000;
-              // créer un token jwt pour l'utilisateur et l'ajouter à la session
-              newUser.token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
-              req.session.jwt = newUser.token; // Ajouter le token JWT à la session
-              return res.status(200).json({ message: 'Inscription et authentification réussies', user: newUser, jwt: newUser.token });
-          });
-      } catch (error) {
-          res.status(500).json({ message: error.errors.map(err => err.message) });
-      }
+  // Manage register
+  register: async (req, res) => {
+    const { email, password } = req.body;
+    
+    try {
+        const newUser = await User.create({ email, password });
+        
+        req.logIn(newUser, (err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Erreur lors de la création de la session' });
+            }
+            // Créer la session
+            req.session.isLoggedIn = true;
+            req.session.cookie.maxAge = 3600000;
+            // créer un token jwt pour l'utilisateur et l'ajouter à la session
+            newUser.token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+            req.session.jwt = newUser.token; // Ajouter le token JWT à la session
+            return res.status(200).json({ message: 'Inscription et authentification réussies', user: newUser, jwt: newUser.token });
+        });
+        
+    } catch (error) {
+        res.status(500).json({ message: error.errors.map(err => err.message) });
+    }
   },
 
   // reset password (confirmation mail send from User Model hook)
