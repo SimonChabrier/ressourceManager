@@ -61,32 +61,38 @@ const ressourceController = {
   },
   // create new ressource with user
   createRessource: async (req, res) => {
-    const { title, description, code, userId } = req.body;
+    const { title, content, tag, tech, userId } = req.body;
     try {
-      const newRessource = await Ressource.create({ title, description, code, userId });
+      const newRessource = await Ressource.create({title, content, tag, tech, userId});
       res.json(newRessource);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+      res.status(500).json({ message: 'Erreur interne du serveur' + error.message });
     }
   },
   // update ressource by id
   updateRessource: async (req, res) => {
+    
     const { id } = req.params;
-    const { title, description, code } = req.body;
+    const { title, content, tag, tech, userId } = req.body;
+   
     try {
       const ressource = await Ressource.findByPk(id);
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
+
       ressource.title = title;
-      ressource.description = description;
-      ressource.code = code;
+      ressource.content = content;
+      ressource.tag = tag;
+      ressource.tech = tech;
+      ressource.userId = userId;
+
       await ressource.save();
       res.json(ressource);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+      res.status(500).json({ message: 'Erreur interne du serveur' + error.message});
     }
   },
   // delete ressource by id

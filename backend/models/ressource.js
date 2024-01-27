@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const User = require('./user');
 
 const Ressource = sequelize.define('ressource', {
   id: {
@@ -11,14 +12,26 @@ const Ressource = sequelize.define('ressource', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  description: {
+  content: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  code: {
+  tag: { // eg : documentation, tutorial, article
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  tech: { // eg : react, node, express, sequelize, postgresql
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  // userId: {
+  //   type: DataTypes.INTEGER,
+  //   allowNull: false,
+  //   references: { // optionnel car sequelize le fait automatiquement sur la base du nom du model et de la clé primaire
+  //     model: User,
+  //     key: 'id',
+  //   },
+  // },
 });
 
 

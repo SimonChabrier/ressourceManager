@@ -41,15 +41,20 @@ const User = sequelize.define('user', {
 User.hasMany(Ressource, {
   foreignKey: {
     allowNull: false,
-    onDelete: 'CASCADE',
+    ondeDelete: 'CASCADE',  // si on supprime un user on supprime ses ressources
   },
 });
 // get user from ressource
 Ressource.belongsTo(User, {
   foreignKey: {
     allowNull: false,
+    // references: { // optionnel car sequelize le fait automatiquement sur la base du nom du model et de la clé primaire
+    //   model: User,
+    //   key: 'id',
+    // },
   },
 });
+
 // hash password before saving
 User.addHook('beforeCreate', async (user) => {
   user.password = await paswwwordEncoder.hashPassword(user.password);
@@ -67,6 +72,7 @@ User.addHook('beforeUpdate', async (user) => {
     user.password = await paswwwordEncoder.hashPassword(user.password);
   }
 });
+
 
 // after delete truncate ressources and user table
 // User.addHook('afterDestroy', async (user) => {
