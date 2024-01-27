@@ -23,7 +23,8 @@ const logger = {
             // call est une méthode de l'objet Function qui permet d'appeler une fonction avec un contexte et des arguments spécifiques (ici le contexte est res et l'argument est data)
             originalControllerResponse.call(res, data);
         };
-        next();
+        // J'appelle le middleware suivant qui va logger la requête et la réponse
+        logger.logReq(req, res, next);
     },
     
     // middleware pour logger les requêtes (Apellé dans app.js sur toutes les routes)

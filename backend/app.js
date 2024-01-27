@@ -27,8 +27,8 @@ sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
 
 //* ROUTES + MIDDLEWARES LOGS + ROUTERS *//
-app.use('/api', captureRes, logReq, apiRouter); // use for api routes and log response (placer le router après les middlewares de log pour logger les réponses)
-app.use('/', captureRes, logReq, openRouter); // use for open routes and log response (placer le router après les middlewares de log pour logger les réponses)
+app.use('/api', captureRes, apiRouter); // use for api routes and log response (placer le router après les middlewares de log pour logger les réponses)
+app.use('/', captureRes, openRouter); // use for open routes and log response (placer le router après les middlewares de log pour logger les réponses)
 
 app.use(logErr); // use for log errors - put it after routes to log server errors
 
