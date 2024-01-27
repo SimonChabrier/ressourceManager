@@ -1,1 +1,1 @@
-{"code":500,"body":{"username":"simon","email":"simonchabrierffddU@gmzeqzerdsszerdfqdffqdsdfsfrail.com","password":"password","firstName":"Simon","lastName":"Chabrier"},"url":"/api/","method":"POST","ip":"::ffff:127.0.0.1","date":"2024-01-27T10:44:01.383Z"}
+{"code":500,"method":"POST","route":"/api/users","errorMessage":{"message":["email must be unique"]},"message":"Internal Server Error","date":"2024-01-27T12:27:25.423Z"}

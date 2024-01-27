@@ -1,0 +1,9 @@
+[
+  [
+    [
+      "{\"code\":500,\"method\":\"POST\",\"route\":\"/api/users\",\"controllerReturnMessage\":{\"message\":[\"email must be unique\"]},\"message\":\"Internal Server Error\",\"date\":\"2024-01-27T12:34:56.686Z\"}"
+    ],
+    "{\"code\":500,\"method\":\"POST\",\"route\":\"/api/users\",\"controllerReturnMessage\":{\"message\":[\"email must be unique\"]},\"message\":\"Internal Server Error\",\"date\":\"2024-01-27T12:35:02.776Z\"}"
+  ],
+  "{\"code\":500,\"method\":\"POST\",\"route\":\"/api/users\",\"controllerReturnMessage\":{\"message\":[\"email must be unique\"]},\"message\":\"Internal Server Error\",\"date\":\"2024-01-27T12:35:07.069Z\"}"
+]

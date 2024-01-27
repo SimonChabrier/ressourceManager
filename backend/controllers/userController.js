@@ -27,7 +27,8 @@ const userController = {
       });
       res.json(newUser);
     } catch (error) {
-      res.status(500).json({ message: error.errors.map(err => err.message) });    }
+      // res.locals.message = error.errors.map(err => err.message);
+      res.status(500).json({ message: error.errors.map(err => err.message) });}
   },
   // update one user
   patchUser: async (req, res) => {
