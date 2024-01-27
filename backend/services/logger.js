@@ -23,10 +23,8 @@ const logger = {
                 const loggerFileWriter = require('./loggerFileWriter');
                 loggerFileWriter.logControllersResponsesToFile(req, res, next)
             }
-            if (res.locals.message) {
-                // on stringify le message pour le logger
-                controllerReturn = JSON.stringify(res.locals.message);
-                console.log(`******************* Message -----> ${controllerReturn}`);
+            if (res.locals.message) { // les messages retournés par les controllers sont diffusés par le middleware captureResponse
+                console.log(`******************* Message -----> ${JSON.stringify(res.locals.message)}`);
             }
         });
     },
