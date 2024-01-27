@@ -9,9 +9,9 @@ const ressourceController = {
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
       }
-      return res.json({"message": "Ressources trouvées", "ressources": ressources});
+       return res.json({"message": "Ressources trouvées", "ressources": ressources});
     } catch (error) {
-      return res.status(500).send({ message: error.message });
+       return res.status(500).send({ message: error.message });
     }
   },
   // get one ressource by id and user associated
@@ -25,7 +25,7 @@ const ressourceController = {
       res.json(ressource);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+      return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
   // get ressources by user id
@@ -53,10 +53,9 @@ const ressourceController = {
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
-      return res.json({"message": "Ressources trouvées", "ressources": ressource});
+        return res.json({"message": "Ressources trouvées", "ressources": ressource});
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+        return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
   // create new ressource with user
@@ -64,10 +63,9 @@ const ressourceController = {
     const { title, content, tag, tech, userId } = req.body;
     try {
       const newRessource = await Ressource.create({title, content, tag, tech, userId});
-      return res.status(201).json({ message: 'Ressource créée', newRessource });
+        return res.status(201).json({ message: 'Ressource créée', newRessource });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' + error.message });
+        return res.status(500).json({ message: 'Erreur interne du serveur' + error.message });
     }
   },
   // update ressource by id
@@ -75,7 +73,7 @@ const ressourceController = {
     
     const { id } = req.params;
     const { title, content, tag, tech, userId } = req.body;
-   
+   console.log(req.body);
     try {
       const ressource = await Ressource.findByPk(id);
       if (!ressource) {
@@ -93,8 +91,7 @@ const ressourceController = {
       return res.status(200).json({ message: 'Ressource modifiée', ressource });
    
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' + error.message});
+        return res.status(500).json({ message: 'Erreur interne du serveur' + error.message});
     }
   },
   // delete ressource by id
@@ -106,20 +103,18 @@ const ressourceController = {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
       await ressource.destroy();
-      return res.status(200).json({ message: 'Ressource supprimée' });
+        return res.status(200).json({ message: 'Ressource supprimée' });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Erreur interne du serveur' });
+        return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
   // delete all ressources
   deleteAllRessources: async (req, res) => {
     try {
       await Ressource.destroy({ truncate: true });
-      return res.status(200).json({ message: 'Toutes les ressources ont été supprimées' });
+        return res.status(200).json({ message: 'Toutes les ressources ont été supprimées' });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Erreur interne du serveur' });
+        return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
 };

@@ -5,6 +5,7 @@ const apiRouter = express.Router(); // je récupère le router d'express
 // routes détails
 const authRoutes = require('./authRoutes');
 const userRoutes = require('./userRoutes');
+const logRoutes = require('./logRoutes');
 const ressourceRoutes = require('./ressourceRoutes');
 const contactRoutes = require('./contactRoutes');
 
@@ -21,9 +22,11 @@ openRouter.use('/ws', express.static('public/ws.html'));
 if (process.env.NODE_ENV === 'prod') {
     apiRouter.use('/users',isAuthenticated, verifyToken, userRoutes);
     apiRouter.use('/ressources',isAuthenticated, verifyToken, ressourceRoutes);
+    apiRouter.use('/logs',isAuthenticated, verifyToken, logRoutes);
 } else {
     apiRouter.use('/users', userRoutes);
     apiRouter.use('/ressources', ressourceRoutes);
+    apiRouter.use('/logs', logRoutes);
 }    
 
 module.exports = { openRouter, apiRouter };

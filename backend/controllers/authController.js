@@ -24,7 +24,9 @@ const authController = {
         req.session.isLoggedIn = true; 
         req.session.cookie.maxAge = 3600000; 
         req.session.jwt = user.token;
+
         return res.status(200).json({ message: 'Authentification réussie', user: user, jwt: user.token });
+     
       });
     })(req, res, next); // call the authenticate method
   },
@@ -33,7 +35,7 @@ const authController = {
   logout: (req, res) => {
     req.logout(() => { // logout method from passport
       req.session.destroy();
-      return res.status(200).json({ message: 'Déconnexion réussie' });
+      res.status(200).json({ message: 'Déconnexion réussie' });
     });
   },
 

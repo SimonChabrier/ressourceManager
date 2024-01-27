@@ -6,7 +6,7 @@ const userController = {
     try {
       const users = await User.findAll(); 
       if(users.length === 0) {
-        return res.status(200).json({ message: 'Aucun utilisateur enregistré' });
+        res.status(200).json({ message: 'Aucun utilisateur enregistré' });
       }
       res.json(users);
     } catch (error) {
@@ -25,10 +25,10 @@ const userController = {
         firstName, 
         lastName 
       });
-      return res.status(201).json({ message: 'Utilisateur créé', user: newUser });
+        res.status(201).json({ message: 'Utilisateur créé', user: newUser });
     } catch (error) {
       // res.locals.message = error.errors.map(err => err.message);
-      res.status(500).json({ message: error.errors.map(err => err.message) });}
+        res.status(500).json({ message: error.errors.map(err => err.message) });}
   },
   // update one user
   patchUser: async (req, res) => {
@@ -53,15 +53,15 @@ const userController = {
           lastname: lastName 
         });
 
-        res.json(user);
+        return res.json({ message: `L'utilisateur avec l'id ${id} a été modifié` });
 
       } else {
-        res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
+        return res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
       }
 
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
   // delete one user
@@ -78,7 +78,7 @@ const userController = {
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+      res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
   // get one user by username
@@ -93,7 +93,7 @@ const userController = {
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+       res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
   // get one user by email
@@ -104,11 +104,11 @@ const userController = {
       if (user) {
         res.json(user);
       } else {
-        return res.status(404).json({ message: `L'utilisateur avec le email ${email} n'existe pas` });
+        res.status(404).json({ message: `L'utilisateur avec le email ${email} n'existe pas` });
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+        res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
   // get one user by id
@@ -119,22 +119,21 @@ const userController = {
       if (user) {
         res.json(user);
       } else {
-        return res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
+        res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
       }
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+        res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
   // delete all users
   deleteAllUsers: async (req, res) => {
     try {
-      await User.destroy({ where: {}});
-
+      await User.destroy({ where: {}}); // supprimer tous les utilisateurs
       res.json({ message: 'Tous les utilisateurs ont été supprimés' });
     } catch (error) {
       console.error(error);
-      return res.status(500).json('Erreur interne du serveur');
+        res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
 

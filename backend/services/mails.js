@@ -10,7 +10,7 @@ const appMails = {
         try {
             const info = await mailer.sendMail(message);
             const { accepted, rejected, response } = info;
-        
+            
             return {
                 message: `Mail envoyé de ${info.envelope.from} à ${info.envelope.to}`,
                 accepted: accepted,
