@@ -26,7 +26,7 @@ const logger = {
         next();
     },
     
-    // middleware pour logger les requêtes
+    // middleware pour logger les requêtes (Apellé dans app.js sur toutes les routes)
     logReq: (req, res, next) => {
 
         const start = Date.now();
