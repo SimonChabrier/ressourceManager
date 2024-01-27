@@ -6,22 +6,26 @@ const logController = require('./../controllers/logController');
 const logger = {
     // middleware pour capturer le message dans res.locals.message
     captureRes : (req, res, next) => {
-
-        const originalJson = res.json;
-    
-        res.json = function (data) {
-            //console.log('data', data)
-            // si j'ai pas la clé message dans l'objet data, je la rajoute une valeur par défaut pour éviter d'avoir un undefined dans les logs
+        // Stocke la méthode json originale de l'objet response dans une variable (c'est une fonction que je récupère là)
+        const originalControllerResponse = res.json;
+        // Redéfinit la méthode json de l'objet response avec une fonction personnalisée avec un callback pour récupérer les données ou les modifier avant de les renvoyer
+        res.json = (data) => {
+            // console.log('captureRes', data); // ici data contient maintenant le return explicite de res.json du controller
+            // Je regarde si  j'ai une propriété message dans l'objet data retourné par le controller
             if (!data.message) {
+                // Si non je crée la propriété message et je lui donne la valeur 'pas de clé message dans l\'objet data retourné par le controller' pour ne pas avoir d'erreur dans la suite du code
                 data.message = 'pas de clé message dans l\'objet data retourné par le controller';
             }
-          res.locals.message = data;
-          originalJson.call(res, data);
+            // Si j'ai une propriété message dans l'objet data retourné par le controller, je stocke la réponse dans res.locals.message pour pouvoir la récupérer dans le middleware logReq
+            res.locals.message = data;
+            // Pour finir, j'appelle la méthode json originale de l'objet response avec les données modifiées ou non  (les données modifiées ici sont cellede la propriété message uniquement)
+            // car j'en ai impérativement besoin dans logReq pour écrire les logs dans le fichier et dans la bdd
+            // call est une méthode de l'objet Function qui permet d'appeler une fonction avec un contexte et des arguments spécifiques (ici le contexte est res et l'argument est data)
+            originalControllerResponse.call(res, data);
         };
-    
         next();
-
     },
+    
     // middleware pour logger les requêtes
     logReq: (req, res, next) => {
 
