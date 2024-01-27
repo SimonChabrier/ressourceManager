@@ -13,7 +13,7 @@ const isAuthenticated = require('../security/isAuthenticated');
 const verifyToken = require('../security/jwtCheck');
 
 // capturer le message dans res.locals.message
-const captureResponse = require('../services/captureResponse');
+const captureResponse = require('../services/captureResponse'); // middleware pour capturer le message dans res.locals.message
 
 openRouter.use(captureResponse); // récupère le message dans res.locals.message pour le logger
 apiRouter.use(captureResponse); // le message c'est toujours le résultat de la méthode du controller appelée

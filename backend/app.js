@@ -27,14 +27,12 @@ app.use(cors(
 app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
-app.use(loggerFileWriter.logClientRequestsToFile); // use for log success - put it before routes
+app.use(loggerFileWriter.logClientRequestsToFile); // use for log success - put it before routes to log client requests
 
 app.use('/api', apiRouter); // use for api routes
 app.use('/', openRouter); // use for open routes
 
-app.use(logger.logErr); // use for log errors - put it after routes
-
-
+app.use(logger.logErr); // use for log errors - put it after routes to log server errors
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
