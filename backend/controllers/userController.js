@@ -25,7 +25,7 @@ const userController = {
         firstName, 
         lastName 
       });
-      res.json(newUser);
+      return res.status(201).json({ message: 'Utilisateur créé', user: newUser });
     } catch (error) {
       // res.locals.message = error.errors.map(err => err.message);
       res.status(500).json({ message: error.errors.map(err => err.message) });}
@@ -61,7 +61,7 @@ const userController = {
 
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
   // delete one user
@@ -78,7 +78,7 @@ const userController = {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
   // get one user by username
@@ -93,7 +93,7 @@ const userController = {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
   // get one user by email
@@ -104,11 +104,11 @@ const userController = {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).json({ message: `L'utilisateur avec le email ${email} n'existe pas` });
+        return res.status(404).json({ message: `L'utilisateur avec le email ${email} n'existe pas` });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
   // get one user by id
@@ -119,11 +119,11 @@ const userController = {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
+        return res.status(404).json({ message: `L'utilisateur avec l'id ${id} n'existe pas` });
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
   // delete all users
@@ -134,7 +134,7 @@ const userController = {
       res.json({ message: 'Tous les utilisateurs ont été supprimés' });
     } catch (error) {
       console.error(error);
-      res.status(500).json('Erreur interne du serveur');
+      return res.status(500).json('Erreur interne du serveur');
     }
   },
 

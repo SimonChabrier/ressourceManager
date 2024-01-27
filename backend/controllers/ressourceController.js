@@ -9,9 +9,9 @@ const ressourceController = {
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
       }
-      res.json(ressources);
+      return res.json({"message": "Ressources trouvées", "ressources": ressources});
     } catch (error) {
-      res.status(500).send('Erreur interne du serveur');
+      return res.status(500).send({ message: error.message });
     }
   },
   // get one ressource by id and user associated
@@ -53,7 +53,7 @@ const ressourceController = {
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
-      res.json(ressource);
+      return res.json({"message": "Ressources trouvées", "ressources": ressource});
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur interne du serveur' });
@@ -64,7 +64,7 @@ const ressourceController = {
     const { title, content, tag, tech, userId } = req.body;
     try {
       const newRessource = await Ressource.create({title, content, tag, tech, userId});
-      res.json(newRessource);
+      return res.status(201).json({ message: 'Ressource créée', newRessource });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur interne du serveur' + error.message });
@@ -89,7 +89,9 @@ const ressourceController = {
       ressource.userId = userId;
 
       await ressource.save();
-      res.json(ressource);
+      
+      return res.status(200).json({ message: 'Ressource modifiée', ressource });
+   
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Erreur interne du serveur' + error.message});
@@ -104,20 +106,20 @@ const ressourceController = {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
       await ressource.destroy();
-      res.status(200).json({ message: 'Ressource supprimée' });
+      return res.status(200).json({ message: 'Ressource supprimée' });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+      return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
   // delete all ressources
   deleteAllRessources: async (req, res) => {
     try {
       await Ressource.destroy({ truncate: true });
-      res.status(200).json({ message: 'Toutes les ressources ont été supprimées' });
+      return res.status(200).json({ message: 'Toutes les ressources ont été supprimées' });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur interne du serveur' });
+      return res.status(500).json({ message: 'Erreur interne du serveur' });
     }
   },
 };

@@ -11,7 +11,7 @@ const contactController = {
         // valider les champs
         const errors = validator.validateFields({ from, to, subject, content });
         if (errors.length > 0) {
-            return res.status(400).json({ errors });
+            return res.status(400).json({ message: errors });
         }
         // envoyer le mail depuis le service  mail.js
         const sendInfo = await appMail.sendContactMail(from, to, subject, content);

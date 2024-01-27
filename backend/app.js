@@ -7,7 +7,7 @@ const cors = require('cors');
 const startWebSocketServer = require('./notifications/ws');
 const path = require('path'); 
 const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
-const logger = require('./services/logger');
+const { logReq, logErr, captureRes } = require('./services/logger');
 
 const app = express();
 
@@ -22,15 +22,15 @@ app.use(cors(
   }
 ));
 
-
-app.use(logger.logReq); // use for log request - put it before routes 
+// app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
 
-app.use('/api', apiRouter); // use for api routes
-app.use('/', openRouter); // use for open routes
+//* ROUTES + MIDDLEWARES LOGS + ROUTERS *//
+app.use('/api', captureRes, logReq, apiRouter); // use for api routes and log response (placer le router après les middlewares de log pour logger les réponses)
+app.use('/', captureRes, logReq, openRouter); // use for open routes and log response (placer le router après les middlewares de log pour logger les réponses)
 
-app.use(logger.logErr); // use for log errors - put it after routes to log server errors
+app.use(logErr); // use for log errors - put it after routes to log server errors
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {

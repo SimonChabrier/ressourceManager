@@ -1,11 +1,11 @@
-const moment = require('moment'); // pour formater la date Middleware Express
 const fs = require('fs');
 const path = require('path');
+const appUtils = require('../utils/appUtils');
 
 const logger = {
 
     // middleware pour capturer le message dans res.locals.message
-    captureResponse : (req, res, next) => {
+    captureRes : (req, res, next) => {
 
         const originalJson = res.json;
     
@@ -15,7 +15,9 @@ const logger = {
         };
     
         next();
+
     },
+
     // middleware pour logger les requêtes
     logReq: (req, res, next) => {
 
@@ -26,6 +28,13 @@ const logger = {
         console.log(`******************* Origin -----> ${req.get('Origin')}`);
         // réponse de la méthode appellée dans le controller
         console.log(`******************* Message -----> ${res.locals.message}`);
+
+        //* CE QU'ON RECUPERE DANS LA REQUETE
+        const method = req.method;
+        const url = req.url;
+        const ip = req.ip;
+        const origin = req.get('Origin') || 'no origin';
+
         next();
 
         res.on('finish', () => { // finish est un événement de l'objet response qui se déclenche quand la réponse est envoyée au client
@@ -46,15 +55,10 @@ const logger = {
             if (res.locals.message) { // les messages retournés par les controllers sont diffusés par le middleware captureResponse
                 console.log(`******************* Message -----> ${JSON.stringify(res.locals.message)}`);
             }
-
-
-            // ÉCRIRE LES LOGS DANS UN FICHIER
-            const method = req.method;
-            const url = req.url;
-            const ip = req.ip;
-            const origin = req.get('Origin');
+ 
+            //* CE QU'ON RECUPERE DANS LA REPONSE
             const code = res.statusCode;
-            const date = moment().format('DD/MM/YY HH[h]mm[mn]ss[s]');
+            const date = appUtils.appDateFormat();
             const time = duration + ' ms';
             const message = res.locals.message;  // res.locals.message est diffisée par le middleware captureResponse qui est appelé dans les routers
             let formatedControllerMessage = message.message;
@@ -62,6 +66,7 @@ const logger = {
 
             const data = [ method, url, ip, origin, code, date, time, formatedControllerMessage ]
 
+            //* ON ECRIT LES LOGS DANS UN FICHIER JSON
             logger.writeLogs(...data);
 
         });
@@ -74,11 +79,11 @@ const logger = {
         res.status(500).json({ message: 'Erreur serveur' });
     },
     // fonction pour écrire les logs dans un fichier
-    writeLogs : (method, url, ip, origin, code, date, time, message) => {
+    writeLogs : (method, url, ip, origin, code, date, ReqResDuration, message) => {
         const logFile = path.join(__dirname, '../logs/requests.json');
-        logger.ensureDirectoryExistence(logFile);
+        appUtils.ensureDirectoryExistence(logFile);
     
-        const data = { method, url, ip, origin, code, date, time, message };
+        const data = { method, url, ip, origin, code, date, ReqResDuration, message };
         // Lire le fichier existant s'il existe
         let existingLogs = [];
         try {
@@ -93,14 +98,14 @@ const logger = {
         // Écrire la liste mise à jour dans le fichier
         fs.writeFileSync(logFile, JSON.stringify(existingLogs, null, 2));
     },
-    // fonction pour créer un dossier s'il n'existe pas
-    ensureDirectoryExistence : (filePath) => {
-        const directory = path.dirname(filePath);
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory, { recursive: true });
-        }
-    },
+
 
 };
 
-module.exports = logger;
+module.exports = {  
+    // format pour exporter plusieurs fonctions et allèger les appel dans les fichiers en faisant  const { logReq, logErr, captureResponse } = require('./services/logger');
+    // et en appelant les fonctions directement par leur nom
+    logReq: logger.logReq,
+    logErr: logger.logErr,
+    captureRes: logger.captureRes
+};

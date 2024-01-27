@@ -58,7 +58,7 @@ const authController = {
         });
         
     } catch (error) {
-        res.status(500).json({ message: error.errors.map(err => err.message) });
+        return res.status(500).json({ message: error.errors.map(err => err.message) });
     }
   },
 
@@ -95,10 +95,10 @@ const authController = {
         const session = req.session;
         const sessionData = { user: user, session: session }
 
-      res.status(200).json(sessionData);
+      return res.status(200).json({ message: 'Utilisateur authentifié', sessionData });
 
     } else {
-      res.status(401).json({ message: 'Utilisateur non authentifié' });
+      return res.status(401).json({ message: 'Utilisateur non authentifié' });
     }
   },
 };
