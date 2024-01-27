@@ -39,7 +39,7 @@ const loggerFileWriter = {
         next();
     },
 
-    // A apeller comme MiddleWare sur les routers pour récupèrer les réponses des controllers
+    // Apallé sur le logger methode logReq quand il y a une code réponse >= 400
     logControllersResponsesToFile: (req, res, next) => {
         const logFile = path.join(__dirname, '../logs/server_responses_log.json');
         ensureDirectoryExistence(logFile);

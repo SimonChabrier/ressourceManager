@@ -1,3 +1,5 @@
+const loggerFileWriter = require('./loggerFileWriter');
+
 const logger = {
 
     logReq: (req, res, next) => {
@@ -19,8 +21,8 @@ const logger = {
             }
             if (res.statusCode >= 400) {
                 console.error(`******************* Erreur -----> ${res.statusMessage}`);
-                // on apelle la méthode logControllersResponsesToFile
-                const loggerFileWriter = require('./loggerFileWriter');
+                
+                // on apelle la méthode logControllersResponsesToFile du module loggerFileWriter
                 loggerFileWriter.logControllersResponsesToFile(req, res, next)
             }
             if (res.locals.message) { // les messages retournés par les controllers sont diffusés par le middleware captureResponse
