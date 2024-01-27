@@ -27,7 +27,7 @@ app.use(cors(
 app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
-app.use(loggerFileWriter.logSucessToFile); // use for log success - put it before routes
+app.use(loggerFileWriter.logClientRequestsToFile); // use for log success - put it before routes
 
 app.use('/api', apiRouter); // use for api routes
 app.use('/', openRouter); // use for open routes

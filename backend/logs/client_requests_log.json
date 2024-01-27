@@ -1,0 +1,32 @@
+[
+  {
+    "method": "POST",
+    "url": "/api/users",
+    "code": 200,
+    "date": "2024-01-27T12:52:34.312Z"
+  },
+  {
+    "method": "POST",
+    "url": "/api/users",
+    "code": 200,
+    "date": "2024-01-27T12:54:33.335Z"
+  },
+  {
+    "method": "POST",
+    "url": "/api/users",
+    "code": 200,
+    "date": "27/01/24 13h55m"
+  },
+  {
+    "method": "POST",
+    "url": "/api/users",
+    "code": 200,
+    "date": "27/01/24 14h00m"
+  },
+  {
+    "method": "POST",
+    "url": "/api/users",
+    "code": 200,
+    "date": "27/01/24 14h02m"
+  }
+]

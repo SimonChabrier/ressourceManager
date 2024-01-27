@@ -19,12 +19,14 @@ const logger = {
             }
             if (res.statusCode >= 400) {
                 console.error(`******************* Erreur -----> ${res.statusMessage}`);
-                // on apelle la méthode logErrorsToFile
+                // on apelle la méthode logControllersResponsesToFile
                 const loggerFileWriter = require('./loggerFileWriter');
-                loggerFileWriter.logErrorsToFile(req, res, next)
+                loggerFileWriter.logControllersResponsesToFile(req, res, next)
             }
             if (res.locals.message) {
-                console.log(`******************* Message -----> ${res.locals.message}`);
+                // on stringify le message pour le logger
+                controllerReturn = JSON.stringify(res.locals.message);
+                console.log(`******************* Message -----> ${controllerReturn}`);
             }
         });
     },

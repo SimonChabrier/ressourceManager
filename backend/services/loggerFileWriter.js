@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const moment = require('moment'); // pour formater la date Middleware Express
 
 // on vérifie que le dossier de destination existe, sinon on le crée
 const ensureDirectoryExistence = (filePath) => {
@@ -9,34 +10,37 @@ const ensureDirectoryExistence = (filePath) => {
     }
 };
 
-// l'objet qui va servir à écrire dans le fichier de log
-
+// on crée un objet loggerFileWriter qui contient les méthodes pour logger les requêtes et les réponses
+// et les écrire dans des fichiers json
 const loggerFileWriter = {
 
-    logSucessToFile: (req, res, next) => {
-        console.log('logSucessToFile');
+    logClientRequestsToFile: (req, res, next) => {
         const logFile = path.join(__dirname, '../logs/client_requests_log.json');
         ensureDirectoryExistence(logFile);
 
         const method = req.method;
         const url = req.url;
         const code = res.statusCode;
-        const message = res.locals.message;
-        const date = new Date();
-
-        const success = { method, url, code, message, date };
-        const successJSON = JSON.stringify(success);
-        fs.appendFile(logFile, `${successJSON},\n`, (err) => {
-            if (err) {
-                console.error('Erreur lors de l\'écriture dans le fichier de succès:', err);
-            }
-        });
+        const date = moment().format('DD/MM/YY HH[h]mm[m]');
+        const success = { method, url, code, date };
+        
+        // Lire le fichier existant s'il existe
+        let existingLogs = [];
+        try {
+            const existingLogsContent = fs.readFileSync(logFile, 'utf8');
+            existingLogs = JSON.parse(existingLogsContent);
+        } catch (err) {
+            // Le fichier n'existe peut-être pas encore ou est vide
+        }
+        // Ajouter le nouveau log à la liste existante
+        existingLogs.push(success);
+        // Écrire la liste mise à jour dans le fichier
+        fs.writeFileSync(logFile, JSON.stringify(existingLogs, null, 2));
         next();
-
     },
 
-    logErrorsToFile: (req, res, next) => {
-        console.log('logErrorsToFile');
+    // A apeller comme MiddleWare sur les routers pour récupèrer les réponses des controllers
+    logControllersResponsesToFile: (req, res, next) => {
         const logFile = path.join(__dirname, '../logs/server_responses_log.json');
         ensureDirectoryExistence(logFile);
 
@@ -44,19 +48,26 @@ const loggerFileWriter = {
         const message = res.statusMessage;
         const method = req.method;
         const route = req.baseUrl;
-        const controllerReturnMessage = res.locals.message;  // res.locals.message doit être défini dans les controllers
-        const date = new Date();        
-        const error = { code, method, route, controllerReturnMessage,  message, date };
-        const errorJSON = JSON.stringify(error);
-        fs.appendFile(logFile, `${errorJSON},\n`, (err) => {
-            if (err) {
-                console.error('Erreur lors de l\'écriture dans le fichier d\'erreur:', err);
-            }
-        });
+        const controllerReturnMessage = res.locals.message;  // res.locals.message est diffisée par le middleware captureResponse qui est appelé dans les routers
+        let formatedControllerMessage = controllerReturnMessage.message;
+        formatedControllerMessage.length === 1 ? formatedControllerMessage = formatedControllerMessage[0] : formatedControllerMessage = formatedControllerMessage;  
+        const date = moment().format('DD/MM/YY HH[h]mm[m]');
+        const error = { code, method, route, formatedControllerMessage,  message, date };
+        // Lire le fichier existant s'il existe
+        let existingLogs = [];
+        try {
+            const existingLogsContent = fs.readFileSync(logFile, 'utf8');
+            existingLogs = JSON.parse(existingLogsContent);
+        } catch (err) {
+            // Le fichier n'existe peut-être pas encore ou est vide
+        }
+        // Ajouter le nouveau log à la liste existante
+        existingLogs.push(error);
+        // Écrire la liste mise à jour dans le fichier
+        fs.writeFileSync(logFile, JSON.stringify(existingLogs, null, 2));
         next();
     },
 
 };
 
-// on exporte l'objet loggerWriter
 module.exports = loggerFileWriter;
