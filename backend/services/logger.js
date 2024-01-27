@@ -2,7 +2,7 @@ const loggerFileWriter = require('./loggerFileWriter');
 
 const logger = {
 
-    logReq: (req, res, next) => {
+    logReq: async (req, res, next) => {
         const start = Date.now();
         console.log(`******************* Requette ---> ${req.method}, ${req.url}`);
         console.log(`******************* Client IP --> ${req.ip}`);
@@ -11,7 +11,8 @@ const logger = {
         console.log(`******************* Message -----> ${res.locals.message}`);
 
         next();
-        res.on('finish', () => {
+
+        res.on('finish', async () => { // async pour pouvoir utiliser await sur loggerFileWriter.logControllersResponsesToFile (qui est une méthode asynchrone)
             const end = Date.now();
             const duration = end - start;
             console.log(`******************* Reponse ---> ${res.statusCode}`);
@@ -23,7 +24,7 @@ const logger = {
                 console.error(`******************* Erreur -----> ${res.statusMessage}`);
                 
                 // on apelle la méthode logControllersResponsesToFile du module loggerFileWriter
-                loggerFileWriter.logControllersResponsesToFile(req, res, next)
+                await loggerFileWriter.logControllersResponsesToFile(req, res, next)
             }
             if (res.locals.message) { // les messages retournés par les controllers sont diffusés par le middleware captureResponse
                 console.log(`******************* Message -----> ${JSON.stringify(res.locals.message)}`);

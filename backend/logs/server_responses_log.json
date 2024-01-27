@@ -5,6 +5,6 @@
     "route": "/api/users",
     "formatedControllerMessage": "email must be unique",
     "message": "Internal Server Error",
-    "date": "27/01/24 17h38m"
+    "date": "27/01/24 17h53m"
   }
 ]
