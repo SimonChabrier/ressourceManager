@@ -3,6 +3,8 @@ const path = require('path');
 const moment = require('moment'); // pour formater la date Middleware Express
 
 // on vérifie que le dossier de destination existe, sinon on le crée
+// avec l'option recursive: true, on crée le dossier et tous les dossiers parents qui n'existent pas
+// ça crée aussi le fichier s'il n'existe pas
 const ensureDirectoryExistence = (filePath) => {
     const directory = path.dirname(filePath);
     if (!fs.existsSync(directory)) {
@@ -15,6 +17,7 @@ const ensureDirectoryExistence = (filePath) => {
 const loggerFileWriter = {
 
     logClientRequestsToFile: (req, res, next) => {
+        
         const logFile = path.join(__dirname, '../logs/client_requests_log.json');
         ensureDirectoryExistence(logFile);
 
@@ -22,15 +25,17 @@ const loggerFileWriter = {
         const url = req.url;
         const code = res.statusCode;
         const date = moment().format('DD/MM/YY HH[h]mm[m]');
+        
         const success = { method, url, code, date };
         
         // Lire le fichier existant s'il existe
         let existingLogs = [];
         try {
-            const existingLogsContent = fs.readFileSync(logFile, 'utf8');
+             const existingLogsContent =  fs.readFileSync(logFile, 'utf8');
             existingLogs = JSON.parse(existingLogsContent);
         } catch (err) {
             // Le fichier n'existe peut-être pas encore ou est vide
+            console.error('Le fichier de log n\'existe pas ou est vide');
         }
         // Ajouter le nouveau log à la liste existante
         existingLogs.push(success);
@@ -41,6 +46,7 @@ const loggerFileWriter = {
 
     // Apallé sur le logger methode logReq quand il y a une code réponse >= 400
     logControllersResponsesToFile: (req, res, next) => {
+        
         const logFile = path.join(__dirname, '../logs/server_responses_log.json');
         ensureDirectoryExistence(logFile);
 
@@ -59,7 +65,7 @@ const loggerFileWriter = {
             const existingLogsContent = fs.readFileSync(logFile, 'utf8');
             existingLogs = JSON.parse(existingLogsContent);
         } catch (err) {
-            // Le fichier n'existe peut-être pas encore ou est vide
+            console.error('Le fichier de log n\'existe pas ou est vide');
         }
         // Ajouter le nouveau log à la liste existante
         existingLogs.push(error);

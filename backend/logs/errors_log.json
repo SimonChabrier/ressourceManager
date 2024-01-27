@@ -1,1 +1,0 @@
-{"code":500,"method":"POST","route":"/api/users","errorMessage":{"message":["email must be unique"]},"message":"Internal Server Error","date":"2024-01-27T12:27:25.423Z"}
