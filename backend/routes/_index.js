@@ -12,11 +12,12 @@ const contactRoutes = require('./contactRoutes');
 const isAuthenticated = require('../security/isAuthenticated');
 const verifyToken = require('../security/jwtCheck');
 
-// capturer le message dans res.locals.message
-const captureResponse = require('../services/captureResponse'); // middleware pour capturer le message dans res.locals.message
+const logger = require('../services/logger');
+// openRouter.use(captureResponse); // récupère le message dans res.locals.message pour le logger
+// apiRouter.use(captureResponse); // le message c'est toujours le résultat de la méthode du controller appelée
 
-openRouter.use(captureResponse); // récupère le message dans res.locals.message pour le logger
-apiRouter.use(captureResponse); // le message c'est toujours le résultat de la méthode du controller appelée
+openRouter.use(logger.captureResponse); // récupère le message dans res.locals.message pour le logger
+apiRouter.use(logger.captureResponse); // le message c'est toujours le résultat de la méthode du controller appelée
 
 // open routes préfix: /
 openRouter.use('/', authRoutes);
