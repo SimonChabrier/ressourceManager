@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const appUtils = require('../utils/appUtils');
 const logController = require('./../controllers/logController');
+const Log = require('../models/logs');  
 
 const logger = {
     // middleware pour capturer le message dans res.locals.message
@@ -73,7 +74,8 @@ const logger = {
                 // Si aucune réponse n'a été envoyée, écrire les logs
                 logger.writeLogs(...data);
                 // on apelle la méthode du controller logController pour créer un nouveau log
-                logController.createLog(...data);
+                logger.insertLog(...data);
+                
             }
         });
 
@@ -83,6 +85,25 @@ const logger = {
         console.log('logErr');
         console.error(err.stack);
         res.status(500).json({ message: 'Erreur serveur' });
+    },
+
+    // apellé dans le middleware logReq de logger.js pour créer un nouveau log
+    insertLog: async ( method, url, ip, origin, code, date, time, message)  => {
+        try {
+            const newLog = await Log.create({ 
+                method, 
+                url, 
+                ip, 
+                origin, 
+                code, 
+                date, 
+                time, 
+                message 
+            });
+            console.log(`Le log avec l'id ${newLog.id} a été créé`);
+        } catch (error) {
+            console.error(error);
+        }
     },
     // fonction pour écrire les logs dans un fichier
     writeLogs : ( method, url, ip, origin, code, date, ReqResDuration, message ) => {

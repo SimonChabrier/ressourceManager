@@ -30,25 +30,6 @@ const logController = {
         }
     },
 
-    // apellé dans le middleware logReq de logger.js pour créer un nouveau log
-    createLog: async ( method, url, ip, origin, code, date, time, message)  => {
-        try {
-            const newLog = await Log.create({ 
-                method, 
-                url, 
-                ip, 
-                origin, 
-                code, 
-                date, 
-                time, 
-                message 
-            });
-            console.log(`Le log avec l'id ${newLog.id} a été créé`);
-        } catch (error) {
-            console.error(error);
-        }
-    },
-
     deleteLog: async (req, res) => {
         const { id } = req.params;
         try {
