@@ -8,7 +8,6 @@ const startWebSocketServer = require('./notifications/ws');
 const path = require('path'); 
 const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
 const logger = require('./services/logger');
-const loggerFileWriter = require('./services/loggerFileWriter');
 
 const app = express();
 
@@ -27,8 +26,6 @@ app.use(cors(
 app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
-
-app.use(loggerFileWriter.logClientRequestsToFile); // use for log success - put it before routes to log client requests
 
 app.use('/api', apiRouter); // use for api routes
 app.use('/', openRouter); // use for open routes

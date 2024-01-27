@@ -1,0 +1,58 @@
+[
+  {
+    "method": "POST",
+    "url": "/register",
+    "ip": "::ffff:127.0.0.1",
+    "code": 200,
+    "date": "27/01/24 18h38mn23s"
+  },
+  {
+    "method": "POST",
+    "url": "/register",
+    "ip": "::ffff:127.0.0.1",
+    "code": 500,
+    "date": "27/01/24 18h41mn18s",
+    "message": {
+      "message": [
+        "email must be unique"
+      ]
+    }
+  },
+  {
+    "method": "POST",
+    "url": "/register",
+    "ip": "::ffff:127.0.0.1",
+    "code": 500,
+    "date": "27/01/24 18h42mn48s",
+    "message": {
+      "message": [
+        "email must be unique"
+      ]
+    }
+  },
+  {
+    "method": "POST",
+    "url": "/register",
+    "ip": "::ffff:127.0.0.1",
+    "code": 500,
+    "date": "27/01/24 18h45mn28s",
+    "message": {
+      "message": [
+        "email must be unique"
+      ]
+    }
+  },
+  {
+    "method": "POST",
+    "url": "/register",
+    "ip": "::ffff:127.0.0.1",
+    "code": 500,
+    "date": "27/01/24 18h45mn40s",
+    "time": "82ms",
+    "message": {
+      "message": [
+        "email must be unique"
+      ]
+    }
+  }
+]
