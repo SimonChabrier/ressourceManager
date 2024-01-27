@@ -3,7 +3,7 @@ const passport = require('./authenticate');
 
 // Configuration de la gestion de session
 const sessionConfig = {
-  secret: 'mon_secret_de_session',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
 };

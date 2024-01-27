@@ -2,7 +2,7 @@ const loggerFileWriter = require('./loggerFileWriter');
 
 const logger = {
 
-    logReq: async (req, res, next) => {
+    logReq: (req, res, next) => {
         const start = Date.now();
         console.log(`******************* Requette ---> ${req.method}, ${req.url}`);
         console.log(`******************* Client IP --> ${req.ip}`);
@@ -10,9 +10,9 @@ const logger = {
         // réponse de la méthode appellée dans le controller
         console.log(`******************* Message -----> ${res.locals.message}`);
 
+        
         next();
-
-        res.on('finish', async () => { // async pour pouvoir utiliser await sur loggerFileWriter.logControllersResponsesToFile (qui est une méthode asynchrone)
+        res.on('finish', () => {
             const end = Date.now();
             const duration = end - start;
             console.log(`******************* Reponse ---> ${res.statusCode}`);
@@ -24,7 +24,7 @@ const logger = {
                 console.error(`******************* Erreur -----> ${res.statusMessage}`);
                 
                 // on apelle la méthode logControllersResponsesToFile du module loggerFileWriter
-                await loggerFileWriter.logControllersResponsesToFile(req, res, next)
+                loggerFileWriter.logControllersResponsesToFile(req, res, next)
             }
             if (res.locals.message) { // les messages retournés par les controllers sont diffusés par le middleware captureResponse
                 console.log(`******************* Message -----> ${JSON.stringify(res.locals.message)}`);
@@ -35,7 +35,7 @@ const logger = {
     logErr: (err, req, res, next) => {
         console.log('logErr');
         console.error(err.stack);
-        res.status(500).send('Erreur interne du serveur retournée dans app.js');
+        res.status(500).json({ message: 'Erreur serveur' });
     },
 
 };
