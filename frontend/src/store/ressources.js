@@ -75,10 +75,30 @@ export const useRessourcesStore = defineStore('ressources', {
           async fetchRessource(id) {
             try {
               const response = await ressources.getRessource(id);
-              this.ressource = response.data; // pas de clé spécifique dans le json
+              this.ressource = response.data.ressource; 
               this.message = response.data.message;
             } catch (error) {
               console.error('Error fetching ressource:', error);
+            }
+          },
+
+          // créer une ressource createRessource(ressource)
+          async createRessource(ressource) {
+            try {
+              const response = await ressources.createRessource(ressource);
+              this.message = response.data.message;
+            } catch (error) {
+              console.error('Error creating ressource:', error);
+            }
+          },
+
+          // modifier la ressource updateRessource(id, ressource)
+          async updateRessource(id, ressource) {
+            try {
+              const response = await ressources.updateRessource(id, ressource);
+              this.message = response.data.message;
+            } catch (error) {
+              console.error('Error updating ressource:', error);
             }
           },
 

@@ -6,10 +6,7 @@
     
     <div class="mainContainer">
       <!-- Si j'ai un utilisateur connecté, j'affiche son nom -->
-      <div v-if="ressourcesStore.connectedUser">
-        <h5>Bonjour {{ ressourcesStore.connectedUser }}</h5>
-      </div>
-      
+
       <SearchResult></SearchResult>
 
       <router-view v-slot="{ Component }">
@@ -31,8 +28,8 @@
 <script>
 import BannerComponent from "@/components/Banner.vue";
 import NavBar from "@/components/NavBar.vue";
-import { useRessourcesStore } from "@/store/ressources";
-import { reactive, watch } from "vue";
+// import { useRessourcesStore } from "@/store/ressources";
+// import { reactive, watch } from "vue";
 
 export default {
   name: "App",
@@ -42,23 +39,10 @@ export default {
     NavBar,
   },
 
-  setup() {
-    const ressourcesStore = useRessourcesStore();
+  // setup() {
+  //   // const ressourcesStore = useRessourcesStore();
 
-    // Utilisez reactive directement
-    const username = reactive({ value: "" });
-
-    // Surveillez les changements du store pour mettre à jour 'username'
-    watch(
-      () => ressourcesStore.connectedUser,
-      (newVal) => {
-        username.value = newVal;
-      },
-      { immediate: true } // Pour obtenir la valeur initiale
-    );
-
-    return { ressourcesStore, username };
-  },
+  // },
 };
 </script>
 

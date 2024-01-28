@@ -3,14 +3,17 @@
       <router-link to="/">Ressources</router-link>
       <router-link to="/login">Login</router-link>
       <router-link @click="logout" to="/">Logout</router-link>
-      <p v-for="user in users" :key="user.id">{{ user.firstName }} {{ user.lastName }}</p>
+      <!-- v if ---->
+      <p v-if="username.value">Bonjour {{ username.value }}</p>
+      <p v-if="message.value" class="message">{{ message.value}}</p>
     </nav>
   
   </template>
   
   <script>
-  import { ref, onMounted } from 'vue';
+  import { onMounted } from 'vue';
   import { useRessourcesStore } from '@/store/ressources';
+  import { reactive, watch } from "vue";
   
   export default {
     name: 'NavBar',
@@ -18,15 +21,31 @@
     // set up du store
     setup() {
       const ressourcesStore = useRessourcesStore();
-      const users = ref([]);
+      const username = reactive({ value: "" });
+      const message = reactive({ value: "" });
+
+      watch( // Pour mettre à jour le nom d'utilisateur quand il se connecte dans le store je dois utiliser watch
+      () => ressourcesStore.connectedUser,
+      (newVal) => {
+        username.value = newVal;
+      },
+      { immediate: true } // Pour obtenir la valeur initiale
+    );
+
+    // watch message pour afficher le message d'erreur
+    watch(
+      () => ressourcesStore.message,
+      (newVal) => {
+        message.value = newVal;
+      },
+      { immediate: true }
+    );
 
       onMounted(async () => {
-        await ressourcesStore.fetchUsers();
-        users.value = ressourcesStore.getUsers;
+        //
       });
 
-    return { users };
-
+      return { username, message };
     },
 
     methods: {
@@ -42,6 +61,10 @@
   .navbar {
     text-align: right;
     padding: $padding $padding-small;
+  }
+
+  .message {
+    color: $color-success;
   }
   </style>
   

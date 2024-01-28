@@ -22,7 +22,7 @@ const ressourceController = {
       if (!ressource) {
         return res.status(404).json({ message: 'Ressource non trouvée' });
       }
-      res.json(ressource);
+      return res.json({"message": "Ressource trouvée", "ressource": ressource});
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: 'Erreur interne du serveur' });
