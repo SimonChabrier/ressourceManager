@@ -7,7 +7,7 @@ const cors = require('cors');
 const startWebSocketServer = require('./notifications/ws');
 const path = require('path'); 
 const PORT = process.env.EXPRESS_SERVEUR_PORT || 3000;
-const { logReq, logErr, captureRes } = require('./services/logger');
+const { logErr, captureRes } = require('./services/logger');
 
 const app = express();
 
@@ -22,7 +22,6 @@ app.use(cors(
   }
 ));
 
-// app.use(logger.logReq); // use for log request - put it before routes 
 sessionConfig(app); // use for session management on app all routes
 app.use(express.static(path.join(__dirname, 'public'))); // use for static files
 
