@@ -29,13 +29,12 @@ const logger = {
     
     // middleware pour logger les requêtes (Apellé dans app.js sur toutes les routes)
     logReq: (req, res, next) => {
-
+    //* REQUETTE CLIENT
         const start = Date.now();
         // récupèrer /api/ressource en entier (req.originalUrl) ou seulement /ressource (req.url)
         console.log(`******************* Requette ---> ${req.method}, ${req.originalUrl}`);
         console.log(`******************* Client IP --> ${req.ip}`);
         console.log(`******************* Origin -----> ${req.get('Origin')}`);
-        console.log(`******************* Message -----> ${res.locals.message}`); // res.locals.message est diffisée par le middleware captureRes qui est appelé dans les routers pour récupérer le message retourné par les controllers
         console.log(`******************* Utilisateur connecté -----> ${req.user ? req.user.email : 'aucun'}`);         // récupèrer l'utilisateur connecté sur la session  (req.user est ajouté par passport)                                                                      
         //* CE QU'ON RECUPERE DANS LA REQUETE
         const method = req.method;
@@ -43,9 +42,8 @@ const logger = {
         const ip = req.ip;
         const origin = req.get('Origin') || 'no origin';
         const connectedUser = req.user ? req.user.email : 'aucun';
-
         next();
-
+        //* REPONSE SERVEUR
         res.on('finish', () => { // finish est un événement de l'objet response qui se déclenche quand la réponse est envoyée au client
                                 // je peux récupérer le code de statut de la réponse et le message de la réponse retourné par le controller
             const end = Date.now();
@@ -55,7 +53,7 @@ const logger = {
             console.log(`******************* Duree -----> ${duration}ms`);
             if (req.body) { console.log(`******************* Body ------> ${JSON.stringify(req.body)}`); }
             if (res.statusCode >= 400) { console.error(`******************* Erreur -----> ${res.statusMessage}`); }
-            if (res.locals.message) { console.log(`******************* Message -----> ${JSON.stringify(res.locals.message)}`); } // les messages retournés par les controllers sont diffusés par le middleware captureResponse
+            if (res.locals.message) { console.log(`******************* Message -----> ${JSON.stringify(res.locals.message.message)}`); } // les messages retournés par les controllers sont diffusés par le middleware captureResponse
  
             //* CE QU'ON RECUPERE DANS LA REPONSE
             const code = res.statusCode;
@@ -82,6 +80,7 @@ const logger = {
         });
 
     },
+
     // middleware pour logger les erreurs
     logErr: (err, req, res, next) => {
         console.log('logErr');
