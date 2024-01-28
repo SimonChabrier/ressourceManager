@@ -71,9 +71,10 @@ export default {
 
   .mainContainer {
       flex: 1;
-      overflow-y: auto; /* Si le contenu principal peut dépasser la hauteur de la fenêtre */
+      overflow-y: auto;
       background-color: $color-light;
       padding: $padding $padding-small;
+      position: relative; /* Ajoutez cette ligne pour positionner les pages */
   }
 
   .appHeader {
@@ -83,10 +84,25 @@ export default {
   .appFooter {
     flex: 0 0 auto;
   }
-  .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+
+  .fade-enter-active{
+    transition : all 0.5s; 
   }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  .fade-leave-active {
+    transition : all 0.1s; 
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
     opacity: 0;
   }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+  }
+
+
+
+
 </style>
