@@ -6,10 +6,15 @@
           <label for="title">Titre de la ressource</label>
           <input type="text" v-model="title" id="title" placeholder="Saisissez le titre" />
         </div>
-  
+  <!--
         <div class="form-group">
           <label for="textArea">Description</label>
           <textarea v-model="content" id="textArea" placeholder="Saisissez la description"></textarea>
+        </div>
+-->
+        <div class="form-group">
+          <label for="editor">Contenu</label>
+          <QuillEditor theme="snow" />
         </div>
   
         <div class="form-group">
@@ -45,14 +50,22 @@
       </form>
     </div>
   </template>
-  
+
   <script>
   import { useRessourcesStore } from '@/store/ressources';
   import router from '@/router';
+
+    import { QuillEditor } from '@vueup/vue-quill'
+    import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
   
   export default {
     name: 'RessourceForm',
-  
+
+    components: {
+        QuillEditor
+  },
+
     setup() {
       const ressourcesStore = useRessourcesStore();
       if (ressourcesStore.connectedUser === null) {
@@ -70,6 +83,9 @@
         content: '',
         tag: '',
         tech: '',
+        editorOption: {
+          // some quill options
+        }
       };
     },
   
@@ -136,3 +152,4 @@
   }
   </style>
   
+  <link rel="stylesheet" href="https://unpkg.com/@vueup/vue-quill@latest/dist/vue-quill.snow.prod.css">
