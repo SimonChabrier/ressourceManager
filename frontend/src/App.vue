@@ -20,7 +20,7 @@
     <div class="appFooter">
       <FooterComp></FooterComp>
     </div>
-    
+
     <BannerComponent text="© 2024 - Tous droits réservés" color="success" />
   </div>
 </template>

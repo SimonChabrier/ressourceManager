@@ -1,7 +1,7 @@
 <template>
+  <div>
     <div id="ressource-view">
       <h1>Test View</h1>
-      <p>{{ message }}</p>
       <h2>{{ ressource.title }}</h2>
       <p>{{ ressource.content }}</p>
       <!-- revenir en arr!ere -->
@@ -10,19 +10,26 @@
       </router-link>
       <button @click="deleteRessource(ressource.id)">Supprimer</button>
     </div>
+    <div id="spinnerContainer">
+      <SpinerComponent text="loading"></SpinerComponent>
+    </div>
+  </div>
 </template>
 
 <script>
 import { useRessourcesStore } from '@/store/ressources';
 import { onMounted, ref } from 'vue';
+import SpinerComponent from '@/components/Spiner.vue';
 import router from '@/router';
 
 
 export default {
+  components: { 
+    SpinerComponent 
+  },
   name: 'RessourceView',
 
   setup() {
-
     //* déclarer toutes les reférences au store ici
     const ressourcesStore = useRessourcesStore();
     const ressource = ref('');
@@ -31,9 +38,8 @@ export default {
       await ressourcesStore.deleteRessource(id);
       // on vide la div ressource-view et on affiche le spinner au centre de la page
       document.getElementById('ressource-view').innerHTML = '';
-      const spinner = '<span class="loader"></span>';
-      document.getElementById('ressource-view').innerHTML = spinner;
-      // on redirige vers la page ressources
+      document.getElementById('spiner').classList.remove('hide');
+      // on redirige vers la page ressources ne simulant un temps de chargement
       setTimeout(() => {
         router.push({ name: 'ressources' });
       }, 1000);
@@ -59,23 +65,4 @@ export default {
 </script>
 
 <style>
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #FFF;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-    }
-
-    @keyframes rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-    } 
 </style>
