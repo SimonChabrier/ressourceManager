@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import RessourcesView from '../views/RessourcesView.vue'
 import RessourceView from '../views/RessourceView.vue'
 import LoginView from '../views/Login.vue'
+import RessourceForm from '../views/RessourceForm.vue'
 
 const routes = [
   {
@@ -14,11 +15,22 @@ const routes = [
     name: 'ressource',
     component: RessourceView
   },
+  // créer une ressource (formulaire)
+  {
+    path: '/ressource',
+    name: 'ressource-create',
+    component: RessourceForm
+  },
   {
     path: '/login',
     name: 'login',
     component: LoginView
   },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: LoginView
+  }
 ]
 
 const router = createRouter({

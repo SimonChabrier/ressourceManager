@@ -1,6 +1,7 @@
 <template>
     <nav class="navbar">
       <router-link to="/">Ressources</router-link>
+      <router-link to="/ressource">Nouvelle ressource</router-link>
       <router-link to="/login">Login</router-link>
       <router-link @click="logout" to="/">Logout</router-link>
       <!-- v if ---->
@@ -27,7 +28,12 @@
       watch( // Pour mettre à jour le nom d'utilisateur quand il se connecte dans le store je dois utiliser watch
       () => ressourcesStore.connectedUser,
       (newVal) => {
-        username.value = newVal;
+        // récupèrer email sur newVal
+        console.log(newVal);
+        if(newVal) {
+          username.value = newVal.email;
+        }
+        // username.value = newVal
       },
       { immediate: true } // Pour obtenir la valeur initiale
     );

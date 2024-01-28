@@ -49,7 +49,10 @@ export default {
     watch: {
         response() {
             if (this.response === 'Authentification réussie') {
-                this.$router.push('/');
+                // this.$router.push('/');
+                // on redirige vers la page précédente d'où on vient 
+                this.$router.go(-1);
+
             } else {
                 document.getElementById('errors').innerHTML = this.response;
             }

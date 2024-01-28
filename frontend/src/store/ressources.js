@@ -40,7 +40,7 @@ export const useRessourcesStore = defineStore('ressources', {
         async login(credentials) {
             try {
               const response = await security.login(credentials);
-              this.connectedUser = response.data.user.email;
+              this.connectedUser = response.data.user;
               if (response.data.message) {
                 return response.data.message;
               }
