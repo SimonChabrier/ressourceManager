@@ -1,0 +1,140 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;200;300;400;500;600;700;800;900&family=Open+Sans:wght@300&family=Poppins:wght@300&display=swap');
+@import '_vars';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+body {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Noto Sans JP', sans-serif;
+    margin: 0 $margin-small;
+    background: $color-white;
+}
+h1 {
+    font-weight: 900;
+    font-size: 2.5rem;
+    color : $color-primary;
+}
+h2 {
+    font-weight: 800;
+    font-size: 1.7rem;
+    color : $color-secondary;
+}
+h3 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color : $color-tertiary;
+}
+h4 {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color : $color-quaternary;
+}
+h5 {
+    font-weight: 500;
+    font-size: 1rem;
+    color : $color-quinary;
+}
+h6 {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color : $color-light;
+}
+p {
+    font-weight: 300;
+    font-size: 0.8rem;
+    color : $color-grey-light-2;
+
+}
+small {
+    font-weight: 200;
+    font-size: 0.6rem;
+    color : $color-grey-light-2;
+}
+label {
+    font-weight: 100;
+    font-size: 0.6rem;
+    color : $color-grey-light-2;
+}
+
+a {
+    text-decoration: none;
+    color: $color-primary;
+    margin-right: $margin-small;
+    &:hover {
+        color: $color-secondary;
+    }
+    // active
+    &:active {
+        color: $color-tertiary;
+    }
+    // click
+    &:focus {
+        color: $color-quaternary;
+    }
+}
+
+button {
+    // Styles du bouton
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 300;
+    font-size: 0.8rem;
+    color: $color-grey-light-2;
+    background: $color-primary;
+    border: none;
+    border-radius: $border-radius;
+    padding: $padding-small $padding;
+    cursor: pointer;
+    transition: $transition;
+    width: fit-content;
+    // Hover
+    &:hover {
+        background: $color-secondary;
+    }
+
+    // Active
+    &:active {
+        background: $color-tertiary;
+    }
+
+    // Focus
+    &:focus {
+        background: $color-quaternary;
+    }
+
+    // Effet ::after
+    &::after {
+        content: ">";
+        display: inline-block;
+        margin-left: $padding-small;    
+        transition: $transition;
+        width: 20px;
+        height: 20px;   
+        border-radius: 50%;
+        background: $color-grey-light-2;
+        color: black;
+    }
+}
+
+.view_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+  

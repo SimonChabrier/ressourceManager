@@ -1,24 +1,29 @@
 <template>
-  <div class="mainContent">
+  <div class="appContainer">
     <div class="appHeader">
       <NavBar></NavBar>
     </div>
-    <div class="main">
+    
+    <div class="mainContainer">
       <!-- Si j'ai un utilisateur connecté, j'affiche son nom -->
       <div v-if="ressourcesStore.connectedUser">
-        <h1>Bonjour {{ ressourcesStore.connectedUser }}</h1>
+        <h5>Bonjour {{ ressourcesStore.connectedUser }}</h5>
       </div>
       
       <SearchResult></SearchResult>
+
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
+
     </div>
+
     <div class="appFooter">
       <FooterComp></FooterComp>
     </div>
+    
     <BannerComponent text="© 2024 - Tous droits réservés" color="success" />
   </div>
 </template>
@@ -58,25 +63,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  * {
-      box-sizing: border-box!important;
-      -moz-box-sizing: border-box!important;
-      -webkit-box-sizing: border-box!important;
-  }
-  .mainContent {
-    margin: 0 auto;
-    background-color: #fff;
-    min-height: 100vh;
-    flex-direction: column;
+  .appContainer {
     display: flex;
+    flex-direction: column;
+    height: 100vh;
   }
+
+  .mainContainer {
+      flex: 1;
+      overflow-y: auto; /* Si le contenu principal peut dépasser la hauteur de la fenêtre */
+      background-color: $color-light;
+      padding: $padding $padding-small;
+  }
+
   .appHeader {
     flex: 0 0 auto;
   }
-  .main {
-    flex: 1 0 auto;
-  }
+
   .appFooter {
     flex: 0 0 auto;
   }
@@ -86,5 +89,4 @@ export default {
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
   }
-
 </style>

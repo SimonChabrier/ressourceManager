@@ -15,7 +15,7 @@ app.use(bodyParser.json()); // use for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // use for parsing application/x-www-form-urlencoded
 app.use(cors(
   {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:8080',
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']

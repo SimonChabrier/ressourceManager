@@ -61,7 +61,7 @@ const logger = {
             const time = duration + ' ms';
             let message = res.locals.message.message;  // res.locals.message est diffisée par le middleware captureResponse qui est appelé dans les routers
             message.length === 1 ? message = message[0] : message;
-
+            // let message ='test';
             const data = [ connectedUser, method, url, ip, origin, code, date, time, message ]
 
             //* ON ECRIT LES LOGS DANS UN FICHIER JSON ET ON CREE UN NOUVEAU LOG DANS LA BDD

@@ -29,14 +29,12 @@ export default {
 
 <style lang="scss" scoped>
 
-    .banner {
-        padding: 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.banner {
+    padding: $padding $padding-small;
+    text-align: center;
+}
   .bg-success {
-    background-color: #28a745;
+    background-color: $color-grey-light-1;
   }
 
 </style>

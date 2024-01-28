@@ -1,4 +1,5 @@
 import './registerServiceWorker';
+import './assets/styles/app.scss';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
