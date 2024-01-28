@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const appUtils = require('../utils/appUtils');
-const logController = require('./../controllers/logController');
 const Log = require('../models/logs');  
 
 const logger = {
@@ -32,24 +31,23 @@ const logger = {
     logReq: (req, res, next) => {
 
         const start = Date.now();
-        // requête de l'utilisateur
-        console.log(`******************* Requette ---> ${req.method}, ${req.url}`);
+        // récupèrer /api/ressource en entier (req.originalUrl) ou seulement /ressource (req.url)
+        console.log(`******************* Requette ---> ${req.method}, ${req.originalUrl}`);
         console.log(`******************* Client IP --> ${req.ip}`);
         console.log(`******************* Origin -----> ${req.get('Origin')}`);
-        console.log(`******************* Message -----> ${res.locals.message}`); // res.locals.message est diffisée par le middleware captureResponse qui est appelé dans les routers
-                                                                                // c'est le return explicite qui est retourné par les controllers (si pas de return explicite, c'est un return implicite de undefined)
-
+        console.log(`******************* Message -----> ${res.locals.message}`); // res.locals.message est diffisée par le middleware captureRes qui est appelé dans les routers pour récupérer le message retourné par les controllers
+        console.log(`******************* Utilisateur connecté -----> ${req.user ? req.user.email : 'aucun'}`);         // récupèrer l'utilisateur connecté sur la session  (req.user est ajouté par passport)                                                                      
         //* CE QU'ON RECUPERE DANS LA REQUETE
         const method = req.method;
-        const url = req.url;
+        const url = req.originalUrl;
         const ip = req.ip;
         const origin = req.get('Origin') || 'no origin';
+        const connectedUser = req.user ? req.user.email : 'aucun';
 
         next();
 
         res.on('finish', () => { // finish est un événement de l'objet response qui se déclenche quand la réponse est envoyée au client
                                 // je peux récupérer le code de statut de la réponse et le message de la réponse retourné par le controller
-
             const end = Date.now();
             const duration = end - start;
             
@@ -66,16 +64,20 @@ const logger = {
             let message = res.locals.message.message;  // res.locals.message est diffisée par le middleware captureResponse qui est appelé dans les routers
             message.length === 1 ? message = message[0] : message;
 
-            const data = [ method, url, ip, origin, code, date, time, message ]
+            const data = [ connectedUser, method, url, ip, origin, code, date, time, message ]
 
             //* ON ECRIT LES LOGS DANS UN FICHIER JSON ET ON CREE UN NOUVEAU LOG DANS LA BDD
             // Vérifier si une réponse a déjà été envoyée (pour ne pas envoyer de headers après l'envoi de la réponse)
             if (!res.locals.responseSent) {
                 // Si aucune réponse n'a été envoyée, écrire les logs
                 logger.writeLogs(...data);
-                // on apelle la méthode du controller logController pour créer un nouveau log
-                logger.insertLog(...data);
-                
+                // on apelle la méthode create du Model qui est async et qui retourne une promise c'est pour ça qu'on peut mettre un then et un catch
+                Log.create({ connectedUser, method, url, ip, origin, code, date, time, message }).then((log) => {
+                    console.log('Nouveau log créé'); // je retourne rien si tout est ok
+                }).catch((err) => {
+                    // sinon je retourne une erreur 500 et un message
+                    console.error(err);
+                });
             }
         });
 
@@ -87,30 +89,12 @@ const logger = {
         res.status(500).json({ message: 'Erreur serveur' });
     },
 
-    // apellé dans le middleware logReq de logger.js pour créer un nouveau log
-    insertLog: async ( method, url, ip, origin, code, date, time, message)  => {
-        try {
-            const newLog = await Log.create({ 
-                method, 
-                url, 
-                ip, 
-                origin, 
-                code, 
-                date, 
-                time, 
-                message 
-            });
-            console.log(`Le log avec l'id ${newLog.id} a été créé`);
-        } catch (error) {
-            console.error(error);
-        }
-    },
     // fonction pour écrire les logs dans un fichier
-    writeLogs : ( method, url, ip, origin, code, date, ReqResDuration, message ) => {
+    writeLogs : (connectedUser, method, url, ip, origin, code, date, ReqResDuration, message ) => {
         const logFile = path.join(__dirname, '../logs/requests.json');
         appUtils.ensureDirectoryExistence(logFile);
     
-        const data = { method, url, ip, origin, code, date, ReqResDuration, message };
+        const data = { connectedUser, method, url, ip, origin, code, date, ReqResDuration, message };
         // Lire le fichier existant s'il existe
         let existingLogs = [];
         try {

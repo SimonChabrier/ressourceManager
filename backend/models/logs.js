@@ -7,6 +7,10 @@ const Log = sequelize.define('log', {
         primaryKey: true,
         autoIncrement: true,
     },
+    connectedUser: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
     method: {
         type: DataTypes.TEXT,
         allowNull: false,
