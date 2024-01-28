@@ -15,4 +15,5 @@ module.exports = defineConfig({
   },
   // configuration de base
   transpileDependencies: true,
+
 });

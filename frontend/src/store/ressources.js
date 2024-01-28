@@ -13,6 +13,9 @@ export const useRessourcesStore = defineStore('ressources', {
         ressources: [], 
         ressource: null,
         message: null,
+        re: {
+          body : 'ma valeur',
+        }
     }),
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store

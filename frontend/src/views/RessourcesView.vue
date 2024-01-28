@@ -5,13 +5,13 @@
 
     <div v-for="ressource in ressources" :key="ressource.id">
       <h2>{{ ressource.title }}</h2>
-      <p>{{ ressource.content }}</p>
-      <!-- au clic on pourr l'i de la ressource dans le router pour faire un lien -->
+      <!-- Utilisation de la propriété calculée formattedContent -->
+      <p v-html="formattedContent(ressource.content)"></p>
+      <!-- au clic on pourra utiliser l'id de la ressource dans le router pour faire un lien -->
       <router-link :to="{ name: 'ressource', params: { id: ressource.id } }">
         Voir la ressource
       </router-link>
     </div>
-  
   </div>
 </template>
 
@@ -33,9 +33,21 @@ export default {
       message.value = ressourcesStore.message;
     });
 
+    // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
+    const formattedContent = (content) => {
+      if (content) {
+        // Limitez le contenu à 250 caractères
+        const limitedContent = content.substring(0, 250);
+        // Retournez le contenu traité avec les balises HTML interprétées
+        return limitedContent;
+      }
+      return '';
+    };
+
     return {
       ressources,
       message,
+      formattedContent,
     };
   },
 };
