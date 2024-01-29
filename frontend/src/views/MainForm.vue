@@ -122,8 +122,6 @@ if (router.currentRoute.value.params.id) {
   fetchPost();
   btnText.value = 'Modifier';
   pageTitre.value = 'Modifier une ressource';
-} else {
-  ressourceId.value = '';
 }
 
 const toolbar = [
@@ -151,7 +149,7 @@ const handleSubmit = async () => {
   if (!ressourceId.value) {
     await ressourcesStore.createRessource(formData);
   } else {
-    await ressourcesStore.patchRessource(ressourceId, formData);
+    await ressourcesStore.patchRessource(ressourceId.value, formData);
   }
   router.push({ name: 'ressources' });
 };
