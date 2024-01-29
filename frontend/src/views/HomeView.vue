@@ -1,18 +1,20 @@
 <template>
   <div>
     <h1>Test View</h1>
-    <p>{{ count }} - {{ message }}</p>
-
+      <p>{{ count }} - {{ server_message }}</p>
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
       <p v-html=formattedContent(ressource.content)></p>
       <div class="tags">
-        <span class="tag">{{ ressource.tag }}</span>
-        <span class="tag">{{ ressource.tech }}</span>
+        <span v-if="ressource.tag"  class="tag">{{ ressource.tag }}</span>
+        <span v-if="ressource.tech"  class="tag">{{ ressource.tech }}</span>
       </div>
-      <span class="date">{{ formatedDate(ressource.createdAt) }}</span>
-      <router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link>
-      <router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link>
+            <p class="date">{{ formatedDate(ressource.createdAt) }}</p>
+          
+          <div class="ressource_links">
+            <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link></p>
+            <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link></p>
+          </div>
     </div>
   </div>
 </template>
@@ -27,13 +29,13 @@ export default {
   setup() {
     const ressourcesStore = useRessourcesStore();
     const ressources = ref([]); // on ajoute les références au store
-    const message = ref(''); 
+    const server_message = ref(''); 
     const count = ref(0);
 
     onMounted(async () => {
       await ressourcesStore.getRessources();
       ressources.value = ressourcesStore.ressources;
-      message.value = ressourcesStore.message;
+      server_message.value = ressourcesStore.message;
       count.value = ressourcesStore.ressources?.length || 0;
     });
 
@@ -79,7 +81,7 @@ export default {
     // retourner les références locales pour les utiliser dans le template
     return {
       ressources,
-      message,
+      server_message,
       formattedContent,
       formatedDate,
       count,
