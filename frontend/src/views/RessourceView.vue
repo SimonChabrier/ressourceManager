@@ -48,7 +48,7 @@ export default {
     //* utiliser les rférences ici pour récupérer les données du store
     onMounted(async () => {
       const id = router.currentRoute.value.params.id;
-      await ressourcesStore.fetchRessource(id);
+      await ressourcesStore.getRessource(id);
       // Affectez les valeurs du store aux références locales (on utilise plus this avec Vue 3)
       ressource.value = ressourcesStore.ressource;
       message.value = ressourcesStore.message;      

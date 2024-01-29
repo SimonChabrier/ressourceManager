@@ -1,74 +1,83 @@
 <template>
-    <div>
-        <h1>Créer une ressource</h1>
-        <!-- bouton pou rfetcher un post
-        <button @click="fetchPosts">Get posts</button>
-        -->
-      <!-- Formulaire de création de ressource -->
-      <form class="resource-form" @submit.prevent="createRessource">
-        <div class="form-group">
-          <label for="title">Titre de la ressource</label>
-          <input type="text" v-model="title" id="title" placeholder="Saisissez le titre" />
-        </div>
-  
-        <div class="form-group">
-          <label for="tag">Tag</label>
-            <quill-editor 
-                ref="quill" 
-                :modules="modules" 
-                :toolbar="toolbar" 
-                v-model:content="content" 
-                contentType="html" 
-            />
-        </div>
-  
-        <div class="form-group">
-          <label for="tag">Tag</label>
-          <select v-model="tag" id="tag">
-            <option value="" disabled selected hidden>Choisir un tag</option>
-            <option value="doc">Documentation</option>
-            <option value="tuto">Tutoriel</option>
-            <option value="article">Article</option>
-          </select>
-        </div>
-  
-        <div class="form-group">
-          <label for="tech">Technologie</label>
-          <select v-model="tech" id="tech">
-            <option value="" disabled selected hidden>Choisir une technologie</option>
-            <option value="html">HTML</option>
-            <!-- ... autres options ... -->
-          </select>
-        </div>
-  
-        <input type="submit" value="Créer" />
-      </form>
-    </div>
-  </template>
-  
-  <script setup>
-  import BlotFormatter from 'quill-blot-formatter'
-  import axios from 'axios'
-  import { ref, nextTick } from 'vue'
-  import { useRessourcesStore } from '@/store/ressources';
-  import router from '@/router';
-  import '@vueup/vue-quill/dist/vue-quill.snow.css'
-  import { QuillEditor } from '@vueup/vue-quill'
+  <div>
+    <h1>Créer une ressource</h1>
+    
+    <!-- Formulaire de création de ressource -->
+    <form class="resource-form" @submit.prevent="handleSubmit">
+      <div class="form-group">
+        <label for="title">Titre de la ressource</label>
+        <input type="text" v-model="title" id="title" placeholder="Saisissez le titre" />
+      </div>
 
-  const ressourcesStore = useRessourcesStore();
+      <div class="form-group">
+        <label for="tag">Contenu</label>
+        <quill-editor ref="quill" :modules="modules" :toolbar="toolbar" v-model:content="content" contentType="html" />
+      </div>
 
-  const title = ref('');
-  const content = ref('');
-  const tag = ref('');
-  const tech = ref('');
-  // propriété pour récupérer l'instance de Quill Editor et pouvoir y accéder dans le code
-  const quill = ref(null);
-  // propriété pour stocker le contenu de Quill Editor (à utiliser avec v-model)
-  const modules = {
-    module: BlotFormatter,
-  };
-  
-  const toolbar = [
+      <div class="form-group">
+        <label for="tag">Tag</label>
+        <select v-model="tag" id="tag">
+          <option value="" disabled selected hidden>Choisir un tag</option>
+          <option value="doc">Documentation</option>
+          <option value="tuto">Tutoriel</option>
+          <option value="article">Article</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tech">Technologie</label>
+        <select v-model="tech" id="tech">
+          <option value="" disabled selected hidden>Choisir une technologie</option>
+          <option value="html">HTML</option>
+          <!-- ... autres options ... -->
+        </select>
+      </div>
+
+      <input type="submit" value="Créer" />
+    </form>
+  </div>
+</template>
+
+<script setup> // setup() est une fonctionnalité de Vue 3 qui permet de simplifier le code des composants
+// il permet de déclarer des variables et des fonctions sans avoir à les déclarer dans le data() et methods: {}
+// https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
+
+import BlotFormatter from 'quill-blot-formatter'
+import axios from 'axios'
+import { ref, nextTick } from 'vue'
+import { useRessourcesStore } from '@/store/ressources';
+import router from '@/router';
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import { QuillEditor } from '@vueup/vue-quill'
+
+const ressourcesStore = useRessourcesStore();
+const ressourceId = ref('');
+const userId = ref('');
+const title = ref('');
+const content = ref('');
+const tag = ref('');
+const tech = ref('');
+const quill = ref(null);
+
+const modules = {
+  module: BlotFormatter,
+};
+
+// si j'ai un id dans l'url, je le passe à la ref ressourceId
+if (router.currentRoute.value.params.id) {
+  ressourceId.value = router.currentRoute.value.params.id;
+} else {
+  console.log('pas de paramètre de route');
+}
+// si j'ai un id dans le store, je le passe à la ref userId
+if (ressourcesStore.connectedUser) {
+  userId.value = ressourcesStore.connectedUser.id;
+  console.log('userId', userId.value);
+} else {
+  router.push({ name: 'login' });
+}
+
+const toolbar = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   ['bold', 'italic', 'underline', 'strike'],
   ['blockquote', 'code-block'],
@@ -77,100 +86,62 @@
   [{ color: [] }, { background: [] }],
   [{ font: [] }],
   ['link', 'image', 'video'],
-//   ['clean'],
+  ['clean'],
 ];
-  
-  const createRessource = async () => {
-      // on créer un objet ressource avec les données du formulaire et l'id de l'utilisateur
-      // les données sont récupérées grâce au v-model sur les inputs
-        const ressource = {
-            title: title.value,
-            content: content.value,
-            tag: tag.value,
-            tech: tech.value,
-            userId: ressourcesStore.connectedUser.id
-        };
 
-      await ressourcesStore.createRessource(ressource);
-      router.push({ name: 'ressources' });
-    };
-
-  // Fonction pour charger les posts (à ajuster selon votre API)
-  // const id = router.currentRoute.value.params.id;
-
-  const fetchPosts = async () => {
-    try {
-      const id = router.currentRoute.value.params.id;
-      const response = await axios.get('http://localhost:3000/api/ressources/' + id);
-        console.log(response.data);
-        let post = response.data.ressource;  
-        // post.reverse();
-        // post = post[0];
-        // Mettre à jour le contenu de Quill avec le contenu du post
-        // Utiliser nextTick pour s'assurer que Quill a bien rendu avant de mettre à jour le contenu
-      nextTick(() => {
-        // set title
-        title.value = post.title;
-        // set content
-        quill.value.setHTML(post.content); // on met à jour le contenu de Quill avec le contenu du post
-        // set tag
-        tag.value = post.tag;
-        // set tech
-        tech.value = post.tech;
-      });
-  
-    } catch (error) {
-      console.warn(error);
-    }
+// Centralisation de la gestion du formulaire
+const handleSubmit = async () => {
+  const formData = {
+    title: title.value,
+    content: content.value,
+    tag: tag.value,
+    tech: tech.value,
+    userId: userId.value,
   };
-  
 
-    // // si j'ai paramètres dans la route, je fetch le post correspondant
-    if (router.currentRoute.value.params.id) {
-        fetchPosts();
-    }
+  if (!router.currentRoute.value.params.id) {
+    await ressourcesStore.createRessource(formData);
+  } else {
+    await ressourcesStore.patchRessource(ressourceId, formData);
+  }
+  // resetForm();
+  router.push({ name: 'ressources' });
+};
 
-  </script>
-  
-  <style lang="scss" scoped>
-  .resource-form {
-    max-width: 90%;
-    margin: auto;
+// Fonction pour charger les posts (à ajuster selon votre API)
+const fetchPost = async () => {
+  try {
+    const id = router.currentRoute.value.params.id;
+    const response = await axios.get('http://localhost:3000/api/ressources/' + id);
+    let post = response.data.ressource;
+
+    nextTick(() => {
+      title.value = post.title;
+      quill.value.setHTML(post.content);
+      tag.value = post.tag;
+      tech.value = post.tech;
+    });
+  } catch (error) {
+    console.log(error);
   }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  input,
-  textarea,
-  select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  textarea {
-    height: 400px;
-  }
-  
-  button {
-    color: white;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
+};
+
+if (router.currentRoute.value.params.id) {
+  console.log('fetch');
+  fetchPost();
+}
+</script>
+
+<style lang="scss" scoped>
+/* Styles ici */
+.resource-form {
+  max-width: 90%;
+  margin: auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
 
 
-  </style>
-  
+</style>

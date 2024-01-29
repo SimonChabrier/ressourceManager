@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import RessourcesView from '../views/RessourcesView.vue'
+import HomeView from '../views/HomeView.vue'
 import RessourceView from '../views/RessourceView.vue'
 import LoginView from '../views/Login.vue'
 // import RessourceForm from '../views/RessourceForm.vue'
@@ -12,22 +12,30 @@ const routes = [
   {
     path: '/',
     name: 'ressources',
-    component: RessourcesView
+    component: HomeView
   },
   {
     path: '/ressource/:id',
-    name: 'ressource',
+    name: 'ressource-view',
     component: RessourceView
   },
   {
     path: '/ressource-edit/:id',
-    name: 'ressource',
+    name: 'ressource-edit',
     component: MainForm
   },
   // créer une ressource (formulaire)
   {
     path: '/ressource',
     name: 'ressource-create',
+    // vérifier le token
+    beforeEnter: (to, from, next) => {
+      if (tokenManager.getToken()) {
+        next();
+      } else {
+        next({ name: 'login' });
+      }
+    },
     component: MainForm
   },
   {

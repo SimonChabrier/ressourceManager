@@ -6,19 +6,12 @@
     
     <div class="mainContainer">
       <!-- Si j'ai un utilisateur connecté, j'affiche son nom -->
-
-      <SearchResult></SearchResult>
-
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </router-view>
 
-    </div>
-
-    <div class="appFooter">
-      <FooterComp></FooterComp>
     </div>
 
     <BannerComponent text="© 2024 - Tous droits réservés" color="success" />
@@ -55,10 +48,11 @@ export default {
 
   .mainContainer {
       flex: 1;
-      overflow-y: auto;
+      // overflow-y: auto;
       background-color: $color-light;
-      padding: $padding $padding-small;
+      padding: $padding-large $padding-xlarge;
       position: relative; /* Ajoutez cette ligne pour positionner les pages */
+      border: 1px solid $color-dark;
   }
 
   .appHeader {

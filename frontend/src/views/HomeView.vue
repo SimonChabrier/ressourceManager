@@ -1,19 +1,18 @@
 <template>
   <div>
     <h1>Test View</h1>
-    <p>{{ message }}</p>
+    <p>{{ count }} - {{ message }}</p>
 
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
-      <p v-html="formattedContent(ressource.content)"></p>
+      <p v-html=formattedContent(ressource.content)></p>
       <div class="tags">
         <span class="tag">{{ ressource.tag }}</span>
         <span class="tag">{{ ressource.tech }}</span>
       </div>
       <span class="date">{{ formatedDate(ressource.createdAt) }}</span>
-      <router-link :to="{ name: 'ressource', params: { id: ressource.id } }">
-        Voir la ressource
-      </router-link>
+      <router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link>
+      <router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link>
     </div>
   </div>
 </template>
@@ -23,25 +22,32 @@ import { useRessourcesStore } from '@/store/ressources';
 import { onMounted, ref } from 'vue';
 
 export default {
-  name: 'RessourcesView',
+  name: 'HomeView',
 
   setup() {
     const ressourcesStore = useRessourcesStore();
     const ressources = ref([]); // on ajoute les références au store
     const message = ref(''); 
+    const count = ref(0);
 
     onMounted(async () => {
-      await ressourcesStore.fetchRessources();
+      await ressourcesStore.getRessources();
       ressources.value = ressourcesStore.ressources;
       message.value = ressourcesStore.message;
+      count.value = ressourcesStore.ressources?.length || 0;
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
       if (content) {
-        // on élève les balises HTML et on limite à 250 caractères
-        content = content.replace(/<[^>]*>/g, '');
-        const limitedContent = content.substring(0, 250);
+        // enlever toutes les balises html sans contenu
+        content = content.replace(/<[^>]*>([\s]?)*<\/[^>]*>/g, '');
+        // en lever tous les espaces blancs en début et fin de chaine
+        content = content.trim();
+        // enlever tous les espaces blancs entre deux balises HTML
+        content = content.replace(/>\s+</g, '><');
+
+        const limitedContent = content.substring(0, 500);
         // Retournez le contenu traité avec les balises HTML interprétées
         return limitedContent;
       }
@@ -70,11 +76,13 @@ export default {
       return '';
     };
 
+    // retourner les références locales pour les utiliser dans le template
     return {
       ressources,
       message,
       formattedContent,
       formatedDate,
+      count,
     };
   },
 };

@@ -23,8 +23,8 @@ export default {
     createRessource(ressource) {
         return apiClient.post('/ressources', ressource)
     },
-    updateRessource(ressource) {
-        return apiClient.put('/ressources/' + ressource._id, ressource)
+    patchRessource(ressourceId, ressource) {
+        return apiClient.patch('/ressources/' + ressourceId, ressource)
     },
     deleteRessource(id) {
         return apiClient.delete('/ressources/' + id)
