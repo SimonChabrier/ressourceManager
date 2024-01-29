@@ -1,8 +1,9 @@
 <template>
     <div>
         <h1>Créer une ressource</h1>
-        <!-- bouton pou rfetcher un post-->
+        <!-- bouton pou rfetcher un post
         <button @click="fetchPosts">Get posts</button>
+        -->
       <!-- Formulaire de création de ressource -->
       <form class="resource-form" @submit.prevent="createRessource">
         <div class="form-group">
@@ -55,18 +56,14 @@
   import { QuillEditor } from '@vueup/vue-quill'
 
   const ressourcesStore = useRessourcesStore();
-    if (ressourcesStore.connectedUser === null) {
-    router.push({ name: 'login' });
-    } 
 
   const title = ref('');
   const content = ref('');
-//   const test = ref('');
   const tag = ref('');
   const tech = ref('');
-  
+  // propriété pour récupérer l'instance de Quill Editor et pouvoir y accéder dans le code
   const quill = ref(null);
-  
+  // propriété pour stocker le contenu de Quill Editor (à utiliser avec v-model)
   const modules = {
     module: BlotFormatter,
   };
@@ -84,7 +81,6 @@
 ];
   
   const createRessource = async () => {
-
       // on créer un objet ressource avec les données du formulaire et l'id de l'utilisateur
       // les données sont récupérées grâce au v-model sur les inputs
         const ressource = {
@@ -96,29 +92,44 @@
         };
 
       await ressourcesStore.createRessource(ressource);
-      //router.push({ name: 'ressources' });
+      router.push({ name: 'ressources' });
     };
-  
+
   // Fonction pour charger les posts (à ajuster selon votre API)
+  // const id = router.currentRoute.value.params.id;
+
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/ressources');
-        
+      const id = router.currentRoute.value.params.id;
+      const response = await axios.get('http://localhost:3000/api/ressources/' + id);
         console.log(response.data);
-      
-        let post = response.data.ressources;  
-        post.reverse();
-        post = post[0];
+        let post = response.data.ressource;  
+        // post.reverse();
+        // post = post[0];
         // Mettre à jour le contenu de Quill avec le contenu du post
-      // Utiliser nextTick pour s'assurer que Quill a bien rendu avant de mettre à jour le contenu
+        // Utiliser nextTick pour s'assurer que Quill a bien rendu avant de mettre à jour le contenu
       nextTick(() => {
-        quill.value.setHTML(post.content);
+        // set title
+        title.value = post.title;
+        // set content
+        quill.value.setHTML(post.content); // on met à jour le contenu de Quill avec le contenu du post
+        // set tag
+        tag.value = post.tag;
+        // set tech
+        tech.value = post.tech;
       });
   
     } catch (error) {
       console.warn(error);
     }
   };
+  
+
+    // // si j'ai paramètres dans la route, je fetch le post correspondant
+    if (router.currentRoute.value.params.id) {
+        fetchPosts();
+    }
+
   </script>
   
   <style lang="scss" scoped>

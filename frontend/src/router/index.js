@@ -19,6 +19,11 @@ const routes = [
     name: 'ressource',
     component: RessourceView
   },
+  {
+    path: '/ressource-edit/:id',
+    name: 'ressource',
+    component: MainForm
+  },
   // créer une ressource (formulaire)
   {
     path: '/ressource',
