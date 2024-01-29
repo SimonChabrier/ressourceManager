@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import dataloader from '@/dataloader/users';
 import security from '@/dataloader/security';
 import ressources from '@/dataloader/ressources';
+import tokenManager from '@/security/tokenManager';
 
 export const useRessourcesStore = defineStore('ressources', {
    
@@ -13,6 +14,7 @@ export const useRessourcesStore = defineStore('ressources', {
         ressources: [], 
         ressource: null,
         message: null,
+        token: null,
         re: {
           body : 'ma valeur',
         }
@@ -44,6 +46,8 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await security.login(credentials);
               this.connectedUser = response.data.user;
+              this.token = response.data.jwt;
+              tokenManager.saveToken(response.data.jwt);
               if (response.data.message) {
                 return response.data.message;
               }
@@ -58,6 +62,7 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await security.logout();
               this.connectedUser = null;
+              tokenManager.removeToken();
               return response.data.message;
             } catch (error) {
               console.error('Error logging out:', error);

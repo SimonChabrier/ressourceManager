@@ -3,7 +3,7 @@
     <div id="ressource-view">
       <h1>Test View</h1>
       <h2>{{ ressource.title }}</h2>
-      <p>{{ ressource.content }}</p>
+      <p v-html="ressource.content"></p>
       <!-- revenir en arr!ere -->
       <router-link :to="{ name: 'ressources' }">
         Retour aux ressources

@@ -3,11 +3,14 @@
     <h1>Test View</h1>
     <p>{{ message }}</p>
 
-    <div v-for="ressource in ressources" :key="ressource.id">
+    <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
-      <!-- Utilisation de la propriété calculée formattedContent -->
       <p v-html="formattedContent(ressource.content)"></p>
-      <!-- au clic on pourra utiliser l'id de la ressource dans le router pour faire un lien -->
+      <div class="tags">
+        <span class="tag">{{ ressource.tag }}</span>
+        <span class="tag">{{ ressource.tech }}</span>
+      </div>
+      <span class="date">{{ formatedDate(ressource.createdAt) }}</span>
       <router-link :to="{ name: 'ressource', params: { id: ressource.id } }">
         Voir la ressource
       </router-link>
@@ -36,10 +39,33 @@ export default {
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
       if (content) {
-        // Limitez le contenu à 250 caractères
+        // on élève les balises HTML et on limite à 250 caractères
+        content = content.replace(/<[^>]*>/g, '');
         const limitedContent = content.substring(0, 250);
         // Retournez le contenu traité avec les balises HTML interprétées
         return limitedContent;
+      }
+      return '';
+    };
+
+    const formatedDate = (date) => {
+      if (date) {
+        // Je veux obtenir le format suivant : "mercredi 21 juillet 2021 à 14h30"
+        const options = { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+        };
+
+        const formattedDate = new Date(date);
+        let texDate = formattedDate.toLocaleDateString('fr-FR', options);
+        // chercher : et remplacer par h
+        texDate = texDate.replace(':', 'h');
+        texDate = texDate.replace('à', '-');
+        return texDate;
       }
       return '';
     };
@@ -48,11 +74,22 @@ export default {
       ressources,
       message,
       formattedContent,
+      formatedDate,
     };
   },
 };
 </script>
 
 <style>
-  /* styles ici */
+  .tags {
+    display: flex;
+    gap: 10px;
+  }
+
+  .tags span {
+    background-color: #0989f9;
+    padding: 5px 10px;
+    color: white;
+    font-size: 12px;
+  }
 </style>
