@@ -56,7 +56,9 @@ h6 {
 p {
     font-weight: 300;
     font-size: 0.8rem;
-    color : $color-black
+    color : $color-black;
+    margin: 0;
+    padding: 0;
 
 }
 small {
@@ -72,10 +74,31 @@ label {
     margin: 5px;
 }
 
-a {
+// a du header
+.navbar a {
     text-decoration: none;
-    color: $color-primary;
+    color: $color-quaternary;
     margin-right: $margin-small;
+    border-radius: $border-radius;
+    &:hover {
+        color: $color-secondary;
+    }
+    // active
+    &:active {
+        color: $color-tertiary;
+    }
+    // click
+    &:focus {
+        color: $color-quaternary;
+    }
+}
+
+// sauf les liens du header
+a:not(.navbar a){
+    text-decoration: none;
+    color: $color-info;
+    margin-right: $margin-small;
+    transition: all 0.3s ease-in-out;
     &:hover {
         color: $color-secondary;
     }
@@ -140,19 +163,6 @@ button {
     &:focus {
         background: $color-quaternary;
     }
-
-    // Effet ::after
-    // &::after {
-    //     content: ">";
-    //     display: inline-block;
-    //     margin-left: $padding-small;    
-    //     transition: $transition;
-    //     width: 20px;
-    //     height: 20px;   
-    //     border-radius: 50%;
-    //     background: $color-grey-light-2;
-    //     color: black;
-    // }
 }
 
 .ql-editor {
@@ -194,5 +204,10 @@ button {
 
 .date {
     text-transform: capitalize;
+    padding: 5px 0;
 }
-  
+
+.ressource_links {
+    display: flex;
+    padding: 5px 0;
+}

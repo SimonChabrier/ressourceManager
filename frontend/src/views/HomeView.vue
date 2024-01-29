@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Test View</h1>
-      <p>{{ count }} - {{ server_message }}</p>
+      <p class="ressources_count">{{ count }} - {{ server_message }}</p>
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
       <p v-html=formattedContent(ressource.content)></p>
@@ -90,16 +90,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
   .tags {
     display: flex;
     gap: 10px;
+    margin: 15px 0 5px 0;
   }
 
   .tags span {
-    background-color: #0989f9;
+    background-color: $color-info;
     padding: 5px 10px;
     color: white;
     font-size: 12px;
+  }
+
+  .ressources_count {
+    font-size: .9rem;
   }
 </style>

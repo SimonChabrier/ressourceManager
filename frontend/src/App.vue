@@ -48,11 +48,9 @@ export default {
 
   .mainContainer {
       flex: 1;
-      // overflow-y: auto;
       background-color: $color-light;
       padding: $padding-large $padding-xlarge;
-      position: relative; /* Ajoutez cette ligne pour positionner les pages */
-      border: 1px solid $color-dark;
+      position: relative;
   }
 
   .appHeader {
