@@ -3,7 +3,7 @@
       <router-link to="/">Ressources</router-link>
       <router-link to="/ressource">Nouvelle ressource</router-link>
       <router-link to="/login">Login</router-link>
-      <router-link @click="logout" to="/">Logout</router-link>
+      <router-link to="/logout">Logout</router-link>
       <!-- v if ---->
       <p v-if="username.value">Bonjour {{ username.value }}</p>
       <p v-if="message.value" class="message">{{ message.value}}</p>
