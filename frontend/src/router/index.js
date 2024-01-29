@@ -5,6 +5,7 @@ import LoginView from '../views/Login.vue'
 // import RessourceForm from '../views/RessourceForm.vue'
 import MainForm from '../views/MainForm.vue'
 // import TestView from '../views/TestView.vue'
+import tokenManager from '@/security/tokenManager'
 
 const routes = [
   {
@@ -39,5 +40,16 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  // Middleware pour vérifier la présence du token
+  if (!tokenManager.getToken() && to.name !== 'login') {
+    // Redirection vers la page de login si le token est absent
+    next({ name: 'login' });
+  } else {
+    // Continuer vers la route demandée
+    next();
+  }
+});
 
 export default router
