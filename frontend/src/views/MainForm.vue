@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Créer une ressource</h1>
+    <h1>{{ pageTitre }}</h1>
     
     <!-- Formulaire de création de ressource -->
     <form class="resource-form" @submit.prevent="handleSubmit">
@@ -33,7 +33,7 @@
         </select>
       </div>
 
-      <input type="submit" value="Créer" />
+      <input type="submit" :value="btnText" />
     </form>
   </div>
 </template>
@@ -57,6 +57,8 @@ onBeforeMount(() => {
   console.log('onBeforeMount');
   if (!ressourcesStore.connectedUser) {
     router.push({ name: 'login' });
+  } else {
+    userId.value = ressourcesStore.connectedUser.id;
   }
 });
 
@@ -70,6 +72,8 @@ watch(() => router.currentRoute.value, (to) => {
       quill.value.setHTML('');
       tag.value = '';
       tech.value = '';
+      btnText.value = 'Créer';
+      pageTitre.value = 'Créer une ressource';
     });
   }
 });
@@ -85,54 +89,11 @@ const content = ref('');
 const tag = ref('');
 const tech = ref('');
 const quill = ref(null);
+const pageTitre = ref('Créer une ressource');
+const btnText = ref('créer');
 
 const modules = {
   module: BlotFormatter,
-};
-
-// si j'ai un id dans l'url, je le passe à la ref ressourceId
-if (router.currentRoute.value.params.id) {
-  ressourceId.value = router.currentRoute.value.params.id;
-} else {
-  console.log('pas de paramètre de route');
-}
-// si j'ai un id dans le store, je le passe à la ref userId
-if (ressourcesStore.connectedUser) {
-  userId.value = ressourcesStore.connectedUser.id;
-  console.log('userId', userId.value);
-} else {
-  router.push({ name: 'login' });
-}
-
-const toolbar = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  ['blockquote', 'code-block'],
-  [{ align: [] }],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [{ color: [] }, { background: [] }],
-  [{ font: [] }],
-  ['link', 'image', 'video'],
-  ['clean'],
-];
-
-// Centralisation de la gestion du formulaire
-const handleSubmit = async () => {
-  const formData = {
-    title: title.value,
-    content: content.value,
-    tag: tag.value,
-    tech: tech.value,
-    userId: userId.value,
-  };
-
-  if (!router.currentRoute.value.params.id) {
-    await ressourcesStore.createRessource(formData);
-  } else {
-    await ressourcesStore.patchRessource(ressourceId, formData);
-  }
-  // resetForm();
-  router.push({ name: 'ressources' });
 };
 
 // Fonction pour charger les posts (à ajuster selon votre API)
@@ -153,10 +114,48 @@ const fetchPost = async () => {
   }
 };
 
+// si j'ai un id dans l'url, je le passe à la ref ressourceId
 if (router.currentRoute.value.params.id) {
-  console.log('fetch');
+  ressourceId.value = router.currentRoute.value.params.id;
   fetchPost();
+  btnText.value = 'Modifier';
+  pageTitre.value = 'Modifier une ressource';
+} else {
+  ressourceId.value = '';
 }
+
+const toolbar = [
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote', 'code-block'],
+  [{ align: [] }],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ color: [] }, { background: [] }],
+  [{ font: [] }],
+  ['link', 'image', 'video'],
+  ['clean'],
+];
+
+// Centralisation de la gestion du formulaire
+const handleSubmit = async () => {
+  
+  const formData = {
+    title: title.value,
+    content: content.value,
+    tag: tag.value,
+    tech: tech.value,
+    userId: userId.value,
+  };
+
+  if (!ressourceId.value) {
+    await ressourcesStore.createRessource(formData);
+  } else {
+    await ressourcesStore.patchRessource(ressourceId, formData);
+  }
+
+  router.push({ name: 'ressources' });
+};
+
 </script>
 
 <style lang="scss" scoped>
