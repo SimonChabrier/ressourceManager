@@ -44,7 +44,7 @@
 
 import BlotFormatter from 'quill-blot-formatter'
 import axios from 'axios'
-import { ref, nextTick, onBeforeMount } from 'vue'
+import { ref, nextTick, onBeforeMount, watch } from 'vue'
 import { useRessourcesStore } from '@/store/ressources';
 import router from '@/router';
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
@@ -57,6 +57,20 @@ onBeforeMount(() => {
   console.log('onBeforeMount');
   if (!ressourcesStore.connectedUser) {
     router.push({ name: 'login' });
+  }
+});
+
+// jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
+watch(() => router.currentRoute.value, (to) => {
+  // si je vais sur une route sans id, je vide l'éditeur et les champs
+  // c'est que je suis en mode création
+  if (!to.params.id) {
+    nextTick(() => {
+      title.value = '';
+      quill.value.setHTML('');
+      tag.value = '';
+      tech.value = '';
+    });
   }
 });
 
