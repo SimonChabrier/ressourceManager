@@ -7,6 +7,7 @@ import MainForm from '../views/MainForm.vue'
 // import TestView from '../views/TestView.vue'
 import tokenManager from '@/security/tokenManager'
 import dataLoader from '../dataloader/security'
+import { useRessourcesStore } from '@/store/ressources'
 
 const routes = [
   {
@@ -22,7 +23,14 @@ const routes = [
   {
     path: '/ressource-edit/:id',
     name: 'ressource-edit',
-    component: MainForm
+    beforeEnter: (to, from, next) => {
+      if (!tokenManager.getToken() && !useRessourcesStore.connectedUser) {
+        next({ name: 'login' });
+      } else {
+        next();
+      }
+    },
+    component: MainForm,
   },
   // créer une ressource (formulaire)
   {
@@ -30,10 +38,10 @@ const routes = [
     name: 'ressource-create',
     // vérifier le token
     beforeEnter: (to, from, next) => {
-      if (tokenManager.getToken()) {
-        next();
-      } else {
+      if (!tokenManager.getToken() && !useRessourcesStore.connectedUser ) {
         next({ name: 'login' });
+      } else {
+        next();
       }
     },
     component: MainForm
@@ -60,15 +68,17 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  // Middleware pour vérifier la présence du token
-  if (!tokenManager.getToken() && to.name !== 'login') {
-    // Redirection vers la page de login si le token est absent
-    next({ name: 'login' });
-  } else {
-    // Continuer vers la route demandée
-    next();
-  }
-});
+
+// PROTEGE TOUTES LES ROUTES SAUF LOGIN POUR POURVOIR SE CONNECTER
+// router.beforeEach((to, from, next) => {
+//   // Middleware pour vérifier la présence du token
+//   if (!tokenManager.getToken() && to.name !== 'login') {
+//     // Redirection vers la page de login si le token est absent
+//     next({ name: 'login' });
+//   } else {
+//     // Continuer vers la route demandée
+//     next();
+//   }
+// });
 
 export default router
