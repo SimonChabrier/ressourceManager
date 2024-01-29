@@ -6,6 +6,7 @@ import LoginView from '../views/Login.vue'
 import MainForm from '../views/MainForm.vue'
 // import TestView from '../views/TestView.vue'
 import tokenManager from '@/security/tokenManager'
+import dataLoader from '../dataloader/security'
 
 const routes = [
   {
@@ -32,7 +33,12 @@ const routes = [
   {
     path: '/logout',
     name: 'logout',
-    component: LoginView
+    // direct request to backend
+    beforeEnter: (to, from, next) => {
+      tokenManager.removeToken();
+      dataLoader.logout();
+      next({ name: 'login' });
+    }
   }
 ]
 
