@@ -63,6 +63,8 @@ onBeforeMount(() => {
 });
 
 // jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
+// quand je sitche de route, je récupère la route courante dans to (passer de la route A à la route B)
+// sur le même composant...pour rafrachir le contenu de l'éditeur en fonciton de la route creation ou édition
 watch(() => router.currentRoute.value, (to) => {
   // si je vais sur une route sans id, je vide l'éditeur et les champs
   // c'est que je suis en mode création
@@ -146,20 +148,17 @@ const handleSubmit = async () => {
     tech: tech.value,
     userId: userId.value,
   };
-
   if (!ressourceId.value) {
     await ressourcesStore.createRessource(formData);
   } else {
     await ressourcesStore.patchRessource(ressourceId, formData);
   }
-
   router.push({ name: 'ressources' });
 };
 
 </script>
 
 <style lang="scss" scoped>
-/* Styles ici */
 .resource-form {
   max-width: 90%;
   margin: auto;
