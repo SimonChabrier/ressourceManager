@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // use for parsing applicati
 app.use(cors(
   {
     origin: 'http://localhost:8080',
-    credentials: true,
+    credentials: true, // pour envoyer le cookie de session au frontend (ici le cookie passport qui contient le jwt)
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }

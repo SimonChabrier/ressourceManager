@@ -43,7 +43,7 @@
 // https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
 
 import BlotFormatter from 'quill-blot-formatter'
-import axios from 'axios'
+// import axios from 'axios'
 import { ref, nextTick, watch } from 'vue'
 import { useRessourcesStore } from '@/store/ressources';
 import router from '@/router';
@@ -94,9 +94,9 @@ const modules = {
 // Fonction pour charger les posts (à ajuster selon votre API)
 const fetchPost = async () => {
   try {
-    const id = router.currentRoute.value.params.id;
-    const response = await axios.get('http://localhost:3000/api/ressources/' + id);
-    let post = response.data.ressource;
+
+    const ressourceId = router.currentRoute.value.params.id;
+    let post = await ressourcesStore.getRessource(ressourceId);
 
     nextTick(() => {
       title.value = post.title;

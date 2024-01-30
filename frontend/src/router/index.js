@@ -11,11 +11,29 @@ const routes = [
   {
     path: '/',
     name: 'ressources',
+    beforeEnter: async (to, from, next) => {
+      const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+      const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+      if (!tokenManager.getToken() || !connectedUser) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
+  },
     component: HomeView
   },
   {
     path: '/ressource/:id',
     name: 'ressource-view',
+    beforeEnter: async (to, from, next) => {
+      const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+      const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+      if (!tokenManager.getToken() || !connectedUser) {
+      next({ name: 'login' });
+    } else {
+      next();
+    }
+  },
     component: RessourceView
   },
   {
