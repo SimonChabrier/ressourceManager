@@ -14,6 +14,5 @@ module.exports = defineConfig({
       });
   },
   // configuration de base
-  transpileDependencies: true,
-  productiontip: false,
+  transpileDependencies: true
 });

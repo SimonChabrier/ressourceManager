@@ -8,6 +8,7 @@ import tokenManager from '@/security/tokenManager';
 export const useRessourcesStore = defineStore('ressources', {
    
     state: () => ({
+
         connectedUser: null,
         ressources: [], 
         ressource: null,
@@ -16,9 +17,6 @@ export const useRessourcesStore = defineStore('ressources', {
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store
     getters: {
-        // getUsers(state) {
-        //     return state.users;
-        // },
         getConnectedUser(state) {
             return state.connectedUser;
         },
@@ -45,10 +43,12 @@ export const useRessourcesStore = defineStore('ressources', {
             }
           },
           async logout() {
+            console.log('logout store');
             try {
               const response = await security.logout();
-              this.connectedUser = null;
               tokenManager.removeToken();
+              this.message = response.data.message;
+              this.connectedUser = null;
               return response.data.message;
             } catch (error) {
               console.error('Error logging out:', error);

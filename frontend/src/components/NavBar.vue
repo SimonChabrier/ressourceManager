@@ -28,8 +28,7 @@
       watch( // Pour mettre à jour le nom d'utilisateur quand il se connecte dans le store je dois utiliser watch
       () => ressourcesStore.connectedUser,
       (newVal) => {
-        // récupèrer email sur newVal
-        console.log(newVal);
+        console.log('nouvelle valeur', newVal);
         if(newVal) {
           username.value = newVal.email;
         }

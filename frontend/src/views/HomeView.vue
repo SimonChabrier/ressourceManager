@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Test View</h1>
+    <h1>Xp 2000 - Mega Compilator</h1>
       <p class="ressources_count">{{ count }} - {{ server_message }}</p>
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
@@ -49,7 +49,7 @@ export default {
         // enlever tous les espaces blancs entre deux balises HTML
         content = content.replace(/>\s+</g, '><');
 
-        const limitedContent = content.substring(0, 500);
+        const limitedContent = content.substring(0, 500) + '...';
         // Retournez le contenu traité avec les balises HTML interprétées
         return limitedContent;
       }

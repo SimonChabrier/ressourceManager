@@ -35,7 +35,7 @@ const authController = {
   logout: (req, res) => {
     req.logout(() => { // logout method from passport
       req.session.destroy();
-      res.status(200).json({ message: 'Déconnexion réussie' });
+      return res.status(200).json({ message: 'Déconnexion réussie' , user: null});
     });
   },
 

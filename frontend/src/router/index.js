@@ -6,7 +6,7 @@ import LoginView from '../views/Login.vue'
 import MainForm from '../views/MainForm.vue'
 // import TestView from '../views/TestView.vue'
 import tokenManager from '@/security/tokenManager'
-import dataLoader from '../dataloader/security'
+// import dataLoader from '../dataloader/security'
 import { useRessourcesStore } from '@/store/ressources'
 
 const routes = [
@@ -55,9 +55,9 @@ const routes = [
     path: '/logout',
     name: 'logout',
     // direct request to backend
-    beforeEnter: (to, from, next) => {
-      tokenManager.removeToken();
-      dataLoader.logout();
+    beforeEnter: async (to, from, next) => {
+      await useRessourcesStore().logout(); // utiliser comme une fonction car logout est une action
+      // dataLoader.logout();
       next({ name: 'login' });
     }
   }

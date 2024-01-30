@@ -3,8 +3,8 @@
     <div class="login_form">    
 
         <form @submit.prevent="login">
-        <input v-model="username" type="text" placeholder="Username" />
-        <input v-model="password" type="password" placeholder="Password" />
+        <input v-model="username" type="text" placeholder="Username" autocomplete="username"/>
+        <input v-model="password" type="password" placeholder="Password" autocomplete="current-password" />
         <input type="submit" value="Login" />
         </form>
     
