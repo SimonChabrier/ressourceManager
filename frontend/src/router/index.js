@@ -32,6 +32,21 @@ const routes = [
     },
     component: MainForm,
   },
+  // delete ressource
+  {
+    path: '/ressource-delete/:id',
+    name: 'ressource-delete',
+    beforeEnter: async (to, from, next) => {
+        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        if (!tokenManager.getToken() || !connectedUser) {
+        next({ name: 'login' });
+      } else {
+        await ressourcesStore.deleteRessource(to.params.id);
+        next({ name: 'ressources' });
+      }
+    },
+  },
   {
     path: '/ressource',
     name: 'ressource-create',
@@ -49,7 +64,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: LoginView
+    component: LoginView,
   },
   {
     path: '/logout',
@@ -74,7 +89,7 @@ const router = createRouter({
 //     // Redirection vers la page de login si le token est absent
 //     next({ name: 'login' });
 //   } else {
-//     // Continuer vers la route demandée
+//     // Continuer vers la route demandée 
 //     next();
 //   }
 // });

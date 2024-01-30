@@ -5,10 +5,10 @@
       <h2>{{ ressource.title }}</h2>
       <p v-html="ressource.content"></p>
       <!-- revenir en arr!ere -->
-      <router-link :to="{ name: 'ressources' }">
-        Retour aux ressources
-      </router-link>
-      <button @click="deleteRessource(ressource.id)">Supprimer</button>
+      <div class="ressource_links">
+      <p><router-link :to="{ name: 'ressources' }">Retour aux ressources</router-link></p>
+      <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }">Supprimer</router-link></p>
+      </div>
     </div>
     <div id="spinnerContainer">
       <SpinerComponent text="loading"></SpinerComponent>
@@ -34,16 +34,6 @@ export default {
     const ressourcesStore = useRessourcesStore();
     const ressource = ref('');
     const message = ref('');
-    const deleteRessource = async (id) => {
-      await ressourcesStore.deleteRessource(id);
-      // on vide la div ressource-view et on affiche le spinner au centre de la page
-      document.getElementById('ressource-view').innerHTML = '';
-      document.getElementById('spiner').classList.remove('hide');
-      // on redirige vers la page ressources ne simulant un temps de chargement
-      setTimeout(() => {
-        router.push({ name: 'ressources' });
-      }, 1000);
-    };
 
     //* utiliser les rférences ici pour récupérer les données du store
     onMounted(async () => {
@@ -57,7 +47,6 @@ export default {
     return {
       ressource,
       message,
-      deleteRessource,
     };
   },
   

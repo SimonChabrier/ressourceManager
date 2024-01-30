@@ -4,7 +4,6 @@ import { defineStore } from 'pinia';
 import security from '@/dataloader/security';
 import ressources from '@/dataloader/ressources';
 import tokenManager from '@/security/tokenManager';
-
 export const useRessourcesStore = defineStore('ressources', {
    
     state: () => ({
