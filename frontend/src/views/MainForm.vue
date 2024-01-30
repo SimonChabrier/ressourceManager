@@ -157,13 +157,9 @@ const handleSubmit = async () => {
 </script>
 
 <style lang="scss" scoped>
-.resource-form {
-  max-width: 90%;
-  margin: auto;
-}
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: $margin-small;
 }
 
 

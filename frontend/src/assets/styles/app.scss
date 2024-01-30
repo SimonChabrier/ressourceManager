@@ -74,24 +74,7 @@ label {
     margin: 5px;
 }
 
-// a du header
-.navbar a {
-    text-decoration: none;
-    color: $color-quaternary;
-    margin-right: $margin-small;
-    border-radius: $border-radius;
-    &:hover {
-        color: $color-secondary;
-    }
-    // active
-    &:active {
-        color: $color-tertiary;
-    }
-    // click
-    &:focus {
-        color: $color-quaternary;
-    }
-}
+
 
 // sauf les liens du header
 a:not(.navbar a){
