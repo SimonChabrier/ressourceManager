@@ -4,8 +4,9 @@
 const jwt = require('jsonwebtoken');
 
 function verifyToken(req, res, next) {
-    console.log('req.headers', req.headers);
+    
     const authHeader = req.headers.authorization;
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Access denied' });
     }
