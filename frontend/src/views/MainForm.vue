@@ -87,8 +87,6 @@ watch(() => router.currentRoute.value, (to) => {
   }
 });
 
-
-
 const modules = {
   module: BlotFormatter,
 };
