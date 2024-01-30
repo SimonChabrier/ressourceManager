@@ -37,7 +37,8 @@ export const useRessourcesStore = defineStore('ressources', {
               tokenManager.saveToken(response.data.jwt);
               if (response.data.message) {
                 this.linkPath = "/logout"
-                this.linkText = "logout"
+                this.linkText = "Logout"
+                this.message = response.data.message;
                 return response.data.message;
               }
             } catch (error) {
@@ -57,7 +58,8 @@ export const useRessourcesStore = defineStore('ressources', {
                 email: null,
               };
               this.linkPath = "/login"
-              this.linkText = "login"
+              this.linkText = "Login"
+
               return response.data.message;
             } catch (error) {
               console.error('Error logging out:', error);
@@ -72,7 +74,7 @@ export const useRessourcesStore = defineStore('ressources', {
                 this.ressources = response.data.ressource; 
                }
               // prendre la clé ressources du json
-              this.message = response.data.message; // prendre la clé message du json
+              this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
             } catch (error) {
               console.error('Error fetching ressources:', error);
             }

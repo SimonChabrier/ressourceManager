@@ -1,5 +1,5 @@
 <template>
-<div class="navContainer">
+<div class="navContainer" id="navContainer">
     <div class="navbarMessages">
       <p v-if="username.value">{{ username.value }}</p>
       <p v-if="message.value" class="message">{{ message.value}}</p>

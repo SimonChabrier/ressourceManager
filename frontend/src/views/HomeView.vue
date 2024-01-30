@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Page</h1>
-      <p class="ressources_count">{{ count }} - {{ server_message }}</p>
+      <p class="ressources_count">{{ server_message }}</p>
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>
       <p v-html=formattedContent(ressource.content)></p>
@@ -27,18 +27,15 @@ export default {
   name: 'HomeView',
 
   setup() {
+    
     const ressourcesStore = useRessourcesStore();
     const ressources = ref([]); // on ajoute les références au store
-    const server_message = ref(''); 
     const count = ref(0);
 
     onMounted(async () => {
       await ressourcesStore.getRessources();
       ressources.value = ressourcesStore.ressources;
-      server_message.value = ressourcesStore.message;
       count.value = ressourcesStore.ressources?.length || 0;
-
-      console.log('ressources', ressources.value);
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
@@ -83,7 +80,6 @@ export default {
     // retourner les références locales pour les utiliser dans le template
     return {
       ressources,
-      server_message,
       formattedContent,
       formatedDate,
       count,

@@ -1,6 +1,6 @@
 <template>
   <div class="appContainer">
-    <div class="appHeader">
+    <div class="appHeader" id="appHeader">
       <NavBar></NavBar>
     </div>
     
@@ -18,25 +18,9 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import BannerComponent from "@/components/Banner.vue";
 import NavBar from "@/components/NavBar.vue";
-// import { useRessourcesStore } from "@/store/ressources";
-// import { reactive, watch } from "vue";
-
-export default {
-  name: "App",
-
-  components: {
-    BannerComponent,
-    NavBar,
-  },
-
-  // setup() {
-  //   // const ressourcesStore = useRessourcesStore();
-
-  // },
-};
 </script>
 
 <style lang="scss" scoped>
