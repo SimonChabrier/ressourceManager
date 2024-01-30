@@ -1,13 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import tokenManager from '@/security/tokenManager'
+import { useRessourcesStore } from '@/store/ressources'
+
 import HomeView from '../views/HomeView.vue'
 import RessourceView from '../views/RessourceView.vue'
 import LoginView from '../views/Login.vue'
-// import RessourceForm from '../views/RessourceForm.vue'
 import MainForm from '../views/MainForm.vue'
-// import TestView from '../views/TestView.vue'
-import tokenManager from '@/security/tokenManager'
-// import dataLoader from '../dataloader/security'
-import { useRessourcesStore } from '@/store/ressources'
 
 const routes = [
   {
@@ -23,8 +21,10 @@ const routes = [
   {
     path: '/ressource-edit/:id',
     name: 'ressource-edit',
-    beforeEnter: (to, from, next) => {
-      if (!tokenManager.getToken() && !useRessourcesStore.connectedUser) {
+    beforeEnter: async (to, from, next) => {
+        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
         next();
@@ -32,13 +32,13 @@ const routes = [
     },
     component: MainForm,
   },
-  // créer une ressource (formulaire)
   {
     path: '/ressource',
     name: 'ressource-create',
-    // vérifier le token
-    beforeEnter: (to, from, next) => {
-      if (!tokenManager.getToken() && !useRessourcesStore.connectedUser ) {
+    beforeEnter: async (to, from, next) => {
+    const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+    const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+      if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
         next();
@@ -54,10 +54,8 @@ const routes = [
   {
     path: '/logout',
     name: 'logout',
-    // direct request to backend
     beforeEnter: async (to, from, next) => {
-      await useRessourcesStore().logout(); // utiliser comme une fonction car logout est une action
-      // dataLoader.logout();
+      await useRessourcesStore().logout(); // logout store
       next({ name: 'login' });
     }
   }

@@ -18,6 +18,7 @@ export const useRessourcesStore = defineStore('ressources', {
     // les getters sont des fonctions qui permettent d'obtenir des données du store
     getters: {
         getConnectedUser(state) {
+          console.log('getters getConnectedUser', state.connectedUser);
             return state.connectedUser;
         },
         getUserId(state) {

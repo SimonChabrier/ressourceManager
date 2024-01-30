@@ -44,23 +44,29 @@
 
 import BlotFormatter from 'quill-blot-formatter'
 import axios from 'axios'
-import { ref, nextTick, onBeforeMount, watch } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 import { useRessourcesStore } from '@/store/ressources';
 import router from '@/router';
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { QuillEditor } from '@vueup/vue-quill'
 
-// avant de monter le composant, je vérifie si l'utilisateur est connecté
-// si ce n'est pas le cas, je le redirige vers la page de login même si c'est déjà aussi fait dans le router
-// c'est une sécurité supplémentaire
-onBeforeMount(() => {
-  console.log('onBeforeMount');
-  if (!ressourcesStore.connectedUser) {
-    router.push({ name: 'login' });
-  } else {
-    userId.value = ressourcesStore.connectedUser.id;
-  }
-});
+// reférences locales au store et aux variables
+// avant c'était dans le data() et methods: {} mais c'est plus simple avec setup()
+// nouveau dans Vue 3 : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
+const ressourcesStore = useRessourcesStore();
+const ressourceId = ref('');
+const userId = ref('');
+const title = ref('');
+const content = ref('');
+const tag = ref('');
+const tech = ref('');
+const quill = ref(null);
+const pageTitre = ref('Créer une ressource');
+const btnText = ref('créer');
+
+console.log('MainForm -> ressourceStore User', ressourcesStore.getConnectedUser.id);
+userId.value = ressourcesStore.getConnectedUser.id;
+
 
 // jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
 // quand je sitche de route, je récupère la route courante dans to (passer de la route A à la route B)
@@ -76,23 +82,12 @@ watch(() => router.currentRoute.value, (to) => {
       tech.value = '';
       btnText.value = 'Créer';
       pageTitre.value = 'Créer une ressource';
+      userId.value = ressourcesStore.getConnectedUser.id;
     });
   }
 });
 
-// reférences locales au store et aux variables
-// avant c'était dans le data() et methods: {} mais c'est plus simple avec setup()
-// nouveau dans Vue 3 : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
-const ressourcesStore = useRessourcesStore();
-const ressourceId = ref('');
-const userId = ref('');
-const title = ref('');
-const content = ref('');
-const tag = ref('');
-const tech = ref('');
-const quill = ref(null);
-const pageTitre = ref('Créer une ressource');
-const btnText = ref('créer');
+
 
 const modules = {
   module: BlotFormatter,
@@ -146,6 +141,7 @@ const handleSubmit = async () => {
     tech: tech.value,
     userId: userId.value,
   };
+
   if (!ressourceId.value) {
     await ressourcesStore.createRessource(formData);
   } else {
