@@ -12,6 +12,8 @@ export const useRessourcesStore = defineStore('ressources', {
         ressources: [], 
         ressource: null,
         message: null,
+        linkPath: null,
+        linkText: null,
     }),
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store
@@ -34,6 +36,8 @@ export const useRessourcesStore = defineStore('ressources', {
               this.token = response.data.jwt;
               tokenManager.saveToken(response.data.jwt);
               if (response.data.message) {
+                this.linkPath = "/logout"
+                this.linkText = "logout"
                 return response.data.message;
               }
             } catch (error) {
@@ -52,6 +56,8 @@ export const useRessourcesStore = defineStore('ressources', {
                 id: null,
                 email: null,
               };
+              this.linkPath = "/login"
+              this.linkText = "login"
               return response.data.message;
             } catch (error) {
               console.error('Error logging out:', error);

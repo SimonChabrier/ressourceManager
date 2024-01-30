@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Xp 2000 - Mega Compilator</h1>
+    <h1>Page</h1>
       <p class="ressources_count">{{ count }} - {{ server_message }}</p>
     <div v-for="ressource in ressources" :key="ressource.id" class="">
       <h2>{{ ressource.title }}</h2>

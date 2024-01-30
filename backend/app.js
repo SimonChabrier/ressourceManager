@@ -34,12 +34,10 @@ if(process.env.CAPTURE_LOGS === 'true') {
   app.use('/', openRouter); 
 }
 
-
 app.use(logErr); // use for log errors - put it after routes to log server errors
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
-
     startWebSocketServer();
     console.log(`SERVER START ON PORT: ${PORT}`);
   });

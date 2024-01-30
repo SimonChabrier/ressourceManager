@@ -2,9 +2,7 @@
     <nav class="navbar">
       <router-link to="/">Ressources</router-link>
       <router-link to="/ressource">Nouvelle ressource</router-link>
-      <router-link to="/login">Login</router-link>
-      <router-link to="/logout">Logout</router-link>
-      <!-- v if ---->
+      <router-link :to=linkPath.value>{{ linkText.value }}</router-link>
       <p v-if="username.value">{{ username.value }}</p>
       <p v-if="message.value" class="message">{{ message.value}}</p>
     </nav>
@@ -24,33 +22,45 @@
       const ressourcesStore = useRessourcesStore();
       const username = reactive({ value: "" });
       const message = reactive({ value: "" });
+      const linkPath = reactive({ value: ""})
+      const linkText = reactive({ value: ""})
 
-      watch( // Pour mettre à jour le nom d'utilisateur quand il se connecte dans le store je dois utiliser watch
-      () => ressourcesStore.connectedUser,
-      (newVal) => {
-        console.log('nouvelle valeur', newVal);
+      // Pour mettre à jour le nom d'utilisateur quand il se connecte dans le store je dois utiliser watch
+      watch(() => ressourcesStore.connectedUser, (newVal) => {
+          if(newVal) {
+            username.value = newVal.email;
+          }
+        },
+        { immediate: true } 
+      );
+
+      watch(() => ressourcesStore.linkPath, (newVal) => {
         if(newVal) {
-          username.value = newVal.email;
+          console.log(newVal);
+          linkPath.value = newVal;
         }
-        // username.value = newVal
       },
-      { immediate: true } // Pour obtenir la valeur initiale
-    );
+        { immediate: true } 
+      );
 
-    // watch message pour afficher le message d'erreur
-    watch(
-      () => ressourcesStore.message,
-      (newVal) => {
-        message.value = newVal;
-      },
-      { immediate: true }
-    );
+      watch(() => ressourcesStore.linkText, (newVal) => {
+          linkText.value = newVal;
+        },
+        { immediate: true }
+      );
+
+      // watch message pour afficher le message d'erreur
+      watch(() => ressourcesStore.message, (newVal) => {
+          message.value = newVal;
+        },
+        { immediate: true }
+      );
 
       onMounted(async () => {
         //
       });
 
-      return { username, message };
+      return { username, message, linkPath, linkText };
     },
   };
   </script>
