@@ -8,13 +8,9 @@ const ressourceController = {
       const ressources = await Ressource.findAll({ include: User });
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
-      }
-
-      // si j'ai une seule ressource 
-      if(ressources.length === 1) {
+      } else if(ressources.length === 1) { // si j'ai une seule ressource 
         return res.json({"message": "Ressource trouvée", "ressource": ressources});
-      } else {
-        // si j'ai plusieurs ressources
+      } else { // si j'ai plusieurs ressources
         return res.json({"message": "Ressources trouvées", "ressources": ressources});
       }
     } catch (error) {
