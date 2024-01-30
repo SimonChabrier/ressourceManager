@@ -5,7 +5,7 @@
       <router-link to="/login">Login</router-link>
       <router-link to="/logout">Logout</router-link>
       <!-- v if ---->
-      <p v-if="username.value">Bonjour {{ username.value }}</p>
+      <p v-if="username.value">{{ username.value }}</p>
       <p v-if="message.value" class="message">{{ message.value}}</p>
     </nav>
   
