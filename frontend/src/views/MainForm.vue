@@ -141,6 +141,12 @@ const handleSubmit = async () => {
     tech: tech.value,
     userId: userId.value,
   };
+  
+  // validation du formulaire aucune donnée vide
+  if (!formData.title || !formData.content || !formData.tag || !formData.tech) {
+    alert('Veuillez remplir tous les champs');
+    return;
+  }
 
   if (!ressourceId.value) {
     await ressourcesStore.createRessource(formData);
