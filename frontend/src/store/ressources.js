@@ -48,7 +48,10 @@ export const useRessourcesStore = defineStore('ressources', {
               const response = await security.logout();
               tokenManager.removeToken();
               this.message = response.data.message;
-              this.connectedUser = null;
+              this.connectedUser = {
+                id: null,
+                email: null,
+              };
               return response.data.message;
             } catch (error) {
               console.error('Error logging out:', error);

@@ -52,13 +52,6 @@
 
       return { username, message };
     },
-
-    methods: {
-      async logout() {
-        await this.ressourcesStore.logout();
-        this.$router.push('/');
-      },
-    },
   };
   </script>
   
