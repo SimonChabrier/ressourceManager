@@ -21,7 +21,7 @@ openRouter.use('/ws', express.static('public/ws.html'));
 // secure routes préfix: /api
 if (process.env.NODE_ENV === 'prod') {
     apiRouter.use('/users',isAuthenticated, verifyToken, userRoutes);
-    apiRouter.use('/ressources',isAuthenticated, verifyToken, ressourceRoutes);
+    apiRouter.use('/ressources', verifyToken, ressourceRoutes);
     apiRouter.use('/logs',isAuthenticated, verifyToken, logRoutes);
 } else {
     apiRouter.use('/users', userRoutes);
