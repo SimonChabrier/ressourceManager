@@ -5,9 +5,9 @@ import axios from 'axios'
 
 const apiClient = axios.create({
     baseURL: `http://localhost:3000`,
-    withCredentials: false,
+    withCredentials: true, // pour envoyer le cookie de session au backend (ici c'est pas necessaire car on utilise pas de session)
     headers: {
-        Accept: 'application/json',
+         Accept: 'application/json',
         'Content-Type': 'application/json'
     },
 })
