@@ -19,6 +19,23 @@ const routes = [
     component: RessourceView
   },
   {
+    path: '/ressource',
+    name: 'ressource-create',
+    beforeEnter: async (to, from, next) => {
+    // utiliser from pour revenir à la page précédente
+    // utiliser next pour aller à la page suivante
+    // utiliser to pour aller à la page demandée
+    const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+    const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+      if (!tokenManager.getToken() || !connectedUser) {
+        next({ name: 'login' });
+      } else {
+        next();
+      }
+    },
+    component: MainForm
+  },
+  {
     path: '/ressource-edit/:id',
     name: 'ressource-edit',
     beforeEnter: async (to, from, next) => {
@@ -48,20 +65,6 @@ const routes = [
     },
   },
   {
-    path: '/ressource',
-    name: 'ressource-create',
-    beforeEnter: async (to, from, next) => {
-    const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-    const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-      if (!tokenManager.getToken() || !connectedUser) {
-        next({ name: 'login' });
-      } else {
-        next();
-      }
-    },
-    component: MainForm
-  },
-  {
     path: '/login',
     name: 'login',
     component: LoginView,
@@ -80,6 +83,7 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
 
 
 // PROTEGE TOUTES LES ROUTES SAUF LOGIN POUR POURVOIR SE CONNECTER
