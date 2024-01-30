@@ -37,6 +37,8 @@ export default {
       ressources.value = ressourcesStore.ressources;
       server_message.value = ressourcesStore.message;
       count.value = ressourcesStore.ressources?.length || 0;
+
+      console.log('ressources', ressources.value);
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères

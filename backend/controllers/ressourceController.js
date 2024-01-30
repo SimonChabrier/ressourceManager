@@ -9,7 +9,14 @@ const ressourceController = {
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
       }
-       return res.json({"message": "Ressources trouvées", "ressources": ressources});
+
+      // si j'ai une seule ressource 
+      if(ressources.length === 1) {
+        return res.json({"message": "Ressource trouvée", "ressource": ressources});
+      } else {
+        // si j'ai plusieurs ressources
+        return res.json({"message": "Ressources trouvées", "ressources": ressources});
+      }
     } catch (error) {
        return res.status(500).send({ message: error.message });
     }
