@@ -1,38 +1,42 @@
 <template>
   <div>
-    <h1>Page</h1>
-      <p class="ressources_count">{{ server_message }}</p>
-    <div v-for="ressource in ressources" :key="ressource.id" class="">
-      <h2>{{ ressource.title }}</h2>
-      <p v-html=formattedContent(ressource.content)></p>
-      <div class="tags">
-        <span v-if="ressource.tag"  class="tag">{{ ressource.tag }}</span>
-        <span v-if="ressource.tech"  class="tag">{{ ressource.tech }}</span>
-      </div>
-            <p class="date">{{ formatedDate(ressource.createdAt) }}</p>
-          
-          <div class="ressource_links">
-            <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link></p>
-            <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link></p>
+    <p v-if="count > 0" class="message">{{ count }} ressources</p>
+    <p class="ressources_count">{{ server_message }}</p>
+      <div id="ressourcesList" class="ressourcesList">
+          <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
+            <h2>{{ ressource.title }}</h2>
+              <p class="mainText" v-html=formattedContent(ressource.content)></p>
+              <div class="tags">
+                <span v-if="ressource.tag" class="tag">{{ ressource.tag }}</span>
+                <span v-if="ressource.tech" class="tag">{{ ressource.tech }}</span>
+              </div>
+              <p class="date">{{ formatedDate(ressource.createdAt) }}</p>
+              <div class="ressource_links">
+                <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link></p>
+                <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link></p>
+              </div>
           </div>
-    </div>
+      </div>
   </div>
 </template>
 
 <script>
+
 import { useRessourcesStore } from '@/store/ressources';
 import { onMounted, ref } from 'vue';
 
 export default {
+
   name: 'HomeView',
 
-  setup() {
+  setup() { // Composition API : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
     
     const ressourcesStore = useRessourcesStore();
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
 
-    onMounted(async () => {
+    // au montage du composant, on récupère les ressources
+    onMounted( async () => {
       await ressourcesStore.getRessources();
       ressources.value = ressourcesStore.ressources;
       count.value = ressourcesStore.ressources?.length || 0;
@@ -41,16 +45,10 @@ export default {
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
       if (content) {
-        // enlever toutes les balises html sans contenu
-        content = content.replace(/<[^>]*>([\s]?)*<\/[^>]*>/g, '');
-        // en lever tous les espaces blancs en début et fin de chaine
-        content = content.trim();
-        // enlever tous les espaces blancs entre deux balises HTML
-        content = content.replace(/>\s+</g, '><');
-
-        const limitedContent = content.substring(0, 500) + '...';
-        // Retournez le contenu traité avec les balises HTML interprétées
-        return limitedContent;
+        content = content.replace(/<[^>]*>([\s]?)*<\/[^>]*>/g, ''); // enlever toutes les balises html sans contenu
+        content = content.trim(); // enlever les espaces au début et à la fin
+        content = content.replace(/>\s+</g, '><'); // enlever tous les espaces blancs entre deux balises HTML
+        return content.substring(0, 1500) + '...';
       }
       return '';
     };
@@ -76,16 +74,16 @@ export default {
       }
       return '';
     };
-
-    // retourner les références locales pour les utiliser dans le template
-    return {
-      ressources,
-      formattedContent,
-      formatedDate,
-      count,
-    };
+    // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
+    return { ressources, formattedContent, formatedDate, count };
   },
+
+  mounted() {
+    console.log('mouted HomeView', this.count) // 0
+  },
+
 };
+
 </script>
 
 <style lang="scss" scoped>
@@ -105,4 +103,24 @@ export default {
   .ressources_count {
     font-size: .9rem;
   }
+
+  .ressourcesList {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .resourceItem {
+    width: calc(25% - 60px);
+    background-color: $color-light;
+    padding: 20px;
+    border-radius: $border-radius;
+    box-shadow: $shadow-light;
+  }
+
+  .mainText {
+    margin: 10px 0;
+  }
+
+
 </style>

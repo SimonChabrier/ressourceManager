@@ -1,8 +1,7 @@
 <template>
   <div>
     <div id="ressource-view">
-      <h1>Test View</h1>
-      <h2>{{ ressource.title }}</h2>
+      <h1>{{ ressource.title }}</h1>
       <p v-html="ressource.content"></p>
       <!-- revenir en arr!ere -->
       <div class="ressource_links">
