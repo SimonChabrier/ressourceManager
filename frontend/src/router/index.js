@@ -86,6 +86,15 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginView,
+    // beforeEnter: async (to, from, next) => {
+    //   const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+    //   const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+    //   if (tokenManager.getToken() && connectedUser) {
+    //     next({ name: 'ressources' });
+    //   } else {
+    //     next();
+    //   }
+    // },
   },
   {
     path: '/logout',

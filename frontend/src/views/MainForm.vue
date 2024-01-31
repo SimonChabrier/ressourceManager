@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>{{ pageTitre }}</h1>
-    
     <!-- Formulaire de création de ressource -->
     <form class="resource-form" @submit.prevent="handleSubmit">
       <div class="form-group">
@@ -29,7 +28,6 @@
         <select v-model="tech" id="tech">
           <option value="" disabled selected hidden>Choisir une technologie</option>
           <option value="html">HTML</option>
-          <!-- ... autres options ... -->
         </select>
       </div>
 
@@ -43,12 +41,11 @@
 // https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
 
 import BlotFormatter from 'quill-blot-formatter'
-// import axios from 'axios'
 import { ref, nextTick, watch } from 'vue'
 import { useRessourcesStore } from '@/store/ressources';
 import router from '@/router';
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 
 // reférences locales au store et aux variables
 // avant c'était dans le data() et methods: {} mais c'est plus simple avec setup()
@@ -64,9 +61,7 @@ const quill = ref(null);
 const pageTitre = ref('Créer une ressource');
 const btnText = ref('créer');
 
-console.log('MainForm -> ressourceStore User', ressourcesStore.getConnectedUser.id);
 userId.value = ressourcesStore.getConnectedUser.id;
-
 
 // jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
 // quand je sitche de route, je récupère la route courante dans to (passer de la route A à la route B)
@@ -94,15 +89,14 @@ const modules = {
 // Fonction pour charger les posts (à ajuster selon votre API)
 const fetchPost = async () => {
   try {
-
     const ressourceId = router.currentRoute.value.params.id;
-    let post = await ressourcesStore.getRessource(ressourceId);
-
+    const post = await ressourcesStore.getRessource(ressourceId);
     nextTick(() => {
       title.value = post.title;
       quill.value.setHTML(post.content);
       tag.value = post.tag;
       tech.value = post.tech;
+      userId.value = post.userId;
     });
   } catch (error) {
     console.log(error);
@@ -111,10 +105,10 @@ const fetchPost = async () => {
 
 // si j'ai un id dans l'url, je le passe à la ref ressourceId
 if (router.currentRoute.value.params.id) {
-  ressourceId.value = router.currentRoute.value.params.id;
-  fetchPost();
-  btnText.value = 'Modifier';
-  pageTitre.value = 'Modifier une ressource';
+    // ressourceId.value = router.currentRoute.value.params.id;
+    fetchPost();
+    btnText.value = 'Modifier';
+    pageTitre.value = 'Modifier une ressource';
 }
 
 const toolbar = [
@@ -131,15 +125,13 @@ const toolbar = [
 
 // Centralisation de la gestion du formulaire
 const handleSubmit = async () => {
-  
   const formData = {
-    title: title.value,
-    content: content.value,
-    tag: tag.value,
-    tech: tech.value,
-    userId: userId.value,
+      title: title.value,
+      content: content.value,
+      tag: tag.value,
+      tech: tech.value,
+      userId: userId.value,
   };
-  
   // validation du formulaire aucune donnée vide
   if (!formData.title || !formData.content || !formData.tag || !formData.tech) {
     alert('Veuillez remplir tous les champs');
@@ -161,6 +153,5 @@ const handleSubmit = async () => {
 .form-group {
   margin-bottom: $margin-small;
 }
-
 
 </style>

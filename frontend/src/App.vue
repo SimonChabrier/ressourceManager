@@ -20,6 +20,7 @@
 
 <script setup> // avec setup on peut déclarer des variables et des fonctions sans avoir à les déclarer dans le data() et methods: {}
               // les composants sont plus simples à lire et à maintenir et les imports sont directement accessibles dans le template
+              // https://vuejs.org/api/sfc-script-setup.html
   import BannerComponent from "@/components/Banner.vue";
   import NavBar from "@/components/NavBar.vue";
 </script>
