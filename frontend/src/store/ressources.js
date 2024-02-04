@@ -70,11 +70,11 @@ export const useRessourcesStore = defineStore('ressources', {
               const response = await ressources.getRessources();
               if(response.data.ressources){ // plusieurs ressources
                 this.ressources = response.data.ressources;
+                this.message =  response.data.ressources.length + ' - ' + response.data.message; // prendre la clé message du json
               } else { // une seule ressource
                 this.ressources = response.data.ressource; 
+                this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
                }
-              // prendre la clé ressources du json
-              this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
             } catch (error) {
               console.error('Error fetching ressources:', error);
             }
