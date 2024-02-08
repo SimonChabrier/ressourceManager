@@ -1,7 +1,7 @@
 <template>
   <div>
     <p v-if="count > 0" class="message">{{ count }} ressources</p>
-    <p class="ressources_count">{{ server_message }}</p>
+    <p class="ressources_count"> {{ servermessage }}</p>
       <div id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
@@ -34,12 +34,14 @@ export default {
     const ressourcesStore = useRessourcesStore();
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
+    const servermessage = ref('');
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
       await ressourcesStore.getRessources();
       ressources.value = ressourcesStore.ressources;
       count.value = ressourcesStore.ressources?.length || 0;
+      servermessage.value = ressourcesStore.message;
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
@@ -75,7 +77,7 @@ export default {
       return '';
     };
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
-    return { ressources, formattedContent, formatedDate, count };
+    return { ressources, formattedContent, formatedDate, count , servermessage};
   },
 
   mounted() {
