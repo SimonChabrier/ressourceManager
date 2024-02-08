@@ -1,0 +1,103 @@
+// variables de couleur utilisées dans le projet
+// pour les utiliser dans un fichier scss, il faut importer le fichier _vars.scss
+
+// couleurs utilisées dans le projet
+$color-primary: #2f4858;
+$color-secondary: #446677;
+$color-tertiary: #8a99a8;
+$color-quaternary: #6e7f94;
+$color-quinary: #ff9966;
+$color-light: #f2f2f2;
+$color-white: #ffffff;
+$color-dark: #2a3945;
+$color-black: #1a1a1a;
+$color-grey-light-1: #d9d9d9;
+$color-grey-light-2: #b3b3b3;
+
+
+// warning info error success
+$color-warning: #f5ad31;
+$color-info: #3a7db8;
+$color-error: #f94909;
+$color-success: #3c8f29;
+// espacement utilisé dans le projet
+$gutter-vertical: 8px;
+$gutter-horizontal: 16px;
+$padding: 15px;
+$padding-xsmall: 5px;
+$padding-small: 8px;
+$padding-large: 32px;
+$padding-xlarge: 64px;
+$margin: 16px;
+$margin-small: 8px;
+$margin-large: 32px;
+$margin-xlarge: 64px;
+
+// bordures utilisées dans le projet
+$border-radius: 4px;
+$transition: all 0.3s ease-in-out;
+
+// ombres utilisées dans le projet
+$shadow-light: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+$shadow-dark: 0 3px 6px rgba(0, 0, 0, 0.12), 0 3px 6px rgba(0, 0, 0, 0.24);
+
+// breakpoints utilisés dans le projet
+$bp-largest: 75em; // 1200px
+$bp-large: 62.5em; // 1000px
+$bp-medium: 50em; // 800px
+$bp-small: 37.5em; // 600px
+$bp-smallest: 31.25em; // 500px
+
+// mixins utilisés dans le projet
+@mixin clearfix {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin cover {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@mixin ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@mixin fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+@mixin absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+@mixin fixed-center {
+    @include fixed;
+    @include center;
+}
+
+@mixin absolute-center {
+    @include absolute;
+    @include center;
+}
+
+
+
+
