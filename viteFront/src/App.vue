@@ -25,66 +25,47 @@ import BannerComponent from './components/Banner.vue'
 </template>
 
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
+<style lang="scss" scoped>
+  .appContainer {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+    flex-direction: column;
+    height: 100vh;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .mainContainer {
+      flex: 1;
+      background-color: $color-light;
+      padding: $padding-large $padding-xlarge;
+      position: relative;
   }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+  .appHeader {
+    flex: 0 0 auto;
   }
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .appFooter {
+    flex: 0 0 auto;
   }
-}
+
+  .fade-enter-active{
+    transition : all 0.5s; 
+  }
+  .fade-leave-active {
+    transition : all 0.1s; 
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+  }
+
+
+
+
 </style>
+

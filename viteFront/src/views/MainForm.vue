@@ -82,9 +82,7 @@ watch(() => router.currentRoute.value, (to) => {
   }
 });
 
-const modules = {
-  module: BlotFormatter,
-};
+
 
 // Fonction pour charger les posts (à ajuster selon votre API)
 const fetchPost = async () => {
@@ -125,6 +123,10 @@ const toolbar = [
   ['clean'],
 ];
 
+const modules = {
+  module: BlotFormatter,
+};
+
 // Centralisation de la gestion du formulaire
 const handleSubmit = async () => {
   const formData = {
@@ -155,5 +157,7 @@ const handleSubmit = async () => {
 .form-group {
   margin-bottom: $margin-small;
 }
+
+
 
 </style>
