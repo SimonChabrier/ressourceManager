@@ -1,7 +1,5 @@
 <template>
   <div>
-    <p v-if="count > 0" class="message">{{ count }} ressources</p>
-    <p class="ressources_count"> {{ servermessage }}</p>
       <div id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
@@ -89,40 +87,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .tags {
-    display: flex;
-    gap: 10px;
-    margin: 15px 0 5px 0;
-  }
 
-  .tags span {
-    background-color: $color-info;
-    padding: 5px 10px;
-    color: white;
-    font-size: 12px;
-  }
-
-  .ressources_count {
-    font-size: .9rem;
-  }
-
-  .ressourcesList {
-    display: flex;
-    gap: 20px;
+.ressourcesList {
+  display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-  }
+}
 
-  .resourceItem {
-    width: calc(25% - 60px);
-    background-color: $color-light;
+.resourceItem {
+  display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 20px;
     padding: 20px;
-    border-radius: $border-radius;
-    box-shadow: $shadow-light;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #ccc;
+    width: calc(25% - 40px);
+    word-wrap: break-word;
+}
+
+.mainText {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+}
+
+@media screen and (max-width: 1200px) {
+  .resourceItem {
+    width: calc(50% - 40px);
   }
+}
 
-  .mainText {
-    margin: 10px 0;
+@media screen and (max-width: 700px) {
+  .resourceItem {
+    width: calc(100% - 40px);
   }
-
-
+}
 </style>
