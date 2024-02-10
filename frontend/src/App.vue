@@ -7,17 +7,25 @@ import BannerComponent from './components/Banner.vue'
 <template>  
   <div>
       <NavBar></NavBar>
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+      <div class="view_container">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
     <BannerComponent text="© 2024 - Tous droits réservés" color="success" />
   </div>
 </template>
 
 
 <style lang="scss" scoped>
+
+  .view_container {
+    padding: 30px;
+    margin: 0 auto;
+    border: 1px solid black;
+  }
   .fade-enter-active{
     transition : all 0.5s; 
   }

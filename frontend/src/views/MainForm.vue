@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section class="mainForm_container">
     <h1>{{ pageTitre }}</h1>
     <!-- Formulaire de création de ressource -->
     <form class="resource-form" @submit.prevent="handleSubmit">
@@ -33,7 +33,7 @@
 
       <input type="submit" :value="btnText" />
     </form>
-  </div>
+  </section>
 </template>
 
 <script setup> // setup() est une fonctionnalité de Vue 3 qui permet de simplifier le code des composants

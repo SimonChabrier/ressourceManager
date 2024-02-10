@@ -1,13 +1,10 @@
 <template>
-    
     <div class="login_form">    
-
         <form @submit.prevent="login">
         <input v-model="username" type="text" placeholder="Username" autocomplete="username"/>
         <input v-model="password" type="password" placeholder="Password" autocomplete="current-password" />
         <input type="submit" value="Login" />
         </form>
-    
         <div id="errors" style="color: red;"></div>
     </div>
 </template>
@@ -62,9 +59,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .view_container {
+.login_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    // height: 100vh;
+    form {
         display: flex;
         flex-direction: column;
         align-items: center;
+        input {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
     }
+}
 </style>    

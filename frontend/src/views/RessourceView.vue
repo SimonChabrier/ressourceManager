@@ -1,18 +1,13 @@
 <template>
-  <div>
-    <div id="ressource-view">
+    <section class="ressource_container">
       <h1>{{ ressource.title }}</h1>
       <p v-html="ressource.content"></p>
-      <!-- revenir en arr!ere -->
-      <div class="ressource_links">
-      <p><router-link :to="{ name: 'ressources' }">Retour aux ressources</router-link></p>
-      <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }">Supprimer</router-link></p>
-      </div>
-    </div>
-    <div id="spinnerContainer">
+        <div class="ressource_links">
+          <p><router-link :to="{ name: 'ressources' }">Retour aux ressources</router-link></p>
+          <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }">Supprimer</router-link></p>
+        </div>
       <SpinerComponent text="loading"></SpinerComponent>
-    </div>
-  </div>
+      </section>
 </template>
 
 <script>

@@ -1,27 +1,24 @@
 <template>
-  
-    <div class="view_container">
-      
-      <h1>Login</h1>
-
+  <section class="login_container">
+    <h1>Login</h1>
       <LoginForm></LoginForm>
-
-    </div>
+  </section>
   </template>
   
-  <script>
+  <script setup>
 
   import LoginForm from '@/components/LoginForm.vue';
   
-  export default {
-    name: 'LogIn',
-    components: {
-      LoginForm,
-    },
-  };
-  
+
   </script>
   
   <style lang="scss" scoped>
+  .login_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 176px);
+    flex-direction: column;
+  }
   </style>
   
