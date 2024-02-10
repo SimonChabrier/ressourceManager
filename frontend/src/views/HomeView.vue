@@ -117,13 +117,13 @@ export default {
 
 @media screen and (max-width: 1200px) {
   .resourceItem {
-    width: calc(50% - 40px);
+    width: calc(50% - 10px);
   }
 }
 
 @media screen and (max-width: 700px) {
   .resourceItem {
-    width: calc(100% - 40px);
+    width: 100%;
   }
 }
 </style>
