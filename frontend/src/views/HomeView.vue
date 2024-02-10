@@ -106,13 +106,59 @@ export default {
   border-radius: 10px;
   box-shadow: 0 0 10px #ccc;
   width: calc(25% - 15px);
-}
 
+  h2 {
+    color:$color-primary;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+  }
+}
 
 .mainText {
   width: 100%;
   max-height: 300px;
   overflow: auto;
+  margin-bottom: 15px;
+}
+
+.tags {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+  border-top: 1px solid #ccc;
+  .tag {
+    padding-top: 10px;
+    color: $color-info;
+    border-radius: 5px;
+  }
+}
+
+.date {
+  color: $color-info;
+  font-size: 0.8rem;
+  width: 100%;
+  // border-bottom: 1px solid #272727;
+  // padding-bottom: 10px;
+} 
+.ressource_links {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 20px;
+  a {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-decoration: none;
+    color: $color-primary!important;
+    transition: all 0.3s;
+    &:hover {
+      background-color: $color-grey-light-1;
+      color: white;
+    }
+  }
 }
 
 @media screen and (max-width: 1200px) {

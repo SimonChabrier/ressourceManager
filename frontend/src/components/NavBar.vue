@@ -73,15 +73,13 @@ export default {
 
 .top-nav {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #00BAF0;
-  background: linear-gradient(to left, #f46b45, #eea849);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: #FFF;
-  height: 50px;
-  padding: 1em;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #497683;
+    color: #FFF;
+    height: 50px;
+    padding: 1em;
 }
 
 .menu {
@@ -98,7 +96,7 @@ export default {
 }
 
 .menu a {
-  color: #FFF;
+  color: #FFF!important;
   text-decoration: none;
 }
 
@@ -175,7 +173,7 @@ export default {
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
   }
   #menu-toggle:checked ~ .menu li {
-    border: 1px solid #333;
+    border: 1px solid #668f9a;
     height: 2.5em;
     padding: 0.5em;
     transition: height 400ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -187,10 +185,10 @@ export default {
     padding: 0.5em 0;
     width: 100%;
     color: white;
-    background-color: #222;
+    background-color: #497683;
   }
   .menu > li:not(:last-child) {
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #375962;
   }
 }
 </style>

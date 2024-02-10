@@ -24,7 +24,7 @@ import BannerComponent from './components/Banner.vue'
   .view_container {
     padding: 30px;
     margin: 0 auto;
-    border: 1px solid black;
+    // border: 1px solid black;
   }
   .fade-enter-active{
     transition : all 0.5s; 
