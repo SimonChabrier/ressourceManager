@@ -12,8 +12,8 @@ export const useRessourcesStore = defineStore('ressources', {
         ressources: [], 
         ressource: null,
         message: null,
-        linkPath: null,
-        linkText: null,
+        linkPath: '/login',
+        linkText: 'Login',
     }),
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store
