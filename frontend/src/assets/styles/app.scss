@@ -83,11 +83,8 @@ label {
     display: block;
     margin: 5px;
 }
-
-
-
 // sauf les liens du header
-a:not(.navbar a){
+a:not(.top-nav a){
     text-decoration: none;
     color: $color-info;
     margin-right: $margin-small;
@@ -128,6 +125,8 @@ blockquote {
   textarea {
     height: 400px;
   }
+
+
 
 button {
     // Styles du bouton

@@ -1,8 +1,11 @@
 <template>
-    <select v-model="selectedTag" id="tag">
-        <option value="" disabled selected hidden>Choisir un tag</option>
-        <option v-for="item in tags" :key="item.id" :value="item.name">{{ item.name }}</option>
-    </select>
+    <div class="form-group">
+    <label for="tag">Tag</label>
+        <select v-model="selectedTag" id="tag">
+            <option value="" disabled selected hidden>Choisir un tag</option>
+            <option v-for="item in tags" :key="item.id" :value="item.name">{{ item.name }}</option>
+        </select>
+    </div>
 </template>
 
 <script setup>
@@ -24,6 +27,6 @@ const tags = ref([
 
 </script>
 
-<style>
+<style lang="scss">
 /* Ajoutez du style si nécessaire */
 </style>

@@ -1,4 +1,6 @@
 <template>
+    <div class="form-group">
+    <label for="textContent">Contenu</label>
       <QuillEditor 
             ref="textEditor"
             :modules="modules"
@@ -6,7 +8,9 @@
             v-model:content="content"
             contentType="html"
             placeholder="Saisissez le contenu"
+            id="textContent" 
         />
+    </div>
   </template>
   
   <script setup>
@@ -50,7 +54,7 @@
 
   </script>
   
-  <style scoped>
+  <style lang="scss">
   /* Ajoutez du style au besoin */
   </style>
   

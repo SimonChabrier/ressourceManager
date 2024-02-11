@@ -1,13 +1,15 @@
 <template>
-    <select v-model="selectedTech" id="tag">
-        <option value="" disabled selected hidden>Choisir une Tech</option>
-        <option v-for="item in techs" :key="item.id" :value="item.name">{{ item.name }}</option>
-    </select>
+    <div class="form-group">
+        <label for="tech">Tech</label>
+        <select v-model="selectedTech" id="tech">
+            <option value="" disabled selected hidden>Choisir une Tech</option>
+            <option v-for="item in techs" :key="item.id" :value="item.name">{{ item.name }}</option>
+        </select>
+    </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-
 
 const selectedTech = defineModel({
     prop: 'selectedTech',
@@ -33,6 +35,5 @@ const techs = ref([
 
 </script>
 
-<style>
-/* Ajoutez du style si nécessaire */
+<style lang="scss">
 </style>

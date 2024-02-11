@@ -4,27 +4,24 @@
     
     <!-- Formulaire de création de ressource -->
     <form class="resource-form" @submit.prevent="handleSubmit">
-      <div class="form-group">
-        <label for="title">Titre de la ressource</label>
-        <input type="text" v-model="title" id="title" placeholder="Saisissez le titre" />
-      </div>
-
-      <div class="form-group">
-        <label for="content">Contenu</label>
-          <TextEditor v-model="content" />
-      </div>
-
-      <div class="form-group">
-        <label for="tag">Tag</label>
-          <TagSelect v-model="tag" />
-      </div>
-
-      <div class="form-group">
-        <label for="tech">Technologie</label>
-          <TechSelect v-model="tech" />
-      </div>
-
-      <input type="submit" :value="btnText" />
+        <Textinput 
+          v-model="title" 
+          :ressourceTitle="title" 
+          @change="handleTitleChange" 
+        />
+        <TextEditor 
+          v-model="content" 
+          />
+        <TagSelect 
+          v-model="tag" 
+          />
+        <TechSelect 
+          v-model="tech" 
+          />
+      <input 
+        type="submit" 
+        :value="btnText" 
+        />
     </form>
   </section>
 </template>
@@ -40,6 +37,7 @@ import router from '@/router';
 import TagSelect from '@/components/forms/TagSelect.vue';
 import TechSelect from '@/components/forms/TechSelect.vue';
 import TextEditor from '@/components/forms/TextEditor.vue';
+import Textinput from '@/components/forms/Textinput.vue';
 
 // Mes refs et variables locales
 const ressourcesStore = useRessourcesStore();
@@ -57,6 +55,11 @@ if(ressourcesStore.getConnectedUser) {
 } else {
   router.push({ name: 'login' });
 }
+
+// écoute les changements du titre. Si je change le titre, je le passe à la ref title
+const handleTitleChange = (newTitle) => {
+  title.value = newTitle;
+};
 
 // jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
 watch(() => router.currentRoute.value, (to) => {
@@ -111,6 +114,8 @@ const handleSubmit = async () => {
       userId: userId.value,
   };
 
+  console.log(formData);
+
   if (!formData.title || !formData.content || !formData.tag || !formData.tech) {
     alert('Veuillez remplir tous les champs');
     return;
@@ -121,18 +126,16 @@ const handleSubmit = async () => {
   } else {
     await ressourcesStore.patchRessource(ressourceId.value, formData);
   }
-  
+
   router.push({ name: 'ressources' });
 };
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .form-group {
-  margin-bottom: $margin-small;
-}
-
-
+    margin-bottom: $margin-small;
+  }
 
 </style>
