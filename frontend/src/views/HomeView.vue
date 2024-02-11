@@ -11,7 +11,7 @@
               </div>
               <p class="date"><font-awesome-icon :icon="['fas', 'calendar-days']" /> {{ formatedDate(ressource.createdAt) }}</p>
          
-              <div v-if="connectedUser.id" class="ressource_links">
+              <div v-if="connectedUser?.id" class="ressource_links">
                 <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
@@ -61,10 +61,12 @@ export default {
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
-      await ressourcesStore.getRessources();
-      ressources.value = ressourcesStore.ressources;
-      count.value = ressourcesStore.ressources?.length || 0;
-      servermessage.value = ressourcesStore.message;
+      if( ressources.value === undefined || ressources.value.length === 0) { // si j'ai pas déjà les ressources
+        await ressourcesStore.getRessources();
+        ressources.value = ressourcesStore.ressources;
+        count.value = ressourcesStore.ressources?.length || 0;
+        servermessage.value = ressourcesStore.message;
+      }
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
@@ -106,7 +108,7 @@ export default {
 
 
   mounted() {
-    console.log('mouted HomeView', this.count) // 0
+    console.log('mouted HomeView : count', this.count, this.connectedUser?.value) // 0
   },
 
 };
