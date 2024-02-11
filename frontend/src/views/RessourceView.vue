@@ -3,8 +3,9 @@
       <h1>{{ ressource.title }}</h1>
       <p v-html="ressource.content"></p>
         <div class="ressource_links">
-          <p><router-link :to="{ name: 'ressources' }">Retour aux ressources</router-link></p>
-          <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }">Supprimer</router-link></p>
+          <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
+          <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
+          <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
         </div>
       <SpinerComponent text="loading"></SpinerComponent>
       </section>
@@ -47,5 +48,5 @@ export default {
 };
 </script>
 
-<style lang = "scss" scoped>
+<style lang = "scss">
 </style>

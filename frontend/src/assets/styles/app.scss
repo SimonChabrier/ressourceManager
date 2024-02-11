@@ -38,12 +38,10 @@ html,body{
 .ql-syntax {
     background-color: #23241f;
     color: #f8f8f2;
-    padding: 30px
-    }
-  pre {
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
+    padding: 30px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 
 h1, h2, h3, h4, h5, h6 {
     margin: 0 0 $margin-small 0;
@@ -85,9 +83,6 @@ p {
     font-weight: 300;
     font-size: 0.8rem;
     color : $color-black;
-    margin: 0;
-    padding: 0;
-
 }
 small {
     font-weight: 200;
@@ -101,24 +96,30 @@ label {
     display: block;
     margin: 5px;
 }
-// sauf les liens du header
-a:not(.top-nav a){
-    text-decoration: none;
-    color: $color-info;
-    margin-right: $margin-small;
-    transition: all 0.3s ease-in-out;
-    &:hover {
-        color: $color-secondary;
-    }
-    // active
-    &:active {
-        color: $color-tertiary;
-    }
-    // click
-    &:focus {
-        color: $color-quaternary;
-    }
+button {
+    padding: 15px 20px;
+    margin: 0px 5px 0 0;
+    border: none;
+    background-color: #497683;
+    color: white;
+    border-radius: 5px;
+    transition: all 0.3s ease;
 }
+button:hover {
+    background-color: #3f5a6f;
+    cursor: pointer;
+}
+button a {
+    text-decoration: none;
+    color: white!important;
+}
+
+a {
+    text-decoration: none;
+    color: $color-primary;
+}
+
+// sauf les liens du header
 blockquote {
     display: flex;
     align-items: center;
@@ -143,38 +144,6 @@ blockquote {
   textarea {
     height: 400px;
   }
-
-
-
-button {
-    // Styles du bouton
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: 300;
-    font-size: 0.8rem;
-    color: $color-grey-light-2;
-    background: $color-primary;
-    border: none;
-    border-radius: $border-radius;
-    padding: $padding-small $padding;
-    cursor: pointer;
-    transition: $transition;
-    width: fit-content;
-    // Hover
-    &:hover {
-        background: $color-secondary;
-    }
-
-    // Active
-    &:active {
-        background: $color-tertiary;
-    }
-
-    // Focus
-    &:focus {
-        background: $color-quaternary;
-    }
-}
-
 
 .view_container {
     width: 100%;

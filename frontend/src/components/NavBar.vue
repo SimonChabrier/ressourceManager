@@ -15,8 +15,8 @@
     </label>
     
     <ul class="menu">
-      <li><router-link to="/">Ressources</router-link></li>
-      <li><router-link to="/ressource">Nouvelle ressource</router-link></li>
+      <li><router-link to="/"><font-awesome-icon :icon="['fas', 'house']" /></router-link></li>
+      <li><router-link to="/ressource"><font-awesome-icon :icon="['fas', 'plus']" /></router-link></li>
       <li><router-link :to=linkPath.value>{{ linkText.value }}</router-link></li>
     </ul>
 

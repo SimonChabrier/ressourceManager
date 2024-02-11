@@ -10,9 +10,11 @@
                 <span v-if="ressource.tech" class="tag">{{ ressource.tech }}</span>
               </div>
               <p class="date">{{ formatedDate(ressource.createdAt) }}</p>
-              <div class="ressource_links">
-                <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }">Modifier</router-link></p>
-                <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }">Voir</router-link></p>
+         
+              <div v-if="connectedUser" class="ressource_links">
+                <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
+                <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
+                <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
               </div>
           </div>
       </div>
@@ -34,6 +36,7 @@ export default {
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
+    const connectedUser = ressourcesStore.connectedUser;
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
@@ -76,7 +79,7 @@ export default {
       return '';
     };
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
-    return { ressources, formattedContent, formatedDate, count , servermessage};
+    return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser};
   },
 
   mounted() {
@@ -87,7 +90,7 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 .ressourcesList {
   display: flex;
@@ -149,9 +152,11 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  margin-top: 20px;
+
+  
   a {
     padding: 10px;
+    margin-right: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     text-decoration: none;
