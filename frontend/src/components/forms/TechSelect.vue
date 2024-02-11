@@ -26,7 +26,7 @@ const techs = ref([
     { id: 8, name: 'Vue Js' },
     { id: 10, name: 'Node Js' },
     { id: 11, name: 'MongoDB' },
-    { id: 12, name: 'MySQL' },
+    { id: 12, name: 'SQL' },
     { id: 13, name: 'PostgreSQL' },
     { id: 14, name: 'SQLite' },
     { id: 15, name: 'Docker' },

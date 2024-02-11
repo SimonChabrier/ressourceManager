@@ -18,10 +18,11 @@ const selectedTag = defineModel({
 
 const tags = ref([
     { id: 1, name: 'Doc' },
-    { id: 2, name: 'Tuto' },
-    { id: 3, name: 'Article' },
-    { id: 4, name: 'lien' },
-    { id: 5, name: 'Autre' },
+    { id: 2, name: 'Snippet' },
+    { id: 3, name: 'Tuto' },
+    { id: 4, name: 'Article' },
+    { id: 5, name: 'lien' },
+    { id: 6, name: 'Autre' },
 ]);
 
 
