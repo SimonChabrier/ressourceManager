@@ -92,7 +92,7 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await ressources.getRessource(id);
               this.ressource = response.data.ressource; 
-              this.message = response.data.message;
+              this.message = ' Ressource : ' + response.data.ressource.title;
               return response.data.ressource;
             } catch (error) {
               console.error('Error fetching ressource:', error);

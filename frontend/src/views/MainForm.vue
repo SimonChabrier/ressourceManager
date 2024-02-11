@@ -82,14 +82,18 @@ watch(() => router.currentRoute.value, (to) => {
 // Fonction pour charger une ressource si je suis en mode édition
 const fetchPost = async () => {
   try {
-    const ressourceId = router.currentRoute.value.params.id;
-    const post = await ressourcesStore.getRessource(ressourceId);
+    const id = router.currentRoute.value.params.id;
+    const post = await ressourcesStore.getRessource(id);
     nextTick(() => {
       title.value = post.title;
       content.value = post.content;
       tag.value = post.tag;
       tech.value = post.tech;
       userId.value = post.userId;
+      pageTitre.value = 'Modifier ' + title.value;
+      btnText.value = 'Modifier';
+      ressourceId.value = post.id;
+
     });
   } catch (error) {
     console.log(error);
@@ -99,9 +103,6 @@ const fetchPost = async () => {
 // si j'ai un id dans l'url, je le passe à la ref ressourceId
 if (router.currentRoute.value.params.id) {
     fetchPost();
-    ressourceId.value = router.currentRoute.value.params.id;
-    btnText.value = 'Modifier';
-    pageTitre.value = 'Modifier une ressource';
 }
 
 // Centralisation de la gestion du formulaire
