@@ -11,7 +11,7 @@
               </div>
               <p class="date"><font-awesome-icon :icon="['fas', 'calendar-days']" /> {{ formatedDate(ressource.createdAt) }}</p>
          
-              <div v-if="connectedUser" class="ressource_links">
+              <div v-if="connectedUser.id" class="ressource_links">
                 <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
@@ -43,7 +43,7 @@ export default {
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
-    const connectedUser = ressourcesStore.connectedUser;
+    let connectedUser = ref({'value': ''});
     // mettre à jour la liste des ressources après la suppression d'une ressource
 
     watch(() => ressourcesStore.ressources, (newVal) => {
@@ -53,6 +53,10 @@ export default {
    
     watch(() => ressourcesStore.message, (newVal) => {
       servermessage.value = newVal;
+    }, { immediate: true });
+
+    watch(() => ressourcesStore.connectedUser, (newVal) => {
+      connectedUser.value = newVal;
     }, { immediate: true });
 
     // au montage du composant, on récupère les ressources
