@@ -1,6 +1,7 @@
 <template>
   <section class="mainForm_container">
     <h1>{{ pageTitre }}</h1>
+    
     <!-- Formulaire de création de ressource -->
     <form class="resource-form" @submit.prevent="handleSubmit">
       <div class="form-group">
@@ -19,23 +20,15 @@
               placeholder="Saisissez le contenu"
             />
       </div>
-  <!-- ancienne syntaxe v-model:content="textContent" -->
+
       <div class="form-group">
         <label for="tag">Tag</label>
-        <select v-model="tag" id="tag">
-          <option value="" disabled selected hidden>Choisir un tag</option>
-          <option value="doc">Documentation</option>
-          <option value="tuto">Tutoriel</option>
-          <option value="article">Article</option>
-        </select>
+          <TagSelect v-model="tag" />
       </div>
 
       <div class="form-group">
         <label for="tech">Technologie</label>
-        <select v-model="tech" id="tech">
-          <option value="" disabled selected hidden>Choisir une technologie</option>
-          <option value="html">HTML</option>
-        </select>
+          <TechSelect v-model="tech" />
       </div>
 
       <input type="submit" :value="btnText" />
@@ -53,6 +46,8 @@ import { useRessourcesStore } from '@/stores/ressources';
 import router from '@/router';
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
+import TagSelect from '@/components/forms/TagSelect.vue';
+import TechSelect from '@/components/forms/TechSelect.vue';
 
 // reférences locales au store et aux variables
 // avant c'était dans le data() et methods: {} mais c'est plus simple avec setup()
