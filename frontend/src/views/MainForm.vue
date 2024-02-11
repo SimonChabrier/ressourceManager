@@ -9,10 +9,17 @@
       </div>
 
       <div class="form-group">
-        <label for="tag">Contenu</label>
-        <quill-editor ref="quill" :modules="modules" :toolbar="toolbar" v-model:content="content" contentType="html" />
+        <label for="content">Contenu</label>
+          <QuillEditor ref="quill" 
+              :modules="modules" 
+              :toolbar="toolbar" 
+              v-model:content="content"
+              contentType="html" 
+              id="content"
+              placeholder="Saisissez le contenu"
+            />
       </div>
-
+  <!-- ancienne syntaxe v-model:content="textContent" -->
       <div class="form-group">
         <label for="tag">Tag</label>
         <select v-model="tag" id="tag">
@@ -54,7 +61,7 @@ const ressourcesStore = useRessourcesStore();
 const ressourceId = ref('');
 const userId = ref('');
 const title = ref('');
-const content = ref('');
+const content = defineModel(QuillEditor, { event: 'change', prop: 'content' });
 const tag = ref('');
 const tech = ref('');
 const quill = ref(null);
@@ -136,6 +143,8 @@ const handleSubmit = async () => {
       tech: tech.value,
       userId: userId.value,
   };
+
+  console.log(formData);
   // validation du formulaire aucune donnée vide
   if (!formData.title || !formData.content || !formData.tag || !formData.tech) {
     alert('Veuillez remplir tous les champs');
