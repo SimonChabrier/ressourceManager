@@ -27,6 +27,24 @@ html,body{
 //     padding: 0!important;
 // }
 
+.ql-editor {
+    overflow-y: scroll;
+    min-height: 400px;
+    background-color: white;
+    resize: vertical;
+    padding: 12px 15px!important;
+    box-sizing: border-box!important;
+    }
+.ql-syntax {
+    background-color: #23241f;
+    color: #f8f8f2;
+    padding: 30px
+    }
+  pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0 0 $margin-small 0;
     padding: 0;

@@ -120,7 +120,10 @@ export default {
   max-height: 300px;
   overflow: auto;
   margin-bottom: 15px;
+  overflow-x: hidden;
 }
+
+
 
 .tags {
   display: flex;
