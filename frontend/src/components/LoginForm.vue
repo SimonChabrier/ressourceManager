@@ -58,24 +58,5 @@ export default {
 
 </script>
 
-<style lang="scss" scoped>
-.login_form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    // height: 100vh;
-    form {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        input {
-            margin: 10px;
-            padding: 10px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    }
-}
+<style lang="scss">
 </style>    

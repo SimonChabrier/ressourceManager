@@ -1,30 +1,37 @@
 <template>
   <section class="home_container">
-  <h1>Ressources</h1>
-      <div id="ressourcesList" class="ressourcesList">
+      
+    <div v-if="ressources.length > 0" id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
               <p class="mainText" v-html=formattedContent(ressource.content)></p>
               <div class="tags">
-                <span v-if="ressource.tag" class="tag">{{ ressource.tag }}</span>
-                <span v-if="ressource.tech" class="tag">{{ ressource.tech }}</span>
+                <span v-if="ressource.tag" class="tag"><font-awesome-icon :icon="['fas', 'hashtag']" /> {{ ressource.tag }}</span>
+                <span v-if="ressource.tech" class="tag"><font-awesome-icon :icon="['fas', 'code']" /> {{ ressource.tech }}</span>
               </div>
-              <p class="date">{{ formatedDate(ressource.createdAt) }}</p>
+              <p class="date"><font-awesome-icon :icon="['fas', 'calendar-days']" /> {{ formatedDate(ressource.createdAt) }}</p>
          
               <div v-if="connectedUser" class="ressource_links">
                 <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
               </div>
+              <div v-else class="ressource_links">
+                <p><router-link to="/login"><font-awesome-icon :icon="['fas', 'sign-in-alt']" title="login"/></router-link></p>
+              </div>
           </div>
       </div>
+      <div v-else  class="emptyList">
+        <p>{{ servermessage }}</p>
+      </div>
+
     </section>
 </template>
 
 <script>
 
 import { useRessourcesStore } from '@/stores/ressources';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 export default {
 
@@ -37,6 +44,16 @@ export default {
     const count = ref(0);
     const servermessage = ref('');
     const connectedUser = ressourcesStore.connectedUser;
+    // mettre à jour la liste des ressources après la suppression d'une ressource
+
+    watch(() => ressourcesStore.ressources, (newVal) => {
+      ressources.value = newVal;
+      count.value = newVal.length;
+    }, { immediate: true });
+   
+    watch(() => ressourcesStore.message, (newVal) => {
+      servermessage.value = newVal;
+    }, { immediate: true });
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
@@ -49,10 +66,11 @@ export default {
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
       if (content) {
-        content = content.replace(/<[^>]*>([\s]?)*<\/[^>]*>/g, ''); // enlever toutes les balises html sans contenu
-        content = content.trim(); // enlever les espaces au début et à la fin
-        content = content.replace(/>\s+</g, '><'); // enlever tous les espaces blancs entre deux balises HTML
-        return content.substring(0, 1500) + '...';
+        // content = content.replace(/<[^>]*>([\s]?)*<\/[^>]*>/g, ''); // enlever toutes les balises html sans contenu
+        // content = content.trim(); // enlever les espaces au début et à la fin
+        // content = content.replace(/>\s+</g, '><'); // enlever tous les espaces blancs entre deux balises HTML
+        return content.trim().substring(0, 15000) + '...';
+        // supprimer les espaces blancs au début et à la fin
       }
       return '';
     };
@@ -82,6 +100,7 @@ export default {
     return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser};
   },
 
+
   mounted() {
     console.log('mouted HomeView', this.count) // 0
   },
@@ -91,6 +110,18 @@ export default {
 </script>
 
 <style lang="scss">
+
+.emptyList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 176px);
+  p {
+    color: $color-primary;
+    font-size: 1.5rem;
+  }
+}
 
 .ressourcesList {
   display: flex;

@@ -13,6 +13,7 @@ export const useRessourcesStore = defineStore('ressources', {
         ressource: null,
         message: null,
         linkPath: '/login',
+        linkIcon: 'sign-in-alt',
         linkText: 'Login',
     }),
 
@@ -38,6 +39,7 @@ export const useRessourcesStore = defineStore('ressources', {
               if (response.data.message) {
                 this.linkPath = "/logout"
                 this.linkText = "Logout"
+                this.linkIcon = "sign-out-alt"
                 this.message = response.data.message;
                 return response.data.message;
               }
@@ -59,6 +61,7 @@ export const useRessourcesStore = defineStore('ressources', {
               };
               this.linkPath = "/login"
               this.linkText = "Login"
+              this.linkIcon = "sign-in-alt"
 
               return response.data.message;
             } catch (error) {
@@ -68,13 +71,19 @@ export const useRessourcesStore = defineStore('ressources', {
           async getRessources() {
             try {
               const response = await ressources.getRessources();
-              if(response.data.ressources){ // plusieurs ressources
-                this.ressources = response.data.ressources;
-                this.message =  response.data.ressources.length + ' - ' + response.data.message; // prendre la clé message du json
-              } else { // une seule ressource
-                this.ressources = response.data.ressource; 
-                this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
-               }
+              console.log(response.data);
+              if(response.data.message == 'Aucune ressource trouvée'){
+                this.ressources = [];
+                this.message = response.data.message;
+              } else {
+                  if(response.data.ressources){ // plusieurs ressources
+                    this.ressources = response.data.ressources;
+                    this.message =  response.data.ressources.length + ' - ' + response.data.message; // prendre la clé message du json
+                  } else { // une seule ressource
+                    this.ressources = response.data.ressource; 
+                    this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
+                  }
+              }
             } catch (error) {
               console.error('Error fetching ressources:', error);
             }
@@ -112,10 +121,18 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await ressources.deleteRessource(id);
               this.message = response.data.message;
+              // recharger la liste des ressources
+              this.getRessources();
             } catch (error) {
               console.error('Error deleting ressource:', error);
             }
           },
     },
+
+    computed: {
+      linkText() {
+          return this.connectedUser ? 'Logout' : 'Login';
+      },
+  },
 
 });

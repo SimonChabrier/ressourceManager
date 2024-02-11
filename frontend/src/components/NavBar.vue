@@ -3,8 +3,8 @@
    
     <div>
       <ul class="menu">
-        <li v-if="username.value">{{ username.value }}</li>
-        <li v-else>Non connecté</li>
+        <li v-if="username.value"><font-awesome-icon :icon="['fas', 'user']" />&nbsp;&nbsp;{{ username.value }}</li> 
+        <li v-else><font-awesome-icon :icon="['fas', 'user-slash']" /></li>
         <li v-if="message.value" class="message">{{ message.value}}</li>
       </ul>
     </div>
@@ -15,9 +15,9 @@
     </label>
     
     <ul class="menu">
-      <li><router-link to="/"><font-awesome-icon :icon="['fas', 'house']" /></router-link></li>
-      <li><router-link to="/ressource"><font-awesome-icon :icon="['fas', 'plus']" /></router-link></li>
-      <li><router-link :to=linkPath.value>{{ linkText.value }}</router-link></li>
+      <li><router-link to="/"><font-awesome-icon :icon="['fas', 'house']" title="retour aux ressource"/></router-link></li>
+      <li><router-link to="/ressource"><font-awesome-icon :icon="['fas', 'plus']" title="créer une ressource"/></router-link></li>
+      <li><router-link :to=linkPath.value><font-awesome-icon :icon="linkIcon.value" :title="linkText.value"/></router-link></li>
     </ul>
 
   </section>
@@ -29,6 +29,7 @@
 import { useRessourcesStore } from '@/stores/ressources';
 import { ref, reactive, watch } from "vue";
 
+
 export default {
   name: 'NavBar',
   setup() {
@@ -37,6 +38,7 @@ export default {
     const message = reactive({ value: "" });
     const linkPath = reactive({ value: "" })
     const linkText = reactive({ value: "" })
+    const linkIcon = reactive({ value: "" })
     const isMenuOpen = ref(false);
 
     // Fonction pour basculer l'état du menu
@@ -50,6 +52,10 @@ export default {
       }
     }, { immediate: true });
 
+    watch(() => ressourcesStore.message, (newVal) => {
+      message.value = newVal;
+    }, { immediate: true });
+
     watch(() => ressourcesStore.linkPath, (newVal) => {
       if(newVal) {
         linkPath.value = newVal;
@@ -60,11 +66,11 @@ export default {
       linkText.value = newVal;
     }, { immediate: true });
 
-    watch(() => ressourcesStore.message, (newVal) => {
-      message.value = newVal;
+    watch(() => ressourcesStore.linkIcon, (newVal) => {
+      linkIcon.value = newVal;
     }, { immediate: true });
 
-    return { username, message, linkPath, linkText, isMenuOpen, toggleMenu };
+    return { username, message, linkPath, linkText, isMenuOpen, toggleMenu, linkIcon};
   },
 };
 </script>

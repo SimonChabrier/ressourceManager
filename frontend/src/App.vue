@@ -14,7 +14,7 @@ import BannerComponent from './components/Banner.vue'
           </transition>
         </router-view>
       </div>
-    <BannerComponent text="© 2024 - Tous droits réservés" color="success" />
+    <BannerComponent text="© 2024 - Ressoursator" color="success" />
   </div>
 </template>
 

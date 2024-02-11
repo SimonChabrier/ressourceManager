@@ -12,7 +12,7 @@
 
   </script>
   
-  <style lang="scss" scoped>
+  <style lang="scss">
   .login_container {
     display: flex;
     align-items: center;
