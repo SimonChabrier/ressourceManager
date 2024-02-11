@@ -11,14 +11,7 @@
 
       <div class="form-group">
         <label for="content">Contenu</label>
-          <QuillEditor ref="quill" 
-              :modules="modules" 
-              :toolbar="toolbar" 
-              v-model:content="content"
-              contentType="html" 
-              id="content"
-              placeholder="Saisissez le contenu"
-            />
+          <TextEditor v-model="content" />
       </div>
 
       <div class="form-group">
@@ -40,41 +33,40 @@
 // il permet de déclarer des variables et des fonctions sans avoir à les déclarer dans le data() et methods: {}
 // https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
 
-import BlotFormatter from 'quill-blot-formatter'
 import { ref, nextTick, watch } from 'vue'
 import { useRessourcesStore } from '@/stores/ressources';
 import router from '@/router';
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
+
 import TagSelect from '@/components/forms/TagSelect.vue';
 import TechSelect from '@/components/forms/TechSelect.vue';
+import TextEditor from '@/components/forms/TextEditor.vue';
 
-// reférences locales au store et aux variables
-// avant c'était dans le data() et methods: {} mais c'est plus simple avec setup()
-// nouveau dans Vue 3 : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
+// Mes refs et variables locales
 const ressourcesStore = useRessourcesStore();
 const ressourceId = ref('');
 const userId = ref('');
 const title = ref('');
-const content = defineModel(QuillEditor, { event: 'change', prop: 'content' });
+const content = ref('');
 const tag = ref('');
 const tech = ref('');
-const quill = ref(null);
 const pageTitre = ref('Créer une ressource');
 const btnText = ref('créer');
 
-userId.value = ressourcesStore.getConnectedUser.id;
+if(ressourcesStore.getConnectedUser) {
+  userId.value = ressourcesStore.getConnectedUser.id;
+} else {
+  router.push({ name: 'login' });
+}
 
 // jécoute les changements de route pour vider l'éditeur si je ne suis pas en mode édition
-// quand je sitche de route, je récupère la route courante dans to (passer de la route A à la route B)
-// sur le même composant...pour rafrachir le contenu de l'éditeur en fonciton de la route creation ou édition
 watch(() => router.currentRoute.value, (to) => {
   // si je vais sur une route sans id, je vide l'éditeur et les champs
   // c'est que je suis en mode création
+  console.log(to);
   if (!to.params.id) {
     nextTick(() => {
       title.value = '';
-      quill.value.setHTML('');
+      content.value = '';
       tag.value = '';
       tech.value = '';
       btnText.value = 'Créer';
@@ -84,16 +76,14 @@ watch(() => router.currentRoute.value, (to) => {
   }
 });
 
-
-
-// Fonction pour charger les posts (à ajuster selon votre API)
+// Fonction pour charger une ressource si je suis en mode édition
 const fetchPost = async () => {
   try {
     const ressourceId = router.currentRoute.value.params.id;
     const post = await ressourcesStore.getRessource(ressourceId);
     nextTick(() => {
       title.value = post.title;
-      quill.value.setHTML(post.content);
+      content.value = post.content;
       tag.value = post.tag;
       tech.value = post.tech;
       userId.value = post.userId;
@@ -105,29 +95,11 @@ const fetchPost = async () => {
 
 // si j'ai un id dans l'url, je le passe à la ref ressourceId
 if (router.currentRoute.value.params.id) {
-    // ressourceId.value = router.currentRoute.value.params.id;
     fetchPost();
-    // je chage la valeur de ressourceId
     ressourceId.value = router.currentRoute.value.params.id;
     btnText.value = 'Modifier';
     pageTitre.value = 'Modifier une ressource';
 }
-
-const toolbar = [
-  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  ['blockquote', 'code-block'],
-  [{ align: [] }],
-  [{ list: 'ordered' }, { list: 'bullet' }],
-  [{ color: [] }, { background: [] }],
-  [{ font: [] }],
-  ['link', 'image', 'video'],
-  ['clean'],
-];
-
-const modules = {
-  module: BlotFormatter,
-};
 
 // Centralisation de la gestion du formulaire
 const handleSubmit = async () => {
@@ -139,8 +111,6 @@ const handleSubmit = async () => {
       userId: userId.value,
   };
 
-  console.log(formData);
-  // validation du formulaire aucune donnée vide
   if (!formData.title || !formData.content || !formData.tag || !formData.tech) {
     alert('Veuillez remplir tous les champs');
     return;
@@ -151,6 +121,7 @@ const handleSubmit = async () => {
   } else {
     await ressourcesStore.patchRessource(ressourceId.value, formData);
   }
+  
   router.push({ name: 'ressources' });
 };
 

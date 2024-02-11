@@ -8,6 +8,7 @@
 <script setup>
 import { ref } from 'vue'
 
+
 const selectedTech = defineModel({
     prop: 'selectedTech',
     event: 'change'
