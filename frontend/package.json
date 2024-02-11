@@ -1,6 +1,6 @@
 {
-  "name": "vitefront",
-  "version": "0.0.0",
+  "name": "frontend",
+  "version": "1",
   "private": true,
   "type": "module",
   "scripts": {
