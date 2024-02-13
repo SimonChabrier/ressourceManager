@@ -2,6 +2,7 @@ const passport = require('../security/authenticate');
 const User  = require('../models/user');
 const validator = require('../services/validator');
 const jwt = require('jsonwebtoken');
+const isAuthenticated = require('../security/isAuthenticated');
 
 
 const authController = {
@@ -24,6 +25,8 @@ const authController = {
         req.session.isLoggedIn = true; 
         req.session.cookie.maxAge = 3600000; 
         req.session.jwt = user.token;
+
+        console.log('REQ sesssion', req.session);
 
         return res.status(200).json({ message: 'Authentification réussie', user: user, jwt: user.token });
      
@@ -91,16 +94,17 @@ const authController = {
 
   // Manage session info
   getSessionInfo: (req, res) => {
-    if (req.isAuthenticated() && req.session.isLoggedIn) { 
+    console.log('REQ sesssion', req.session);
+    if (req.session.isLoggedIn) { 
       
         const user = req.user;
         const session = req.session;
-        const sessionData = { user: user, session: session }
+        const sessionData = { user: user, session: session, jwt: req.session.jwt };
 
       return res.status(200).json({ message: 'Utilisateur authentifié', sessionData });
 
     } else {
-      return res.status(401).json({ message: 'Utilisateur non authentifié' });
+      return res.status(401).json({ message: 'Session utilisateur non authentifié' });
     }
   },
 };

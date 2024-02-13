@@ -10,9 +10,9 @@ router.post('/register', authController.register);
 router.post('/reset-password', authController.resetPassword);
 // si .env est sur prod 
 if (process.env.NODE_ENV === 'prod') {
-    router.post('/user-info', isAuthenticated, verifyToken, authController.getSessionInfo);
+    router.post('/user-info', verifyToken, isAuthenticated, authController.getSessionInfo);
 } else {
-    router.post('/user-info', authController.getSessionInfo);
+    router.post('/user-info', verifyToken, authController.getSessionInfo);
 }
 
 
