@@ -7,10 +7,8 @@ import tokenManager from '@/security/tokenManager';
 export const ressourcesStore = defineStore('ressources', {
    
     state: () => ({
-
         connectedUser: null,
         ressources: [], 
-        // ressource: null,
         message: null,
         linkPath: '/login',
         linkIcon: 'sign-in-alt',
@@ -55,11 +53,9 @@ export const ressourcesStore = defineStore('ressources', {
             try {
               const response = await security.logout();
               tokenManager.removeToken();
+              
               this.message = response.data.message;
-              this.connectedUser = {
-                id: null,
-                email: null,
-              };
+              this.connectedUser = null;  
               this.linkPath = "/login"
               this.linkText = "Login"
               this.linkIcon = "sign-in-alt"
