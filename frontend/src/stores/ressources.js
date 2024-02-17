@@ -13,6 +13,7 @@ export const ressourcesStore = defineStore('ressources', {
         linkPath: '/login',
         linkIcon: 'sign-in-alt',
         linkText: 'Login',
+        isloading: true,
     }),
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store
@@ -25,6 +26,9 @@ export const ressourcesStore = defineStore('ressources', {
         },
         getUserId(state) {
             return state.connectedUser.id || 'aucun id utilisateur';
+        },
+        getLoading(state) {
+          return state.isloading;
         }
     },
 
@@ -65,19 +69,22 @@ export const ressourcesStore = defineStore('ressources', {
               console.error('Error logging out:', error);
             }
           },
-          async getRessources() {
+          async getRessources(offset, limit) {
             try {
-              const response = await ressources.getRessources();
+              const response = await ressources.getRessources(offset, limit);
               if(response.data.message == 'Aucune ressource trouvée'){
                 this.ressources = [];
                 this.message = response.data.message;
+                // this.isloading = false;
               } else {
                   if(response.data.ressources){ // plusieurs ressources
                     this.ressources = response.data.ressources;
                     this.message =  response.data.ressources.length + ' - ' + response.data.message; // prendre la clé message du json
+                    // this.isloading = false;
                   } else { // une seule ressource
                     this.ressources = response.data.ressource; 
                     this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
+                    // this.isloading = false;
                   }
               }
             } catch (error) {

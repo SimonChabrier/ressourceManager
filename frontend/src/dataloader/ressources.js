@@ -51,13 +51,14 @@ apiClient.interceptors.request.use(config => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
 });
 
 export default {
     // utilisateurs
-    getRessources() {
-        return apiClient.get('/ressources');
+    getRessources(offset, limit) {
+        return apiClient.get(`/ressources?offset=${offset}&limit=${limit}`);
     },
     getRessource(id) {
         return apiClient.get('/ressources/' + id);

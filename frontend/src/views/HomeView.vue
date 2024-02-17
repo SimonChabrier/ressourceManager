@@ -1,7 +1,10 @@
 <template>
   <section class="home_container">
-      
-    <div v-if="count > 0" id="ressourcesList" class="ressourcesList">
+    <div v-if="isloading" class="spinner_container">
+      <Spinner />
+    </div>
+
+    <div v-else-if="!isloading" id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
               <p class="mainText" v-html=formattedContent(ressource.content)></p>
@@ -31,11 +34,25 @@
 <script>
 
 import { ressourcesStore } from '@/stores/ressources';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onBeforeMount, ref, watch, nextTick } from 'vue';
+import Spinner from '@/components/Spiner.vue';
 
 export default {
 
   name: 'HomeView',
+  props: {
+    offset: {
+      type: Number,
+      required: true
+    },
+    limit: {
+      type: Number,
+      required: true
+    }
+  },
+  components: {
+    Spinner
+  },
 
   setup() { // Composition API : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
     
@@ -43,8 +60,13 @@ export default {
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
+    const isloading = ref('');
     let connectedUser = ref({'value': ''});
     // mettre à jour la liste des ressources après la suppression d'une ressource
+    // watch(() => store.isloading, (newVal) => { // Utilisez store.isloading
+    // isloading.value = newVal;
+    // console.log('watch ressourcesStore.isloading', newVal);
+    // }, { immediate: true });
 
     watch(() => store.ressources, (newVal) => {
       console.log('watch ressourcesStore.ressources', newVal);
@@ -60,12 +82,6 @@ export default {
       connectedUser.value = newVal;
     }, { immediate: true });
 
-    // au montage du composant, on récupère les ressources
-    onMounted( async () => {
-      //ressources.value =  await ressourcesStore.getRessources();
-        //console.log('onMounted ressources', ressources.value);
-        // count.value = ressources.value.length;
-    });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
@@ -100,15 +116,19 @@ export default {
       }
       return '';
     };
+    // est ce que le dom est créee
+    onBeforeMount(() => {
+      isloading.value = true;
+      console.log('onBeforeMount', isloading.value); 
+    });
+    onMounted(async () => {
+      console.log('onMounted');
+      await nextTick(); // Attendre le rendu initia
+        isloading.value = false; // Masquer le spinner après un court délai
+    });
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
-    return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser};
+    return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser, isloading};
   },
-
-  mounted() {
-    // console.log('mouted HomeView : count', this.count, this.connectedUser?.value) // 0
-
-  },
-
 };
 
 </script>

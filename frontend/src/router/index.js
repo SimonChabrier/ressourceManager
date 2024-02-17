@@ -12,16 +12,25 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      // path: '/:offset?/:limit?',
       path: '/',
       name: 'ressources',
       component: HomeView,
+      // utiliser les paramètres de navigation pour passer des données à la route
+      props: (route) => ({ 
+        offset: parseInt(route.query.offset) || 0, 
+        limit: parseInt(route.query.limit) || 5 
+      }),
         beforeEnter: async (to, from, next) => {
             const store = ressourcesStore(); // Obtenir une instance du store
             const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
         if (!tokenManager.getToken() || !connectedUser) {
           next({ name: 'login' });
         } else {
-            store.getRessources();
+          console.log('ressources route', to.params.offset, to.params.limit);
+          const offset = parseInt(to.query.offset) || 0;
+          const limit = parseInt(to.query.limit) || 10;
+          store.getRessources(offset, limit);
           next();
         }
       },

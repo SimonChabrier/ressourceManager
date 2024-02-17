@@ -1,5 +1,5 @@
 <template>
-  <div id="spiner" class="loaderBloc hide">
+  <div id="spiner" class="loaderBloc">
     <span class="spinner"></span>
     <p>{{ text }}</p>
   </div>
@@ -20,11 +20,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .spinner {
     width: 48px;
     height: 48px;
-    border: 5px solid #FFF;
+    border: 5px solid #b91b1b;
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
