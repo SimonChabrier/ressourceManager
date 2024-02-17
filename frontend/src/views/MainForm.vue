@@ -31,7 +31,7 @@
 // https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
 
 import { ref, nextTick, watch } from 'vue'
-import { useRessourcesStore } from '@/stores/ressources';
+import { ressourcesStore } from '@/stores/ressources';
 import router from '@/router';
 
 import TagSelect from '@/components/forms/TagSelect.vue';
@@ -40,7 +40,7 @@ import TextEditor from '@/components/forms/TextEditor.vue';
 import Textinput from '@/components/forms/Textinput.vue';
 
 // Mes refs et variables locales
-const ressourcesStore = useRessourcesStore();
+const store = ressourcesStore();
 const ressourceId = ref('');
 const userId = ref('');
 const title = ref('');
@@ -50,8 +50,8 @@ const tech = ref('');
 const pageTitre = ref('Créer une ressource');
 const btnText = ref('créer');
 
-if(ressourcesStore.getConnectedUser) {
-  userId.value = ressourcesStore.getConnectedUser.id;
+if(store.getConnectedUser) {
+  userId.value = store.getConnectedUser.id;
 } else {
   router.push({ name: 'login' });
 }
@@ -74,7 +74,7 @@ watch(() => router.currentRoute.value, (to) => {
       tech.value = '';
       btnText.value = 'Créer';
       pageTitre.value = 'Créer une ressource';
-      userId.value = ressourcesStore.getConnectedUser.id;
+      userId.value = store.getConnectedUser.id;
     });
   }
 });
@@ -83,7 +83,7 @@ watch(() => router.currentRoute.value, (to) => {
 const fetchPost = async () => {
   try {
     const id = router.currentRoute.value.params.id;
-    const post = await ressourcesStore.getRessource(id);
+    const post = await store.getRessource(id);
     nextTick(() => {
       title.value = post.title;
       content.value = post.content;
@@ -123,11 +123,11 @@ const handleSubmit = async () => {
   }
 
   if (!ressourceId.value) {
-    await ressourcesStore.createRessource(formData).then(() => {
+    await store.createRessource(formData).then(() => {
       router.push({ name: 'ressources' });
     });
   } else {
-    await ressourcesStore.patchRessource(ressourceId.value, formData).then(() => {
+    await store.patchRessource(ressourceId.value, formData).then(() => {
       router.push({ name: 'ressources' });
     });
   }

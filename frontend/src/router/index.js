@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useRessourcesStore } from '@/stores/ressources'
+import { ressourcesStore } from '@/stores/ressources'
 import tokenManager from '@/security/tokenManager'
 
 import HomeView from '../views/HomeView.vue'
@@ -15,79 +15,71 @@ const router = createRouter({
       path: '/',
       name: 'ressources',
       component: HomeView,
-      beforeEnter: async (to, from, next) => {
-        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        beforeEnter: async (to, from, next) => {
+            const store = ressourcesStore(); // Obtenir une instance du store
+            const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
         if (!tokenManager.getToken() || !connectedUser) {
-          console.log('router index redirection login');
-        next({ name: 'login' });
-      } else {
-        ressourcesStore.getRessources();
-        console.log('router index next getRessources');
-        console.log('index route', connectedUser);
-        next();
-      }
-    },
+          next({ name: 'login' });
+        } else {
+            store.getRessources();
+          next();
+        }
+      },
     },
     {
       path: '/ressource/:id',
       name: 'ressource-view',
-      beforeEnter: async (to, from, next) => {
-        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-        console.log('ressource id route', connectedUser);
-        if (!tokenManager.getToken() || !connectedUser) {
-        next({ name: 'login' });
-      } else {
-        next();
-      }
-    },
-      component: RessourceView
-    },
-    {
-      path: '/ressource',
-      name: 'ressource-create',
-      beforeEnter: async (to, from, next) => {
-      // utiliser from pour revenir à la page précédente
-      // utiliser next pour aller à la page suivante
-      // utiliser to pour aller à la page demandée
-      const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-      const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-      console.log('ressource create route', connectedUser);
-        if (!tokenManager.getToken() || !connectedUser) {
-          next({ name: 'login' });
-        } else {
-          next();
-        }
-      },
-      component: MainForm
-    },
-    {
-      path: '/ressource-edit/:id',
-      name: 'ressource-edit',
-      beforeEnter: async (to, from, next) => {
-          const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-          const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-          console.log('ressource edit route', connectedUser);
+      component: RessourceView,
+        beforeEnter: async (to, from, next) => {
+          const store = ressourcesStore(); // Obtenir une instance du store
+          const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
+          console.log('ressource id route', connectedUser);
           if (!tokenManager.getToken() || !connectedUser) {
           next({ name: 'login' });
         } else {
           next();
         }
       },
+    },
+    {
+      path: '/ressource',
+      name: 'ressource-create',
       component: MainForm,
+        beforeEnter: async (to, from, next) => {
+        const store = ressourcesStore(); // Obtenir une instance du store
+        const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
+          if (!tokenManager.getToken() || !connectedUser) {
+            next({ name: 'login' });
+          } else {
+            next();
+          }
+        },
+    },
+    {
+      path: '/ressource-edit/:id',
+      name: 'ressource-edit',
+      component: MainForm,
+        beforeEnter: async (to, from, next) => {
+            const store = ressourcesStore(); // Obtenir une instance du store
+            const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
+            console.log('ressource edit route', connectedUser);
+            if (!tokenManager.getToken() || !connectedUser) {
+            next({ name: 'login' });
+          } else {
+            next();
+          }
+        },
     },
     {
     path: '/ressource-delete/:id',
     name: 'ressource-delete',
     beforeEnter: async (to, from, next) => {
-        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
-        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-        console.log('ressource delete route', connectedUser);
+        const store = ressourcesStore(); // Obtenir une instance du store
+        const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
         if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
-        await ressourcesStore.deleteRessource(to.params.id);
+        await store.deleteRessource(to.params.id);
         next({ name: 'ressources' });
       }
     },
@@ -97,7 +89,7 @@ const router = createRouter({
     name: 'login',
     component: LoginView,
     // beforeEnter: async (to, from, next) => {
-    //   const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+    //   const ressourcesStore =  ressourcesStore(); // Obtenir une instance du store
     //   const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
     //   if (tokenManager.getToken() && connectedUser) {
     //     next({ name: 'ressources' });
@@ -110,7 +102,7 @@ const router = createRouter({
     path: '/logout',
     name: 'logout',
     beforeEnter: async (to, from, next) => {
-      await useRessourcesStore().logout(); // logout store
+      await ressourcesStore().logout(); // logout store
       next({ name: 'login' });
     }
   },

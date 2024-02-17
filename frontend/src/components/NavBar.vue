@@ -26,14 +26,14 @@
 
 
 <script>
-import { useRessourcesStore } from '@/stores/ressources';
+import { ressourcesStore } from '@/stores/ressources';
 import { ref, reactive, watch } from "vue";
 
 
 export default {
   name: 'NavBar',
   setup() {
-    const ressourcesStore = useRessourcesStore();
+    const store = ressourcesStore();
     const username = reactive({ value: "" });
     const message = reactive({ value: "" });
     const linkPath = reactive({ value: "" })
@@ -46,27 +46,27 @@ export default {
       isMenuOpen.value = !isMenuOpen.value;
     };
 
-    watch(() => ressourcesStore.connectedUser, (newVal) => {
+    watch(() => store.connectedUser, (newVal) => {
       if(newVal) {
         username.value = newVal.username;
       }
     }, { immediate: true });
 
-    watch(() => ressourcesStore.message, (newVal) => {
+    watch(() => store.message, (newVal) => {
       message.value = newVal;
     }, { immediate: true });
 
-    watch(() => ressourcesStore.linkPath, (newVal) => {
+    watch(() => store.linkPath, (newVal) => {
       if(newVal) {
         linkPath.value = newVal;
       }
     }, { immediate: true });
 
-    watch(() => ressourcesStore.linkText, (newVal) => {
+    watch(() => store.linkText, (newVal) => {
       linkText.value = newVal;
     }, { immediate: true });
 
-    watch(() => ressourcesStore.linkIcon, (newVal) => {
+    watch(() => store.linkIcon, (newVal) => {
       linkIcon.value = newVal;
     }, { immediate: true });
 

@@ -12,7 +12,7 @@
 
 <script>
 
-import { useRessourcesStore } from '@/stores/ressources';
+import { ressourcesStore } from '@/stores/ressources';
 
 export default {
     name: 'LoginForm',
@@ -26,13 +26,13 @@ export default {
     },
 
     setup() {
-        const ressourcesStore = useRessourcesStore();
-        return { ressourcesStore };
+        const store = ressourcesStore();
+        return { store };
     },
 
     methods: {
         async login() {
-            const response = await this.ressourcesStore.login({
+            const response = await this.store.login({
                 username: "simonchabrier@gmail.com",
                 password: "password"
 

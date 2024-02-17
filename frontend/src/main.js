@@ -12,7 +12,11 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas) // add all free solid icons to the library
 
 const app = createApp(App)
+const store = createPinia()
+
+
 app.component('font-awesome-icon', FontAwesomeIcon) // add the component to the app
+app.use(store)
 app.use(router)
-app.use(createPinia())
 app.mount('#app')
+

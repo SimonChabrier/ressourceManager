@@ -30,7 +30,7 @@
 
 <script>
 
-import { useRessourcesStore } from '@/stores/ressources';
+import { ressourcesStore } from '@/stores/ressources';
 import { onMounted, ref, watch } from 'vue';
 
 export default {
@@ -39,24 +39,24 @@ export default {
 
   setup() { // Composition API : https://v3.vuejs.org/guide/composition-api-setup.html#usage-inside-option-api
     
-    const ressourcesStore = useRessourcesStore();
+    const store = ressourcesStore();
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
     let connectedUser = ref({'value': ''});
     // mettre à jour la liste des ressources après la suppression d'une ressource
 
-    watch(() => ressourcesStore.ressources, (newVal) => {
+    watch(() => store.ressources, (newVal) => {
       console.log('watch ressourcesStore.ressources', newVal);
       ressources.value = newVal;
       count.value = newVal.length;
     }, { immediate: true });
    
-    watch(() => ressourcesStore.message, (newVal) => {
+    watch(() => store.message, (newVal) => {
       servermessage.value = newVal;
     }, { immediate: true });
 
-    watch(() => ressourcesStore.connectedUser, (newVal) => {
+    watch(() => store.connectedUser, (newVal) => {
       connectedUser.value = newVal;
     }, { immediate: true });
 
