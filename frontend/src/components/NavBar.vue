@@ -15,7 +15,7 @@
     </label>
     
     <ul class="menu">
-      <li><router-link :to="{ name: 'ressources', query: { offset: 0, limit: 10 } }"><font-awesome-icon :icon="['fas', 'house']" title="retour aux ressource"/></router-link></li>
+      <li><router-link :to="{ name: 'ressources', query: { offset: 0, limit: 28 } }"><font-awesome-icon :icon="['fas', 'house']" title="retour aux ressource"/></router-link></li>
       <li><router-link to="/ressource"><font-awesome-icon :icon="['fas', 'plus']" title="créer une ressource"/></router-link></li>
       <li><router-link :to=linkPath.value><font-awesome-icon :icon="linkIcon.value" :title="linkText.value"/></router-link></li>
     </ul>
@@ -28,7 +28,6 @@
 <script>
 import { ressourcesStore } from '@/stores/ressources';
 import { ref, reactive, watch } from "vue";
-
 
 export default {
   name: 'NavBar',

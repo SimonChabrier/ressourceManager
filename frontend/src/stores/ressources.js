@@ -9,6 +9,7 @@ export const ressourcesStore = defineStore('ressources', {
     state: () => ({
         connectedUser: null,
         ressources: [], 
+        ressourcesCount: 0,
         message: null,
         linkPath: '/login',
         linkIcon: 'sign-in-alt',
@@ -29,6 +30,9 @@ export const ressourcesStore = defineStore('ressources', {
         },
         getLoading(state) {
           return state.isloading;
+        },
+        getRessourcesCount(state) {
+          return state.ressourcesCount;
         }
     },
 
@@ -70,6 +74,8 @@ export const ressourcesStore = defineStore('ressources', {
             }
           },
           async getRessources(offset, limit) {
+            console.log('offset', offset);
+            console.log('limit', limit);
             try {
               const response = await ressources.getRessources(offset, limit);
               if(response.data.message == 'Aucune ressource trouvée'){
@@ -80,10 +86,13 @@ export const ressourcesStore = defineStore('ressources', {
                   if(response.data.ressources){ // plusieurs ressources
                     this.ressources = response.data.ressources;
                     this.message =  response.data.ressources.length + ' - ' + response.data.message; // prendre la clé message du json
+                    console.log('ressources', response.data.ressourcesCount);
+                    this.ressourcesCount = response.data.ressourcesCount;
                     // this.isloading = false;
                   } else { // une seule ressource
                     this.ressources = response.data.ressource; 
                     this.message =  response.data.ressource.length + ' - ' + response.data.message; // prendre la clé message du json
+                    this.ressourcesCount = response.data.ressourcesCount;
                     // this.isloading = false;
                   }
               }

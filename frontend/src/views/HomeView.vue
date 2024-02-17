@@ -1,5 +1,11 @@
 <template>
   <section class="home_container">
+    <div class="paginate">
+        <button @click.prevent="prevPage" :disabled="offset === 0" ><font-awesome-icon :icon="['fas', 'chevron-left']" /></button>
+        <span>{{ currentPage }} / {{ totalPages }}</span>
+        <button @click.prevent="nextPage" :disabled="offset + limit >= countRessources"><font-awesome-icon :icon="['fas', 'chevron-right']" /></button>
+      </div>
+
     <div v-if="isloading" class="spinner_container">
       <Spinner />
     </div>
@@ -34,8 +40,9 @@
 <script>
 
 import { ressourcesStore } from '@/stores/ressources';
-import { onMounted, onBeforeMount, ref, watch, nextTick } from 'vue';
+import { onMounted, onBeforeMount, ref, watch, nextTick, computed } from 'vue';
 import Spinner from '@/components/Spiner.vue';
+import router from '@/router';
 
 export default {
 
@@ -62,11 +69,15 @@ export default {
     const servermessage = ref('');
     const isloading = ref('');
     let connectedUser = ref({'value': ''});
-    // mettre à jour la liste des ressources après la suppression d'une ressource
-    // watch(() => store.isloading, (newVal) => { // Utilisez store.isloading
-    // isloading.value = newVal;
-    // console.log('watch ressourcesStore.isloading', newVal);
-    // }, { immediate: true });
+    const offset = ref(0);
+    const limit = 28;
+    const countRessources = ref(0);
+
+    const fetchRessources = async () => {
+      isloading.value = true;
+      await store.getRessources(offset.value, limit);
+      isloading.value = false;
+    };
 
     watch(() => store.ressources, (newVal) => {
       console.log('watch ressourcesStore.ressources', newVal);
@@ -81,6 +92,42 @@ export default {
     watch(() => store.connectedUser, (newVal) => {
       connectedUser.value = newVal;
     }, { immediate: true });
+
+    watch(() => store.ressourcesCount, (newVal) => {
+      countRessources.value = newVal;
+      console.log('watch ressourcesStore.countRessources', newVal);
+    }, { immediate: true });
+
+
+    const totalPages = computed(() => Math.ceil(countRessources.value / limit));
+    const currentPage = computed(() => Math.floor(offset.value / limit) + 1);
+
+    const nextPage = () => {
+      if (offset.value + limit < countRessources.value) {
+        offset.value += limit;
+        // mettre à jour la query string
+        router.push({ query: { offset: offset.value, limit: limit } });
+
+        fetchRessources();
+      }
+    };
+
+    const prevPage = () => {
+      if (offset.value - limit >= 0) {
+        offset.value -= limit;
+        // mettre à jour la query string
+        router.push({ query: { offset: offset.value, limit: limit } });
+        fetchRessources();
+      }
+    };
+
+    const paginatedRessources = computed(() => {
+      const startIndex = offset.value;
+      const endIndex = Math.min(startIndex + limit, countRessources.value);
+      return ressources.value.slice(startIndex, endIndex);
+    });
+
+    // fetchRessources();
 
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
@@ -116,9 +163,10 @@ export default {
       }
       return '';
     };
+
     // est ce que le dom est créee
     onBeforeMount(() => {
-      isloading.value = true;
+      // isloading.value = true;
       console.log('onBeforeMount', isloading.value); 
     });
     onMounted(async () => {
@@ -127,7 +175,21 @@ export default {
         isloading.value = false; // Masquer le spinner après un court délai
     });
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
-    return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser, isloading};
+    return { 
+      ressources, 
+      formattedContent, 
+      formatedDate, 
+      count , 
+      servermessage, 
+      connectedUser, 
+      isloading, 
+      countRessources,
+      totalPages,
+      nextPage,
+      prevPage,
+      currentPage,
+      paginatedRessources,
+    };
   },
 };
 
