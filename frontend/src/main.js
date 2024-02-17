@@ -13,6 +13,6 @@ library.add(fas) // add all free solid icons to the library
 
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon) // add the component to the app
-app.use(createPinia())
 app.use(router)
+app.use(createPinia())
 app.mount('#app')

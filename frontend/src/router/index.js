@@ -7,6 +7,7 @@ import RessourceView from '../views/RessourceView.vue'
 import LoginView from '../views/Login.vue'
 import MainForm from '../views/MainForm.vue'
 
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -17,6 +18,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
         const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        console.log('index route', connectedUser);
         if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
@@ -30,6 +32,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
         const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        console.log('ressource id route', connectedUser);
         if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
@@ -47,6 +50,7 @@ const router = createRouter({
       // utiliser to pour aller à la page demandée
       const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
       const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+      console.log('ressource create route', connectedUser);
         if (!tokenManager.getToken() || !connectedUser) {
           next({ name: 'login' });
         } else {
@@ -61,6 +65,7 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
           const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
           const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+          console.log('ressource edit route', connectedUser);
           if (!tokenManager.getToken() || !connectedUser) {
           next({ name: 'login' });
         } else {
@@ -75,6 +80,7 @@ const router = createRouter({
     beforeEnter: async (to, from, next) => {
         const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
         const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        console.log('ressource delete route', connectedUser);
         if (!tokenManager.getToken() || !connectedUser) {
         next({ name: 'login' });
       } else {
