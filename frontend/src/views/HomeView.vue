@@ -1,7 +1,7 @@
 <template>
   <section class="home_container">
       
-    <div v-if="ressources.length > 0" id="ressourcesList" class="ressourcesList">
+    <div v-if="count > 0" id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
               <p class="mainText" v-html=formattedContent(ressource.content)></p>
@@ -62,12 +62,9 @@ export default {
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
-      // if( ressources.value === undefined || ressources.value.length === 0) { // si j'ai pas déjà les ressources
-        // await ressourcesStore.getRessources();
-        // ressources.value = ressourcesStore.ressources;
-        // count.value = ressourcesStore.ressources?.length || 0;
-        // servermessage.value = ressourcesStore.message;
-      // }
+      //ressources.value =  await ressourcesStore.getRessources();
+        //console.log('onMounted ressources', ressources.value);
+        // count.value = ressources.value.length;
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
@@ -107,9 +104,9 @@ export default {
     return { ressources, formattedContent, formatedDate, count , servermessage, connectedUser};
   },
 
-
   mounted() {
-    console.log('mouted HomeView : count', this.count, this.connectedUser?.value) // 0
+    // console.log('mouted HomeView : count', this.count, this.connectedUser?.value) // 0
+
   },
 
 };
