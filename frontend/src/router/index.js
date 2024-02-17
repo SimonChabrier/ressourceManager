@@ -18,11 +18,13 @@ const router = createRouter({
       beforeEnter: async (to, from, next) => {
         const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
         const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
-        ressourcesStore.getRessources();
-        console.log('index route', connectedUser);
         if (!tokenManager.getToken() || !connectedUser) {
+          console.log('router index redirection login');
         next({ name: 'login' });
       } else {
+        ressourcesStore.getRessources();
+        console.log('router index next getRessources');
+        console.log('index route', connectedUser);
         next();
       }
     },

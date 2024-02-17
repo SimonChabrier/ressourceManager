@@ -18,6 +18,8 @@ export const useRessourcesStore = defineStore('ressources', {
     }),
 
     // les getters sont des fonctions qui permettent d'obtenir des données du store
+    // c'est l'équivalent des computed properties dans les composants
+    // on peut les utiliser pour filtrer, trier ou formater les données du store avant de les afficher
     getters: {
         getConnectedUser(state) {
           console.log('getters getConnectedUser', state.connectedUser);
