@@ -1,5 +1,3 @@
-// store/ressources.js
-
 import { defineStore } from 'pinia';
 import security from '@/dataloader/security';
 import ressources from '@/dataloader/ressources';
@@ -12,7 +10,7 @@ export const ressourcesStore = defineStore('ressources', {
 
         connectedUser: null,
         ressources: [], 
-        ressource: null,
+        // ressource: null,
         message: null,
         linkPath: '/login',
         linkIcon: 'sign-in-alt',
@@ -54,7 +52,6 @@ export const ressourcesStore = defineStore('ressources', {
             }
           },
           async logout() {
-            console.log('logout store');
             try {
               const response = await security.logout();
               tokenManager.removeToken();
@@ -75,7 +72,6 @@ export const ressourcesStore = defineStore('ressources', {
           async getRessources() {
             try {
               const response = await ressources.getRessources();
-              console.log('reponse getRessource dans le store', response.data);
               if(response.data.message == 'Aucune ressource trouvée'){
                 this.ressources = [];
                 this.message = response.data.message;
@@ -114,7 +110,6 @@ export const ressourcesStore = defineStore('ressources', {
           },
           // modifier la ressource patchRessource(id, ressource)
           async patchRessource(ressourceId, ressource) {
-            console.log(ressource);
             try {
               const response = await ressources.patchRessource(ressourceId, ressource);
               this.message = response.data.message;
@@ -125,6 +120,9 @@ export const ressourcesStore = defineStore('ressources', {
           },
           // suprimer la ressource deleteRessource(id)
           async deleteRessource(id) {
+            if (!confirm('Voulez-vous vraiment supprimer cette ressource ?')) {
+              return;
+            }
             try {
               const response = await ressources.deleteRessource(id);
               this.message = response.data.message;
