@@ -3,7 +3,7 @@
     <h1>{{ pageTitre }}</h1>
     
     <!-- Formulaire de création de ressource -->
-    <form class="resource-form" @submit.prevent="handleSubmit">
+    <form class="resource-form" id="main_form" @submit.prevent="handleSubmit">
         <Textinput 
           v-model="title" 
           :ressourceTitle="title" 

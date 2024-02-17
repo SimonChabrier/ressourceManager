@@ -71,7 +71,7 @@ export const useRessourcesStore = defineStore('ressources', {
           async getRessources() {
             try {
               const response = await ressources.getRessources();
-              console.log(response.data);
+              console.log('reponse getRessource dans le store', response.data);
               if(response.data.message == 'Aucune ressource trouvée'){
                 this.ressources = [];
                 this.message = response.data.message;
@@ -103,6 +103,7 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await ressources.createRessource(ressource);
               this.message = response.data.message;
+              // this.getRessources();
             } catch (error) {
               console.error('Error creating ressource:', error);
             }

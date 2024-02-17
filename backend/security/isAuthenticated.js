@@ -1,7 +1,7 @@
 // middleware custom use passport to check if user is authenticated
 
 function isAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated()) { // si le navigateur a un cookie de session valide
       return next();
     }
     // return reslocals.message = "Utilisateur non authentifié";

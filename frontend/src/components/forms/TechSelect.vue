@@ -3,7 +3,7 @@
         <label for="tech">Tech</label>
         <select v-model="selectedTech" id="tech">
             <option value="" disabled selected hidden>Choisir une Tech</option>
-            <option v-for="item in techs" :key="item.id" :value="item.name">{{ item.name }}</option>
+            <option v-for="item in techs" :key="item.id" :value="item.name" :id="item.name">{{ item.name }}</option>
         </select>
     </div>
 </template>

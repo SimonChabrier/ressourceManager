@@ -63,10 +63,10 @@ export default {
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
       // if( ressources.value === undefined || ressources.value.length === 0) { // si j'ai pas déjà les ressources
-        await ressourcesStore.getRessources();
-        ressources.value = ressourcesStore.ressources;
-        count.value = ressourcesStore.ressources?.length || 0;
-        servermessage.value = ressourcesStore.message;
+        // await ressourcesStore.getRessources();
+        // ressources.value = ressourcesStore.ressources;
+        // count.value = ressourcesStore.ressources?.length || 0;
+        // servermessage.value = ressourcesStore.message;
       // }
     });
 

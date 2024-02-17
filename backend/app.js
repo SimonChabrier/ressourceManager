@@ -18,7 +18,7 @@ app.use(cors(
     origin: 'http://localhost:8080',
     credentials: true, // pour envoyer le cookie de session au frontend (ici le cookie passport qui contient le jwt)
     methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }
 ));
 
