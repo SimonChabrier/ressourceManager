@@ -85,6 +85,7 @@ export const useRessourcesStore = defineStore('ressources', {
                   }
               }
             } catch (error) {
+              this.message = error.message;
               console.error('Error fetching ressources:', error);
             }
           },
@@ -112,6 +113,7 @@ export const useRessourcesStore = defineStore('ressources', {
             try {
               const response = await ressources.patchRessource(ressourceId, ressource);
               this.message = response.data.message;
+              this.getRessources();
             } catch (error) {
               console.error('Error updating ressource:', error);
             }

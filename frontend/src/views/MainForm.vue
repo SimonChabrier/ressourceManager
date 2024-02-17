@@ -123,12 +123,16 @@ const handleSubmit = async () => {
   }
 
   if (!ressourceId.value) {
-    await ressourcesStore.createRessource(formData);
+    await ressourcesStore.createRessource(formData).then(() => {
+      router.push({ name: 'ressources' });
+    });
   } else {
-    await ressourcesStore.patchRessource(ressourceId.value, formData);
+    await ressourcesStore.patchRessource(ressourceId.value, formData).then(() => {
+      router.push({ name: 'ressources' });
+    });
   }
 
-  router.push({ name: 'ressources' });
+
 };
 
 </script>

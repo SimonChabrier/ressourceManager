@@ -13,7 +13,16 @@ const router = createRouter({
     {
       path: '/',
       name: 'ressources',
-      component: HomeView
+      component: HomeView,
+      beforeEnter: async (to, from, next) => {
+        const ressourcesStore = useRessourcesStore(); // Obtenir une instance du store
+        const connectedUser = ressourcesStore.getConnectedUser; // Accéder au getter getConnectedUser
+        if (!tokenManager.getToken() || !connectedUser) {
+        next({ name: 'login' });
+      } else {
+        next();
+      }
+    },
     },
     {
       path: '/ressource/:id',
@@ -95,7 +104,14 @@ const router = createRouter({
       await useRessourcesStore().logout(); // logout store
       next({ name: 'login' });
     }
+  },
+  {
+    path: '/:pathMatch(.*)*',  
+    name: 'not-found',
+    redirect: { name: 'login' }
   }
+  // pour chaque route sauf login et logout vérifier si l'utilisateur est connecté sinon le rediriger vers la page de login
+  
   ]
 })
 

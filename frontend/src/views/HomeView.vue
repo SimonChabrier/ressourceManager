@@ -47,6 +47,7 @@ export default {
     // mettre à jour la liste des ressources après la suppression d'une ressource
 
     watch(() => ressourcesStore.ressources, (newVal) => {
+      console.log('watch ressourcesStore.ressources', newVal);
       ressources.value = newVal;
       count.value = newVal.length;
     }, { immediate: true });
@@ -61,12 +62,12 @@ export default {
 
     // au montage du composant, on récupère les ressources
     onMounted( async () => {
-      if( ressources.value === undefined || ressources.value.length === 0) { // si j'ai pas déjà les ressources
+      // if( ressources.value === undefined || ressources.value.length === 0) { // si j'ai pas déjà les ressources
         await ressourcesStore.getRessources();
         ressources.value = ressourcesStore.ressources;
         count.value = ressourcesStore.ressources?.length || 0;
         servermessage.value = ressourcesStore.message;
-      }
+      // }
     });
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
