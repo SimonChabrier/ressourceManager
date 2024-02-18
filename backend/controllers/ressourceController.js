@@ -4,7 +4,6 @@ const User = require('../models/user');
 const ressourceController = {
   // get all ressources with user
   getAllRessources: async (req, res) => {
-
     // get offset and limit from query
     let offsetValue = parseInt(req.query.offset);
     let limitValue = parseInt(req.query.limit);

@@ -80,18 +80,18 @@ const router = createRouter({
         },
     },
     {
-    path: '/ressource-delete/:id',
-    name: 'ressource-delete',
-    beforeEnter: async (to, from, next) => {
-        const store = ressourcesStore(); // Obtenir une instance du store
-        const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
-        if (!tokenManager.getToken() || !connectedUser) {
-        next({ name: 'login' });
-      } else {
-        await store.deleteRessource(to.params.id);
-        next({ name: 'ressources' });
-      }
-    },
+      path: '/ressource-delete/:id',
+      name: 'ressource-delete',
+      beforeEnter: async (to, from, next) => {
+          const store = ressourcesStore(); // Obtenir une instance du store
+          const connectedUser = store.getConnectedUser; // Accéder au getter getConnectedUser
+          if (!tokenManager.getToken() || !connectedUser) {
+              next({ name: 'login' });
+          } else {
+              await store.deleteRessource(to.params.id, to.query.offset, to.query.limit);
+              next({ name: 'ressources', query: { offset: to.query.offset, limit: to.query.limit } });
+          }
+      },
   },
   {
     path: '/login',

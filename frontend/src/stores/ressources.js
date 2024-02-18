@@ -9,6 +9,7 @@ export const ressourcesStore = defineStore('ressources', {
     state: () => ({
         connectedUser: null,
         ressources: [], 
+        ressource: null,
         ressourcesCount: 0,
         message: null,
         linkPath: '/login',
@@ -74,10 +75,12 @@ export const ressourcesStore = defineStore('ressources', {
             }
           },
           async getRessources(offset, limit) {
-            console.log('offset', offset);
-            console.log('limit', limit);
+            
+            // on vide le message
+            this.message = null;
+            this.ressources = [];
             try {
-              const response = await ressources.getRessources(offset, limit);
+              const response = await ressources.getRessources(offset, limit)
               if(response.data.message == 'Aucune ressource trouvée'){
                 this.ressources = [];
                 this.message = response.data.message;
@@ -131,7 +134,7 @@ export const ressourcesStore = defineStore('ressources', {
             }
           },
           // suprimer la ressource deleteRessource(id)
-          async deleteRessource(id) {
+          async deleteRessource(id, offset, limit) {
             if (!confirm('Voulez-vous vraiment supprimer cette ressource ?')) {
               return;
             }
@@ -139,7 +142,7 @@ export const ressourcesStore = defineStore('ressources', {
               const response = await ressources.deleteRessource(id);
               this.message = response.data.message;
               // recharger la liste des ressources
-              this.getRessources();
+              this.getRessources(offset, limit);
             } catch (error) {
               console.error('Error deleting ressource:', error);
             }

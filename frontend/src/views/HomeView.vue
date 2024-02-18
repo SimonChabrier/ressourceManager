@@ -23,7 +23,7 @@
               <div v-if="connectedUser?.id" class="ressource_links">
                 <p><router-link :to="{ name: 'ressource-view', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'eye']" /></router-link></p>
                 <p><router-link :to="{ name: 'ressource-edit', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'pen-to-square']" /></router-link></p>
-                <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p >
+                <p><router-link :to="{ name: 'ressource-delete', params: { id: ressource.id }, query: { offset: offset, limit: limit } }"><font-awesome-icon :icon="['fas', 'trash']" /></router-link></p>
               </div>
               <div v-else class="ressource_links">
                 <p><router-link to="/login"><font-awesome-icon :icon="['fas', 'sign-in-alt']" title="login"/></router-link></p>
@@ -40,7 +40,7 @@
 <script>
 
 import { ressourcesStore } from '@/stores/ressources';
-import { onMounted, onBeforeMount, ref, watch, nextTick, computed } from 'vue';
+import { onMounted, onBeforeMount, onUpdated, ref, watch, nextTick, computed } from 'vue';
 import Spinner from '@/components/Spiner.vue';
 import router from '@/router';
 
@@ -76,8 +76,12 @@ export default {
     const fetchRessources = async () => {
       isloading.value = true;
       await store.getRessources(offset.value, limit);
-      isloading.value = false;
     };
+
+    watch(() => store.ressourcesCount, (newVal) => {
+      countRessources.value = newVal;
+      console.log('watch ressourcesStore.countRessources', newVal);
+    }, { immediate: true });
 
     watch(() => store.ressources, (newVal) => {
       console.log('watch ressourcesStore.ressources', newVal);
@@ -92,12 +96,6 @@ export default {
     watch(() => store.connectedUser, (newVal) => {
       connectedUser.value = newVal;
     }, { immediate: true });
-
-    watch(() => store.ressourcesCount, (newVal) => {
-      countRessources.value = newVal;
-      console.log('watch ressourcesStore.countRessources', newVal);
-    }, { immediate: true });
-
 
     const totalPages = computed(() => Math.ceil(countRessources.value / limit));
     const currentPage = computed(() => Math.floor(offset.value / limit) + 1);
@@ -166,13 +164,18 @@ export default {
 
     // est ce que le dom est créee
     onBeforeMount(() => {
-      // isloading.value = true;
       console.log('onBeforeMount', isloading.value); 
     });
     onMounted(async () => {
       console.log('onMounted');
-      await nextTick(); // Attendre le rendu initia
-        isloading.value = false; // Masquer le spinner après un court délai
+      // await nextTick(); // Attendre le rendu initia
+      //   isloading.value = false; // Masquer le spinner après un court délai
+    });
+    onUpdated(() => {
+      console.log('onUpdated');
+      nextTick(() => {
+        isloading.value = false;
+      });
     });
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
     return { 
@@ -284,6 +287,19 @@ export default {
       color: white;
     }
   }
+}
+
+.paginate button {
+  padding: 5px;
+    margin: 10px;
+    text-decoration: none;
+    color: #2f4858 !important;
+    transition: all 0.3s;
+    background-color: transparent;
+    &:hover {
+      background-color: $color-grey-light-1;
+      color: white;
+    }
 }
 
 @media screen and (max-width: 1200px) {
