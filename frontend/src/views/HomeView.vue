@@ -165,16 +165,19 @@ export default {
       connectedUser.value = newVal;
     }, { immediate: true });
 
-    // est ce que le dom est créee
     onBeforeMount(() => {
-      console.log('onBeforeMount',store.isloading);
+      // console.log('onBeforeMount',store.isloading);
     });
+
+    // onMounted est appelé après le premier rendu du composant
+    // je met à jour la valeur de isloading avec celle du store
+    // ensuite le watcher va se charger de mettre à jour la valeur de isloading à chaque fois que le store le fait
     onMounted(async () => {
-      console.log('onMounted', store.isloading);
       isloading.value = store.isloading;
     });
+
     onUpdated(() => {
-      console.log('onUpdated', store.isloading);
+      // console.log('onUpdated', store.isloading);
     });
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
     return { 
