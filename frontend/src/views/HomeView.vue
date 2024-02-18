@@ -10,7 +10,13 @@
       <Spinner />
     </div>
 
-    <div v-else-if="!isloading" id="ressourcesList" class="ressourcesList">
+    <div v-else-if="servermessage == 'Network Error'"  class="emptyList">
+        <p>{{ servermessage }}</p>
+          <!-- rafraichir la liste avec les paramètres de query actuels -->
+          <button @click="fetchRessources">Réessayer</button>
+      </div>
+
+    <div v-else id="ressourcesList" class="ressourcesList">
           <div v-for="ressource in ressources" :key="ressource.id" class="resourceItem">
             <h2>{{ ressource.title }}</h2>
               <p class="mainText" v-html=formattedContent(ressource.content)></p>
@@ -30,9 +36,7 @@
               </div>
           </div>
       </div>
-      <div v-else  class="emptyList">
-        <p>{{ servermessage }}</p>
-      </div>
+
 
     </section>
 </template>
@@ -74,6 +78,7 @@ export default {
     const countRessources = ref(0);
 
     const fetchRessources = async () => {
+      console.log('fetchRessources');
       isloading.value = true;
       await store.getRessources(offset.value, limit);
     };
@@ -90,7 +95,11 @@ export default {
     }, { immediate: true });
    
     watch(() => store.message, (newVal) => {
-      servermessage.value = newVal;
+      if (newVal === 'Network Error') { // si le serveur ne répond pas on rapelle la fonction fetchRessources
+        fetchRessources();
+      } else {
+        servermessage.value = newVal;
+      }
     }, { immediate: true });
 
     watch(() => store.connectedUser, (newVal) => {
@@ -105,7 +114,6 @@ export default {
         offset.value += limit;
         // mettre à jour la query string
         router.push({ query: { offset: offset.value, limit: limit } });
-
         fetchRessources();
       }
     };
@@ -124,9 +132,6 @@ export default {
       const endIndex = Math.min(startIndex + limit, countRessources.value);
       return ressources.value.slice(startIndex, endIndex);
     });
-
-    // fetchRessources();
-
 
     // Propriété calculée pour formater le contenu avec HTML interprété et limite de 250 caractères
     const formattedContent = (content) => {
@@ -192,6 +197,7 @@ export default {
       prevPage,
       currentPage,
       paginatedRessources,
+      fetchRessources,
     };
   },
 };

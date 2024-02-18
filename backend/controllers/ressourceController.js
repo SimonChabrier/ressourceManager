@@ -1,17 +1,24 @@
+const { or } = require('sequelize');
 const Ressource = require('../models/ressource');
 const User = require('../models/user');
 
 const ressourceController = {
-  // get all ressources with user
+  // get all ressources with user associated and pagination
   getAllRessources: async (req, res) => {
     // get offset and limit from query
     let offsetValue = parseInt(req.query.offset);
     let limitValue = parseInt(req.query.limit);
-    console.log('offsetValue', offsetValue);
-    console.log('limitValue', limitValue);
+
     try {
       const ressourcesCount = await Ressource.count();
-      const ressources = await Ressource.findAll({ include: User, offset : offsetValue, limit : limitValue});
+      
+      const ressources = await Ressource.findAll({ 
+          include: User, 
+          offset : offsetValue, 
+          limit : limitValue, 
+          order: [['id', 'DESC']]
+        });
+
       if(ressources.length === 0) {
         return res.status(200).json({ message: 'Aucune ressource trouvée' });
       } else if(ressources.length === 1) { // si j'ai une seule ressource 
