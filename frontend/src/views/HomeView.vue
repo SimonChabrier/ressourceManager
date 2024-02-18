@@ -71,7 +71,7 @@ export default {
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
-    const isloading = ref(true);
+    const isloading = ref('');
     let connectedUser = ref({'value': ''});
     const offset = ref(0);
     const limit = 28;
