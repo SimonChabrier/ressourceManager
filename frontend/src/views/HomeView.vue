@@ -143,10 +143,10 @@ export default {
     };
 
     // controler la valeur de isloading dans le store
-    watch(() => store.isloading, (newVal) => {
+    watch(() => store.getLoading, (newVal) => {
       console.log('Nouvel état de isloading :', newVal);
       isloading.value = newVal;
-    });
+    }, { immediate: true });
 
     watch(() => store.ressourcesCount, (newVal) => {
       countRessources.value = newVal;
@@ -173,7 +173,7 @@ export default {
     // je met à jour la valeur de isloading avec celle du store
     // ensuite le watcher va se charger de mettre à jour la valeur de isloading à chaque fois que le store le fait
     onMounted(async () => {
-      isloading.value = store.isloading;
+      isloading.value = store.getLoading;
     });
 
     onUpdated(() => {
