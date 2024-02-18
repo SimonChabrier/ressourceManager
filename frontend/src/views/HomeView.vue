@@ -44,7 +44,7 @@
 <script>
 
 import { ressourcesStore } from '@/stores/ressources';
-import { onMounted, onBeforeMount, onUpdated, ref, watch, nextTick, computed } from 'vue';
+import { onMounted, onBeforeMount, onUpdated, ref, watch, computed } from 'vue';
 import Spinner from '@/components/Spiner.vue';
 import router from '@/router';
 
@@ -71,40 +71,15 @@ export default {
     const ressources = ref([]); // on ajoute les références au store
     const count = ref(0);
     const servermessage = ref('');
-    const isloading = ref('');
+    const isloading = ref(true);
     let connectedUser = ref({'value': ''});
     const offset = ref(0);
     const limit = 28;
     const countRessources = ref(0);
 
     const fetchRessources = async () => {
-      console.log('fetchRessources');
-      isloading.value = true;
       await store.getRessources(offset.value, limit);
     };
-
-    watch(() => store.ressourcesCount, (newVal) => {
-      countRessources.value = newVal;
-      console.log('watch ressourcesStore.countRessources', newVal);
-    }, { immediate: true });
-
-    watch(() => store.ressources, (newVal) => {
-      console.log('watch ressourcesStore.ressources', newVal);
-      ressources.value = newVal;
-      count.value = newVal.length;
-    }, { immediate: true });
-   
-    watch(() => store.message, (newVal) => {
-      if (newVal === 'Network Error') { // si le serveur ne répond pas on rapelle la fonction fetchRessources
-        fetchRessources();
-      } else {
-        servermessage.value = newVal;
-      }
-    }, { immediate: true });
-
-    watch(() => store.connectedUser, (newVal) => {
-      connectedUser.value = newVal;
-    }, { immediate: true });
 
     const totalPages = computed(() => Math.ceil(countRessources.value / limit));
     const currentPage = computed(() => Math.floor(offset.value / limit) + 1);
@@ -167,20 +142,39 @@ export default {
       return '';
     };
 
+    // controler la valeur de isloading dans le store
+    watch(() => store.isloading, (newVal) => {
+      console.log('Nouvel état de isloading :', newVal);
+      isloading.value = newVal;
+    });
+
+    watch(() => store.ressourcesCount, (newVal) => {
+      countRessources.value = newVal;
+    }, { immediate: true });
+
+    watch(() => store.ressources, (newVal) => {
+      ressources.value = newVal;
+      count.value = newVal.length;
+    }, { immediate: true });
+   
+    watch(() => store.message, (newVal) => {
+      newVal === 'Network Error' ? fetchRessources(): servermessage.value = newVal;
+    }, { immediate: true });
+
+    watch(() => store.connectedUser, (newVal) => {
+      connectedUser.value = newVal;
+    }, { immediate: true });
+
     // est ce que le dom est créee
     onBeforeMount(() => {
-      console.log('onBeforeMount', isloading.value); 
+      console.log('onBeforeMount',store.isloading);
     });
     onMounted(async () => {
-      console.log('onMounted');
-      // await nextTick(); // Attendre le rendu initia
-      //   isloading.value = false; // Masquer le spinner après un court délai
+      console.log('onMounted', store.isloading);
+      isloading.value = store.isloading;
     });
     onUpdated(() => {
-      console.log('onUpdated');
-      nextTick(() => {
-        isloading.value = false;
-      });
+      console.log('onUpdated', store.isloading);
     });
     // setUp retourne un objet avec les propriétés et méthodes que je veux rendre accessibles dans le template
     return { 

@@ -75,35 +75,29 @@ export const ressourcesStore = defineStore('ressources', {
             }
           },
           async getRessources(offset, limit) {
-            
-            // on vide le message
             this.message = null;
             this.ressources = [];
+            this.isloading = true;
             try {
               const response = await ressources.getRessources(offset, limit)
               if(response.data.message == 'Aucune ressource trouvée'){
                 this.ressources = [];
                 this.message = response.data.message;
-                // this.isloading = false;
               } else {
                   if(response.data.ressources){ // plusieurs ressources
                     this.ressources = response.data.ressources;
                     this.message =  response.data.ressources.length + ' - ' + response.data.message + ' sur ' + response.data.ressourcesCount; // prendre la clé message du json
-                    console.log('ressources', response.data.ressourcesCount);
                     this.ressourcesCount = response.data.ressourcesCount;
-                    // this.isloading = false;
                   } else { // une seule ressource
                     this.ressources = response.data.ressource; 
                     this.message =  response.data.ressource.length + ' - ' + response.data.message + ' sur ' + response.data.ressourcesCount; // prendre la clé message du json
                     this.ressourcesCount = response.data.ressourcesCount;
-                    // this.isloading = false;
                   }
               }
             } catch (error) {
-              // console.error('Error fetching ressources:', error.message);
-              this.message = error.message;
-              this.isloading = true;
-              console.error('Error fetching ressources:', error);
+               this.message = error.message;
+            } finally {
+                this.isloading = false;
             }
           },
           async getRessource(id) {

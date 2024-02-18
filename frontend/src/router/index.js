@@ -27,7 +27,6 @@ const router = createRouter({
         if (!tokenManager.getToken() || !connectedUser) {
           next({ name: 'login' });
         } else {
-          console.log('ressources route', to.params.offset, to.params.limit);
           const offset = parseInt(to.query.offset) || 0;
           const limit = parseInt(to.query.limit) || 10;
           store.getRessources(offset, limit);
